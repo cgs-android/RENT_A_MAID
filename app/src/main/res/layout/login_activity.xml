@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorCharcoal"
+    android:fillViewport="true"
+    tools:context="com.task.ui.component.login.LoginActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <com.task.utils.font.CustomFontTextViewBold
+            android:id="@+id/laHeaderTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="@string/welcome_back"
+            android:textColor="@color/colorAliceBlue"
+            android:textSize="@dimen/_20sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.task.utils.font.CustomFontTextViewMedium
+            android:id="@+id/laHeaderSubTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="@string/login_to_continue"
+            android:textColor="@color/colorAliceBlue"
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/laHeaderTitleTextView" />
+
+
+        <ImageView
+            android:id="@+id/laAppLogoImageView"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_150sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:src="@drawable/ic_rent_a_maid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/laHeaderSubTitleTextView" />
+
+
+        <com.task.utils.font.CustomerEdittextViewMedium
+            android:id="@+id/laUserNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:hint="@string/user_name"
+            android:imeOptions="actionNext"
+            android:inputType="text|textNoSuggestions"
+            android:paddingBottom="@dimen/_10sdp"
+            android:singleLine="true"
+            android:textColor="@color/colorAliceBlue"
+            android:textColorHint="@color/colorAliceBlue"
+            android:textSize="@dimen/_13sdp"
+            app:layout_constraintTop_toBottomOf="@+id/laAppLogoImageView" />
+
+        <com.task.utils.font.CustomerEdittextViewMedium
+            android:id="@+id/laPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:hint="@string/password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:paddingBottom="@dimen/_10sdp"
+            android:textColor="@color/colorAliceBlue"
+            android:textColorHint="@color/colorAliceBlue"
+            android:textSize="@dimen/_13sdp"
+            app:layout_constraintTop_toBottomOf="@+id/laUserNameEditText"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/colorAliceBlue" />
+
+
+        <com.task.utils.font.CustomFontTextViewBold
+            android:id="@+id/laForgotPasswordTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="@string/forgot_password"
+            android:textColor="@color/colorOrange"
+            android:textSize="@dimen/_11sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/laPasswordEditText" />
+
+        <com.task.utils.font.CustomButtonMedium
+            android:id="@+id/laLoginButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_43sdp"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:background="@drawable/button_radius"
+            android:text="@string/login"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_13sdp"
+            app:layout_constraintTop_toBottomOf="@+id/laForgotPasswordTextView" />
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_24x"
+            android:layout_marginTop="@dimen/space_96x"
+            android:layout_marginEnd="@dimen/space_24x"
+            android:hint="@string/prompt_email"
+            android:inputType="textEmailAddress"
+            android:selectAllOnFocus="true"
+            android:text="@string/test_email"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_24x"
+            android:layout_marginTop="@dimen/space_8x"
+            android:layout_marginEnd="@dimen/space_24x"
+            android:hint="@string/prompt_password"
+            android:imeActionLabel="@string/action_sign_in_short"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:selectAllOnFocus="true"
+            android:text="@string/test_password"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="@dimen/space_48x"
+            android:layout_marginTop="@dimen/space_16x"
+            android:layout_marginEnd="@dimen/space_48x"
+            android:layout_marginBottom="@dimen/space_64x"
+            android:text="@string/action_sign_in"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password"
+            app:layout_constraintVertical_bias="0.2" />
+
+        <RelativeLayout
+            android:id="@+id/loader_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
