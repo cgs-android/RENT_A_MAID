@@ -1,4 +1,4 @@
-package com.task.ui.component.home.fragment.dashboard
+package com.task.ui.component.home.fragment.dashboarddetail
 
 import android.os.Bundle
 import android.os.Handler
@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.task.R
-import com.task.databinding.DashboardFragmentBinding
+import com.task.databinding.DashboardDetaillsFragmentBinding
 import com.task.ui.base.BaseFragment
 import com.task.ui.component.home.HomeActivity
 import com.task.utils.SingleEvent
@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.header_item.*
 
 
 @AndroidEntryPoint
-class DashboardFragment : BaseFragment(), View.OnClickListener {
+class DashboardDetailsFragment : BaseFragment(), View.OnClickListener {
 
 
     var startTime: Long = 0
@@ -30,9 +30,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener {
     var travelTime: String = ""
     var workTime: String = ""
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var dashboardDetailsViewModel: DashboardDetailsViewModel
 
-    private lateinit var binding: DashboardFragmentBinding
+    private lateinit var binding: DashboardDetaillsFragmentBinding
 
     var timerHandler: Handler = Handler()
     private var timerRunnable: Runnable = object : Runnable {
@@ -68,12 +68,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DashboardFragmentBinding.inflate(layoutInflater, container, false)
+        binding = DashboardDetaillsFragmentBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun observeViewModel() {
-        observeToast(dashboardViewModel.showToast)
+        observeToast(dashboardDetailsViewModel.showToast)
     }
 
     override fun initOnClickListeners() {
@@ -124,7 +124,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+        dashboardDetailsViewModel =
+            ViewModelProviders.of(this).get(DashboardDetailsViewModel::class.java)
         observeViewModel()
     }
 
@@ -160,12 +161,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v) {
-
             binding.dfPauseTextView -> {
                 if (pauseAndResume) {
                     pauseAndResume = false
                     binding.dfPauseTextView.text = this.resources.getString(R.string.tap_to_pause)
-                    binding.dfPauseTextView.setTextColor(this.resources.getColor(R.color.colorCharcoal))
+                    binding.dfPauseTextView.setTextColor(this.resources.getColor(R.color.colorAliceBlue))
                     resumeTimerClock()
                 } else {
                     pauseAndResume = true

@@ -1,4 +1,4 @@
-package com.task.ui.component.home.fragment.dashboard
+package com.task.ui.component.home.fragment.dashboarddetail
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class DashboardViewModel @Inject constructor() : BaseViewModel() {
+class DashboardDetailsViewModel @Inject constructor() : BaseViewModel() {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     private val showSnackBarPrivate = MutableLiveData<SingleEvent<Any>>()

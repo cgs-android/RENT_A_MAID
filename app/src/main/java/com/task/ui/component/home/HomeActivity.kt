@@ -15,7 +15,8 @@ import com.task.data.dto.drawer.DrawerResponse
 import com.task.databinding.ActivityHomeBinding
 import com.task.ui.base.BaseActivity
 import com.task.ui.component.home.adapter.DrawerAdapter
-import com.task.ui.component.home.fragment.dashboard.DashboardFragment
+import com.task.ui.component.home.fragment.dashboarddetail.DashboardDetailsFragment
+import com.task.ui.component.home.fragment.projectlist.ProjectListFragment
 import com.task.utils.EnumIntUtils
 import com.task.utils.SingleEvent
 import com.task.utils.setupSnackbar
@@ -27,7 +28,9 @@ class HomeActivity : BaseActivity() {
 
     private lateinit var drawerAdapter: DrawerAdapter
     private val dashboardFragment =
-        DashboardFragment()
+        DashboardDetailsFragment()
+
+    private val projectListFragment = ProjectListFragment()
 
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var binding: ActivityHomeBinding
@@ -51,7 +54,7 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         initRecyclerView()
         bindDrawerData(homeViewModel.loadDrawerData())
-        changeFragment(EnumIntUtils.ZERO.code, args)
+        changeFragment(EnumIntUtils.ONE.code, args)
     }
 
 
@@ -106,15 +109,18 @@ class HomeActivity : BaseActivity() {
         })
     }
 
-    private fun changeFragment(position: Int, bundle: Bundle) {
+     fun changeFragment(position: Int, bundle: Bundle?) {
         when (position) {
             EnumIntUtils.ZERO.code -> {
                 loadFragment(dashboardFragment, bundle)
             }
+            EnumIntUtils.ONE.code -> {
+                loadFragment(projectListFragment, bundle)
+            }
         }
     }
 
-    private fun loadFragment(fragment: Fragment, bundle: Bundle) {
+    private fun loadFragment(fragment: Fragment, bundle: Bundle?) {
         val transaction = supportFragmentManager.beginTransaction()
         fragment.arguments = bundle
         transaction.replace(R.id.chsHomeScreenFramelayout, fragment)
