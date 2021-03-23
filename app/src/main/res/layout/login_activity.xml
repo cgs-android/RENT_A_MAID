@@ -57,17 +57,18 @@
 
 
         <com.task.utils.font.CustomerEdittextViewMedium
-            android:id="@+id/laUserNameEditText"
+            android:id="@+id/laUserEmailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_2sdp"
             android:layout_marginEnd="@dimen/_20sdp"
-            android:hint="@string/user_name"
+            android:hint="@string/user_email"
             android:imeOptions="actionNext"
-            android:inputType="text|textNoSuggestions"
+            android:inputType="text|textNoSuggestions|textEmailAddress"
             android:paddingBottom="@dimen/_10sdp"
             android:singleLine="true"
+            android:text="silivia@rentamaid.com"
             android:textColor="@color/colorAliceBlue"
             android:textColorHint="@color/colorAliceBlue"
             android:textSize="@dimen/_13sdp"
@@ -84,10 +85,11 @@
             android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:paddingBottom="@dimen/_10sdp"
+            android:text="123123"
             android:textColor="@color/colorAliceBlue"
             android:textColorHint="@color/colorAliceBlue"
             android:textSize="@dimen/_13sdp"
-            app:layout_constraintTop_toBottomOf="@+id/laUserNameEditText"
+            app:layout_constraintTop_toBottomOf="@+id/laUserEmailEditText"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/colorAliceBlue" />
 

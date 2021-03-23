@@ -5,9 +5,6 @@ import com.task.data.dto.login.LoginRequest
 import com.task.data.dto.login.LoginResponse
 import kotlinx.coroutines.flow.Flow
 
-/**
- * Created by AhmedEltaher
- */
 
 interface DataRepositorySource {
     suspend fun requestRecipes(): Flow<Resource<Recipes>>

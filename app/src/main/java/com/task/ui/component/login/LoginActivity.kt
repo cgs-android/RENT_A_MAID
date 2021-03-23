@@ -24,10 +24,8 @@ class LoginActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.login.setOnClickListener {
-            doLogin()
-        }
         binding.laLoginButton.setOnClickListener {
+            //doLogin()
             navigateToHomeScreen()
         }
     }
@@ -46,8 +44,8 @@ class LoginActivity : BaseActivity() {
 
     private fun doLogin() {
         loginViewModel.doLogin(
-            binding.username.text.trim().toString(),
-            binding.password.text.toString()
+            binding.laUserEmailEditText.text?.trim().toString(),
+            binding.laPasswordEditText.text.toString()
         )
     }
 
@@ -56,13 +54,17 @@ class LoginActivity : BaseActivity() {
             is Resource.Loading -> binding.loaderView.toVisible()
             is Resource.Success -> status.data?.let {
                 binding.loaderView.toGone()
-                navigateToMainScreen()
+                navigateToHomeScreen()
             }
             is Resource.DataError -> {
                 binding.loaderView.toGone()
                 status.errorCode?.let {
                     loginViewModel.showToastMessage(it)
                 }
+            }
+            is Resource.Failure -> status.data?.let {
+                binding.loaderView.toGone()
+                loginViewModel.showFailureToastMessage(it.message)
             }
         }
     }
@@ -76,6 +78,7 @@ class LoginActivity : BaseActivity() {
     private fun navigateToHomeScreen() {
         val nextScreenIntent = Intent(this, HomeActivity::class.java)
         startActivity(nextScreenIntent)
+        finish()
     }
 
     private fun observeSnackBarMessages(event: LiveData<SingleEvent<Any>>) {

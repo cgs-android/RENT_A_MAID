@@ -57,7 +57,7 @@ class ProjectListViewModel @Inject constructor() : BaseViewModel() {
             ),
             ProjectListResponse(
                 "Project 485",
-                "Martianne Aeby [TL], Susanne Iten, ",
+                "Martianne Aeby [TL], Susanne Iten,",
                 "16.04.2021",
                 false, false
             )

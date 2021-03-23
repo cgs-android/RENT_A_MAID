@@ -12,10 +12,6 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 
-/**
- * Created by AhmedEltaher
- */
-
 class DataRepository @Inject constructor(
     private val remoteRepository: RemoteData,
     private val localRepository: LocalData,
@@ -30,7 +26,7 @@ class DataRepository @Inject constructor(
 
     override suspend fun doLogin(loginRequest: LoginRequest): Flow<Resource<LoginResponse>> {
         return flow {
-            emit(localRepository.doLogin(loginRequest))
+            emit(remoteRepository.requestLogin(loginRequest))
         }.flowOn(ioDispatcher)
     }
 

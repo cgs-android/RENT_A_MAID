@@ -26,9 +26,9 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_username">Not a valid email id</string>
     <string name="invalid_password">Password must be >4 characters</string>
-    <string name="invalid_username_and_password">please check your username and password</string>
+    <string name="invalid_username_and_password">please check your email and password</string>
     <string name="add_to_favorite">Add to favorite</string>
     <string name="test_password">ahmed</string>
     <string name="test_email">ahmed@ahmed.ahmed</string>
@@ -36,6 +36,7 @@
     <string name="login_to_continue">Login to continue.</string>
     <string name="mobile_number">Mobile Number*</string>
     <string name="user_name">Username</string>
+    <string name="user_email">Email</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="login">Login</string>
@@ -52,8 +53,8 @@
     <string name="work_time">Work time</string>
     <string name="zeros">00:00:00</string>
     <string name="assigned_tasks">Assigned tasks</string>
-    <string name="team">Team :</string>
-    <string name="location">Location</string>
+    <string name="team">Team:</string>
+    <string name="location">Location:</string>
     <string name="today">Today</string>
     <string name="all_tasks">All Tasks</string>
 </resources>

@@ -109,7 +109,7 @@ class HomeActivity : BaseActivity() {
         })
     }
 
-     fun changeFragment(position: Int, bundle: Bundle?) {
+    fun changeFragment(position: Int, bundle: Bundle?) {
         when (position) {
             EnumIntUtils.ZERO.code -> {
                 loadFragment(dashboardFragment, bundle)
@@ -147,5 +147,10 @@ class HomeActivity : BaseActivity() {
 
     private fun observeToast(event: LiveData<SingleEvent<Any>>) {
         binding.root.showToast(this, event, Snackbar.LENGTH_LONG)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }

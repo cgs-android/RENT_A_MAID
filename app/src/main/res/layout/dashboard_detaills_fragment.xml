@@ -17,51 +17,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.task.utils.font.CustomFontTextViewBold
-            android:id="@+id/ddfDayHintTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:text="@string/today"
-            android:textColor="@color/colorAliceBlue"
-            android:textSize="@dimen/_14sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dfDashboardHeader" />
-
-
-        <com.task.utils.font.CustomFontTextViewBold
-            android:id="@+id/ddfTaskHintTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:text="@string/all_tasks"
-            android:textColor="@color/colorAliceBlue"
-            android:textSize="@dimen/_14sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dfDashboardHeader" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ddfWholeConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
             android:layout_marginBottom="@dimen/_5sdp"
             android:background="@color/colorLightCharcoal"
-            app:layout_constraintTop_toBottomOf="@+id/ddfDayHintTextView">
+            app:layout_constraintTop_toBottomOf="@+id/dfDashboardHeader">
 
 
             <ImageView
                 android:id="@+id/ddfProjectStatusImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:layout_marginStart="@dimen/_3sdp"
-                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:src="@drawable/ic_single_dot"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -97,7 +71,9 @@
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_9sdp"
+                android:layout_marginEnd="@dimen/_3sdp"
                 android:src="@drawable/ic_right_arrow"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -105,6 +81,8 @@
                 android:id="@+id/pliProjectDetailsConstraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_14sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
                 android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@+id/pliProjectIdTextView">
 
@@ -164,7 +142,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/ddfDriveTimeTextView" />
 
 
-                <com.task.utils.font.CustomFontTextViewMedium
+                <com.task.utils.font.CustomFontTextViewBold
                     android:id="@+id/pliProjectHintTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -181,14 +159,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:text="Albert Ritschard [TL], Susanne Iten, Franco Riccio, Martianne Aeby, Marta Amman"
                     android:textColor="@color/colorAliceBlue"
                     android:textSize="@dimen/_12sdp"
                     app:layout_constraintTop_toBottomOf="@+id/pliProjectHintTextView" />
 
-                <com.task.utils.font.CustomFontTextViewMedium
+                <com.task.utils.font.CustomFontTextViewBold
                     android:id="@+id/pliProjectLocationHintTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -205,7 +182,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:text="Schlossstrasse 1A, 3800 Interlaken BE"
                     android:textColor="@color/colorAliceBlue"

@@ -56,8 +56,6 @@ class ProjectListViewHolder(private val itemBinding: ProjectlistItemBinding) :
                 )
             )
         }
-
-
     }
 }
 
