@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import com.google.android.material.snackbar.Snackbar
 import com.task.data.Resource
 import com.task.data.dto.login.LoginResponse
-import com.task.databinding.LoginActivityBinding
+import com.task.databinding.ActivityLoginBinding
 import com.task.ui.base.BaseActivity
 import com.task.ui.component.home.HomeActivity
 import com.task.ui.component.recipes.RecipesListActivity
@@ -19,19 +19,19 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginActivity : BaseActivity() {
 
     private val loginViewModel: LoginViewModel by viewModels()
-    private lateinit var binding: LoginActivityBinding
+    private lateinit var binding: ActivityLoginBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.laLoginButton.setOnClickListener {
-            //doLogin()
-            navigateToHomeScreen()
+            doLogin()
+            //navigateToHomeScreen()
         }
     }
 
     override fun initViewBinding() {
-        binding = LoginActivityBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
     }

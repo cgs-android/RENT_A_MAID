@@ -2,6 +2,10 @@ package com.task.data
 
 import com.task.data.dto.login.LoginRequest
 import com.task.data.dto.login.LoginResponse
+import com.task.data.dto.projectdetails.ProjectDetailsRequest
+import com.task.data.dto.projectdetails.ProjectDetailsResponse
+import com.task.data.dto.projectlist.ProjectListRequest
+import com.task.data.dto.projectlist.ProjectListsResponse
 import com.task.data.dto.recipes.Recipes
 import com.task.data.local.LocalData
 import com.task.data.remote.RemoteData
@@ -29,6 +33,19 @@ class DataRepository @Inject constructor(
             emit(remoteRepository.requestLogin(loginRequest))
         }.flowOn(ioDispatcher)
     }
+
+    override suspend fun requestProjectList(projectListRequest: ProjectListRequest): Flow<Resource<ProjectListsResponse>> {
+        return flow {
+            emit(remoteRepository.requestProjectList(projectListRequest))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestProjectDeatils(projectDetailsRequest: ProjectDetailsRequest): Flow<Resource<ProjectDetailsResponse>> {
+        return flow {
+            emit(remoteRepository.requestProjectDeatils(projectDetailsRequest))
+        }.flowOn(ioDispatcher)
+    }
+
 
     override suspend fun addToFavourite(id: String): Flow<Resource<Boolean>> {
         return flow {

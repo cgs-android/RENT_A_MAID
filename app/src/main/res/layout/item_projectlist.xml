@@ -28,22 +28,28 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
+        android:gravity="start"
         android:textColor="@color/colorAliceBlue"
         android:textSize="@dimen/_14sdp"
+        app:layout_constraintEnd_toStartOf="@+id/pliProjectDateTextView"
+        app:layout_constraintHorizontal_weight="0.2"
         app:layout_constraintStart_toEndOf="@+id/pliProjectStatusImageView"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <com.task.utils.font.CustomFontTextViewMedium
         android:id="@+id/pliProjectDateTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_11sdp"
         android:layout_marginEnd="@dimen/_20sdp"
+        android:gravity="end"
         android:textColor="@color/colorAliceBlue"
         android:textSize="@dimen/_11sdp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="0.15"
+        app:layout_constraintStart_toEndOf="@+id/pliProjectIdTextView"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -98,9 +104,9 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
-        android:background="@color/colorAliceBlue"
+        android:background="@android:color/darker_gray"
         app:layout_constraintTop_toBottomOf="@+id/pliProjectDetailsConstraintLayout" />
 
 

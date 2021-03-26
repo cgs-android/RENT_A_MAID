@@ -18,51 +18,24 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <com.task.utils.font.CustomFontTextViewBold
-            android:id="@+id/laHeaderTitleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_40sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:text="@string/welcome_back"
-            android:textColor="@color/colorAliceBlue"
-            android:textSize="@dimen/_20sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.task.utils.font.CustomFontTextViewMedium
-            android:id="@+id/laHeaderSubTitleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_21sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:text="@string/login_to_continue"
-            android:textColor="@color/colorAliceBlue"
-            android:textSize="@dimen/_15sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/laHeaderTitleTextView" />
-
-
         <ImageView
             android:id="@+id/laAppLogoImageView"
-            android:layout_width="@dimen/_150sdp"
-            android:layout_height="@dimen/_150sdp"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:src="@drawable/ic_rent_a_maid"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginTop="@dimen/_100sdp"
+            android:src="@drawable/ic_app_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/laHeaderSubTitleTextView" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <com.task.utils.font.CustomerEdittextViewMedium
             android:id="@+id/laUserEmailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_30sdp"
             android:hint="@string/user_email"
             android:imeOptions="actionNext"
             android:inputType="text|textNoSuggestions|textEmailAddress"
@@ -78,9 +51,9 @@
             android:id="@+id/laPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginStart="@dimen/_30sdp"
             android:layout_marginTop="@dimen/_20sdp"
-            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_30sdp"
             android:hint="@string/password"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
@@ -98,9 +71,9 @@
             android:id="@+id/laForgotPasswordTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_21sdp"
+            android:layout_marginStart="@dimen/_30sdp"
             android:layout_marginTop="@dimen/_18sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_30sdp"
             android:text="@string/forgot_password"
             android:textColor="@color/colorOrange"
             android:textSize="@dimen/_11sdp"
@@ -111,9 +84,9 @@
             android:id="@+id/laLoginButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_43sdp"
-            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginStart="@dimen/_30sdp"
             android:layout_marginTop="@dimen/_30sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_30sdp"
             android:background="@drawable/button_radius"
             android:text="@string/login"
             android:textColor="@color/colorWhite"

@@ -12,7 +12,9 @@ import com.task.data.dto.login.LoginResponse
 import com.task.data.error.CHECK_YOUR_FIELDS
 import com.task.data.error.PASS_WORD_ERROR
 import com.task.data.error.USER_NAME_ERROR
+import com.task.data.local.LocalData
 import com.task.ui.base.BaseViewModel
+import com.task.utils.NetworkConnectivity
 import com.task.utils.RegexUtils.isValidEmail
 import com.task.utils.SingleEvent
 import com.task.utils.wrapEspressoIdlingResource
@@ -24,8 +26,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val dataRepository: DataRepository,
-    private val dataRepositoryRepository: DataRepositorySource
+    private val mDataRepository: DataRepository,
+    private val mDataRepositoryRepository: DataRepositorySource,
+    private val mNetworkConnectivity: NetworkConnectivity
 ) :
     BaseViewModel() {
 
@@ -56,7 +59,7 @@ class LoginViewModel @Inject constructor(
             viewModelScope.launch {
                 loginLiveDataPrivate.value = Resource.Loading()
                 wrapEspressoIdlingResource {
-                    dataRepositoryRepository.doLogin(
+                    mDataRepositoryRepository.doLogin(
                         loginRequest = LoginRequest(
                             userEmail,
                             passWord
@@ -69,6 +72,10 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+
+    fun isNetworkAvailable(): Boolean {
+        return mNetworkConnectivity.isConnected()
+    }
 
     fun showToastMessage(errorCode: Int) {
         val error = errorManager.getError(errorCode)

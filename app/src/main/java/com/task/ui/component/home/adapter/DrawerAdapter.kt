@@ -4,9 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.task.data.dto.drawer.DrawerResponse
-import com.task.data.dto.recipes.RecipesItem
-import com.task.databinding.DrawerItemBinding
-import com.task.ui.base.listeners.RecyclerItemListener
+import com.task.databinding.ItemDrawerBinding
 import com.task.ui.component.home.HomeViewModel
 import com.task.ui.component.home.listener.IDrawerItemListener
 
@@ -24,7 +22,7 @@ class DrawerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DrawerViewHolder {
         val itemBinding =
-            DrawerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemDrawerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return DrawerViewHolder(itemBinding)
     }
 

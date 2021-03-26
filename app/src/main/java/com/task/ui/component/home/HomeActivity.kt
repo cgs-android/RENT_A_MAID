@@ -15,7 +15,7 @@ import com.task.data.dto.drawer.DrawerResponse
 import com.task.databinding.ActivityHomeBinding
 import com.task.ui.base.BaseActivity
 import com.task.ui.component.home.adapter.DrawerAdapter
-import com.task.ui.component.home.fragment.dashboarddetail.DashboardDetailsFragment
+import com.task.ui.component.home.fragment.projectdetail.ProjectDetailsFragment
 import com.task.ui.component.home.fragment.projectlist.ProjectListFragment
 import com.task.utils.EnumIntUtils
 import com.task.utils.SingleEvent
@@ -27,8 +27,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeActivity : BaseActivity() {
 
     private lateinit var drawerAdapter: DrawerAdapter
-    private val dashboardFragment =
-        DashboardDetailsFragment()
+    private val projectDetailsFragment =
+        ProjectDetailsFragment()
 
     private val projectListFragment = ProjectListFragment()
 
@@ -53,7 +53,7 @@ class HomeActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initRecyclerView()
-        bindDrawerData(homeViewModel.loadDrawerData())
+        bindDrawerData(homeViewModel.loadDrawerData(this))
         changeFragment(EnumIntUtils.ONE.code, args)
     }
 
@@ -112,7 +112,7 @@ class HomeActivity : BaseActivity() {
     fun changeFragment(position: Int, bundle: Bundle?) {
         when (position) {
             EnumIntUtils.ZERO.code -> {
-                loadFragment(dashboardFragment, bundle)
+                loadFragment(projectDetailsFragment, bundle)
             }
             EnumIntUtils.ONE.code -> {
                 loadFragment(projectListFragment, bundle)
@@ -150,7 +150,15 @@ class HomeActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
+        val fragment =
+            supportFragmentManager.findFragmentById(R.id.chsHomeScreenFramelayout)
+        if (fragment !is OnBackPressedListner || !(fragment as OnBackPressedListner?)!!.onBackPressed()) {
+            super.onBackPressed()
+        }
+    }
+
+
+    interface OnBackPressedListner {
+        fun onBackPressed(): Boolean
     }
 }

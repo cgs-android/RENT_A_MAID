@@ -9,10 +9,10 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 
-interface RecipesService {
+interface CredentialService {
     @GET("recipes.json")
     suspend fun fetchRecipes(): Response<List<RecipesItem>>
 
-    @POST("login.json")
+    @POST("apis/users/login.json")
     suspend fun fetchLogin(@Body loginRequest: LoginRequest): Response<LoginResponse>
 }

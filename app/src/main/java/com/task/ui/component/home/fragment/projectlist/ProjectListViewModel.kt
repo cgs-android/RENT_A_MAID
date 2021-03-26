@@ -3,18 +3,26 @@ package com.task.ui.component.home.fragment.projectlist
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.task.data.dto.drawer.DrawerResponse
-import com.task.data.dto.projectlist.ProjectListResponse
+import androidx.lifecycle.viewModelScope
+import com.task.data.DataRepositorySource
+import com.task.data.Resource
+import com.task.data.dto.projectlist.ProjectListDataResponse
+import com.task.data.dto.projectlist.ProjectListRequest
+import com.task.data.dto.projectlist.ProjectListsResponse
 import com.task.ui.base.BaseViewModel
 import com.task.utils.SingleEvent
+import com.task.utils.wrapEspressoIdlingResource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProjectListViewModel @Inject constructor() : BaseViewModel() {
+class ProjectListViewModel @Inject constructor(
+    private val mDataRepositoryRepository: DataRepositorySource
+) :
+    BaseViewModel() {
 
-
-    private var projectListResponse: List<ProjectListResponse>? = null
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     private val showSnackBarPrivate = MutableLiveData<SingleEvent<Any>>()
@@ -25,47 +33,43 @@ class ProjectListViewModel @Inject constructor() : BaseViewModel() {
     val showToast: LiveData<SingleEvent<Any>> get() = showToastPrivate
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    private val openProjectDetailsPrivate = MutableLiveData<Int>()
-    val openProjectDetails: LiveData<Int> get() = openProjectDetailsPrivate
+    private val projectDetailsPrivate = MutableLiveData<Resource<ProjectListsResponse>>()
+    val projectDetails: LiveData<Resource<ProjectListsResponse>> get() = projectDetailsPrivate
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val openProjectDetailsPrivate = MutableLiveData<SingleEvent<ProjectListDataResponse>>()
+    val openProjectDetails: LiveData<SingleEvent<ProjectListDataResponse>> get() = openProjectDetailsPrivate
+
+
+    fun getAllProjectList() {
+        viewModelScope.launch {
+            projectDetailsPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                mDataRepositoryRepository.requestProjectList(
+                    projectListRequest = ProjectListRequest(
+                        getToken(),
+                    )
+                ).collect {
+                    projectDetailsPrivate.value = it
+                }
+            }
+        }
+    }
+
+    fun onProjectListItemOnTap(
+        projectListDataResponse: ProjectListDataResponse,
+        position: Int
+    ) {
+        openProjectDetailsPrivate.value = SingleEvent(projectListDataResponse)
+    }
+
+
+    fun showFailureToastMessage(error: String) {
+        showToastPrivate.value = SingleEvent(error)
+    }
 
     fun showToastMessage(errorCode: Int) {
         val error = errorManager.getError(errorCode)
         showToastPrivate.value = SingleEvent(error.description)
-    }
-
-    fun loadStaticProjectListData(): List<ProjectListResponse> {
-        projectListResponse = listOf(
-            ProjectListResponse(
-                "Project 456",
-                "Albert Ritschard [TL], \n" +
-                        "Susanne Iten, Franco Riccio, Martianne Aeby, Marta Amman",
-                "Today",
-                true,
-                true
-            ),
-            ProjectListResponse(
-                "Project 457", "Martianne Aeby [TL], Susanne Iten, \n" +
-                        "Franco Riccio, Marta Amman, \n" +
-                        "Giovanni Ceriello", "Tomorrow", true, true
-            ),
-            ProjectListResponse(
-                "Project 472",
-                "Susanne Iten, Franco Riccio, Martianne Aeby, Marta Amman",
-                "11.04.2021",
-                false, false
-            ),
-            ProjectListResponse(
-                "Project 485",
-                "Martianne Aeby [TL], Susanne Iten,",
-                "16.04.2021",
-                false, false
-            )
-        )
-        return projectListResponse as List<ProjectListResponse>
-    }
-
-    fun onProjectListItemOnTap(position: Int) {
-        openProjectDetailsPrivate.value = position
     }
 }

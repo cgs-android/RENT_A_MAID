@@ -17,4 +17,12 @@ object RegexUtils {
     fun isValidEmail(email: String): Boolean {
         return EMAIL_ADDRESS.matcher(email).matches()
     }
+
+    fun removeLastChar(s: String?): String? {
+        val lastIndex = s?.lastIndexOf("")
+        if (lastIndex != null) {
+            return s.substring(0, lastIndex - 1)
+        }
+        return " "
+    }
 }

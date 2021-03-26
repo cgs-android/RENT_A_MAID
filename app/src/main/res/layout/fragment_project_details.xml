@@ -3,17 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorCharcoal"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pdfConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorCharcoal">
+        android:background="@color/colorCharcoal"
+        android:visibility="visible">
 
 
         <include
             android:id="@+id/dfDashboardHeader"
-            layout="@layout/header_item"
+            layout="@layout/item_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -42,7 +45,7 @@
                 app:tint="@color/colorGreen" />
 
             <com.task.utils.font.CustomFontTextViewBold
-                android:id="@+id/pliProjectIdTextView"
+                android:id="@+id/pdfProjectIdTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -84,7 +87,7 @@
                 android:layout_marginStart="@dimen/_14sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@+id/pliProjectIdTextView">
+                app:layout_constraintTop_toBottomOf="@+id/pdfProjectIdTextView">
 
                 <com.task.utils.font.CustomFontTextViewMedium
                     android:id="@+id/ddfDriveTimeHintTextView"
@@ -93,9 +96,12 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
-                    android:text="Drive time start (Ideal): "
+                    android:gravity="start"
+                    android:text="@string/drive_time_start_ideal"
                     android:textColor="@color/colorAliceBlue"
                     android:textSize="@dimen/_13sdp"
+                    app:layout_constraintEnd_toStartOf="@+id/ddfDriveTimeTextView"
+                    app:layout_constraintHorizontal_weight="0.2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -106,11 +112,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:text="07:30 Hrs."
+                    android:layout_marginEnd="@dimen/_1sdp"
+                    android:gravity="end"
+                    android:text="07:30 Uhr"
                     android:textColor="@color/colorAliceBlue"
                     android:textSize="@dimen/_13sdp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="0.1"
+                    app:layout_constraintStart_toEndOf="@+id/ddfDriveTimeHintTextView"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -121,9 +130,12 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
-                    android:text="Work starts at location: "
+                    android:gravity="start"
+                    android:text="@string/work_starts_at_location"
                     android:textColor="@color/colorAliceBlue"
                     android:textSize="@dimen/_13sdp"
+                    app:layout_constraintEnd_toStartOf="@+id/ddfWorkStartTimeTextView"
+                    app:layout_constraintHorizontal_weight="0.2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ddfDriveTimeHintTextView" />
 
@@ -134,12 +146,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_1sdp"
+                    android:gravity="end"
                     android:text="08:30 Hrs."
                     android:textColor="@color/colorAliceBlue"
                     android:textSize="@dimen/_13sdp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ddfDriveTimeTextView" />
+                    app:layout_constraintHorizontal_weight="0.1"
+                    app:layout_constraintStart_toEndOf="@+id/ddfWorkStartHintTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/ddfDriveTimeHintTextView" />
 
 
                 <com.task.utils.font.CustomFontTextViewBold
@@ -147,7 +162,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:text="@string/team"
                     android:textColor="@color/colorAliceBlue"
@@ -155,11 +170,12 @@
                     app:layout_constraintTop_toBottomOf="@+id/ddfWorkStartHintTextView" />
 
                 <com.task.utils.font.CustomFontTextViewMedium
-                    android:id="@+id/pliProjectDescriptionTextView"
+                    android:id="@+id/pdfProjectDescriptionTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_1sdp"
                     android:text="Albert Ritschard [TL], Susanne Iten, Franco Riccio, Martianne Aeby, Marta Amman"
                     android:textColor="@color/colorAliceBlue"
                     android:textSize="@dimen/_12sdp"
@@ -175,14 +191,15 @@
                     android:text="@string/location"
                     android:textColor="@color/colorAliceBlue"
                     android:textSize="@dimen/_13sdp"
-                    app:layout_constraintTop_toBottomOf="@+id/pliProjectDescriptionTextView" />
+                    app:layout_constraintTop_toBottomOf="@+id/pdfProjectDescriptionTextView" />
 
                 <com.task.utils.font.CustomFontTextViewMedium
-                    android:id="@+id/pliProjectLocationDescriptionTextView"
+                    android:id="@+id/pdfProjectLocationDescriptionTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_1sdp"
                     android:text="Schlossstrasse 1A, 3800 Interlaken BE"
                     android:textColor="@color/colorAliceBlue"
                     android:textSize="@dimen/_12sdp"
@@ -198,7 +215,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:background="@color/colorAliceBlue"
+                android:background="@android:color/darker_gray"
                 app:layout_constraintTop_toBottomOf="@+id/pliProjectDetailsConstraintLayout" />
 
 
@@ -404,11 +421,175 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintWholeTravelTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:layout_marginEnd="@dimen/_30sdp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/ddfWholeConstraintLayout">
+
+
+            <com.task.utils.font.CustomFontTextViewMedium
+                android:id="@+id/textddfTravelTimeStartHint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:gravity="start"
+                android:text="@string/title_travel_start_time"
+                android:textColor="@color/colorAliceBlue"
+                android:textSize="@dimen/_12sdp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/textddfTravelTimeEndHint"
+                app:layout_constraintHorizontal_weight="0.2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.task.utils.font.CustomFontTextViewMedium
+                android:id="@+id/textddfTravelTimeEndHint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_1sdp"
+                android:gravity="end"
+                android:text="@string/title_travel_end_time"
+                android:textColor="@color/colorAliceBlue"
+                android:textSize="@dimen/_12sdp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="0.2"
+                app:layout_constraintStart_toEndOf="@+id/textddfTravelTimeStartHint"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.task.utils.font.CustomFontTextViewBold
+                android:id="@+id/textddfTravelTimeStart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:gravity="start"
+                android:text="08:10"
+                android:textColor="@color/colorOrange"
+                android:textSize="@dimen/_16sdp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/textddfTravelTimeEndHint"
+                app:layout_constraintHorizontal_weight="0.2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textddfTravelTimeStartHint" />
+
+
+            <com.task.utils.font.CustomFontTextViewBold
+                android:id="@+id/textddfTravelTimeEnd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_1sdp"
+                android:gravity="end"
+                android:text="00:00"
+                android:textColor="@color/colorOrange"
+                android:textSize="@dimen/_16sdp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="0.2"
+                app:layout_constraintStart_toEndOf="@+id/textddfTravelTimeStartHint"
+                app:layout_constraintTop_toBottomOf="@+id/textddfTravelTimeEndHint" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintWholeWorkTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_30sdp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/constraintWholeTravelTime">
+
+
+            <com.task.utils.font.CustomFontTextViewMedium
+                android:id="@+id/textddfWorkTimeStartHint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:gravity="start"
+                android:text="@string/start"
+                android:textColor="@color/colorAliceBlue"
+                android:textSize="@dimen/_12sdp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/textddfWorkTimeEndHint"
+                app:layout_constraintHorizontal_weight="0.2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.task.utils.font.CustomFontTextViewMedium
+                android:id="@+id/textddfWorkTimeEndHint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_1sdp"
+                android:gravity="end"
+                android:text="@string/end"
+                android:textColor="@color/colorAliceBlue"
+                android:textSize="@dimen/_12sdp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="0.2"
+                app:layout_constraintStart_toEndOf="@+id/textddfWorkTimeStartHint"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.task.utils.font.CustomFontTextViewBold
+                android:id="@+id/textddfWorkTimeStart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:gravity="start"
+                android:text="08:10"
+                android:textColor="@color/colorOrange"
+                android:textSize="@dimen/_16sdp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/textddfWorkTimeEndHint"
+                app:layout_constraintHorizontal_weight="0.2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textddfWorkTimeStartHint" />
+
+
+            <com.task.utils.font.CustomFontTextViewBold
+                android:id="@+id/textddfWorkTimeEnd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_1sdp"
+                android:gravity="end"
+                android:text="00:00"
+                android:textColor="@color/colorOrange"
+                android:textSize="@dimen/_16sdp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="0.2"
+                app:layout_constraintStart_toEndOf="@+id/textddfWorkTimeStartHint"
+                app:layout_constraintTop_toBottomOf="@+id/textddfWorkTimeEndHint" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/dfTimerConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_35sdp"
-            app:layout_constraintTop_toBottomOf="@+id/ddfWholeConstraintLayout">
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@+id/constraintWholeWorkTime">
 
 
             <com.task.utils.font.CustomFontTextViewBold
@@ -419,6 +600,7 @@
                 android:text="@string/travel_time"
                 android:textColor="@color/colorAliceBlue"
                 android:textSize="@dimen/_14sdp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -431,7 +613,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/circular_textview"
                 android:gravity="center"
-                android:text="@string/zeros"
+                android:text="@string/action_start"
                 android:textColor="@color/colorAliceBlue"
                 android:textSize="@dimen/_18sdp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -464,6 +646,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/sliding_background"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:sliding_button_background="@color/colorBlack"
             app:sliding_showTrack="false"
@@ -529,6 +712,20 @@
             app:sliding_text_size="@dimen/_15sdp"
             app:sliding_text_textStyle="bold"
             app:sliding_trackBackgroundTint="@color/colorGold" />
+
+        <RelativeLayout
+            android:id="@+id/ddfProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorCharcoal"
+            android:clickable="true"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

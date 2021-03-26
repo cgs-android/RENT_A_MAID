@@ -20,4 +20,5 @@
     <color name="colorGreen">#9FE554</color>
     <color name="colorJet">#333333</color>
     <color name="colorDarkGreen">#38b000</color>
+    <color name="colorBackground">#e8e8e8</color>
 </resources>
