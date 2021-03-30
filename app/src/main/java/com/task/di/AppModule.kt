@@ -1,13 +1,16 @@
 package com.task.di
 
+import android.app.Activity
 import android.content.Context
 import com.task.App
 import com.task.data.local.LocalData
+import com.task.utils.DialogHelper
 import com.task.utils.Network
 import com.task.utils.NetworkConnectivity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +25,13 @@ class AppModule {
     fun provideLocalRepository(@ApplicationContext context: Context): LocalData {
         return LocalData(context)
     }
+
+//    @Provides
+//    @Singleton
+//    fun provideDialogHelperRepository(@ActivityContext context: Activity): DialogHelper {
+//        return DialogHelper(context)
+//    }
+
 
     @Provides
     @Singleton

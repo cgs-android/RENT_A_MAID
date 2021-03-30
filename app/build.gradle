@@ -110,6 +110,8 @@ dependencies {
     //swipe button
     implementation "id.ss564.lib.slidingbutton:slidingbutton:$swipeButton"
 
+    //gson
+    implementation "com.google.code.gson:gson:$gsonVersion"
 
     // retrofit
     implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"

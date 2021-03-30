@@ -1,8 +1,11 @@
 package com.task.ui.component.home
 
+import android.app.Activity
+import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.task.R
 import com.task.data.DataRepository
 import com.task.data.Resource
 import com.task.data.dto.drawer.DrawerResponse
@@ -13,7 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val dataRepository: DataRepository) :
+class HomeViewModel @Inject constructor(private val mDataRepository: DataRepository) :
     BaseViewModel() {
 
     private var drawerResponse: List<DrawerResponse>? = null
@@ -31,11 +34,11 @@ class HomeViewModel @Inject constructor(private val dataRepository: DataReposito
     val showToast: LiveData<SingleEvent<Any>> get() = showToastPrivate
 
 
-    fun loadDrawerData(): List<DrawerResponse> {
+    fun loadDrawerData(activity: Activity): List<DrawerResponse> {
         drawerResponse = listOf(
-            DrawerResponse("Home"),
-            DrawerResponse("Project Details"),
-            DrawerResponse("Account Details")
+            DrawerResponse(activity.resources.getString(R.string.home)),
+            DrawerResponse(activity.resources.getString(R.string.project_detail)),
+            DrawerResponse(activity.resources.getString(R.string.account_details))
         )
         return drawerResponse as List<DrawerResponse>
     }

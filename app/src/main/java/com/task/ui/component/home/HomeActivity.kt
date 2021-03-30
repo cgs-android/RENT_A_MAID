@@ -15,7 +15,9 @@ import com.task.data.dto.drawer.DrawerResponse
 import com.task.databinding.ActivityHomeBinding
 import com.task.ui.base.BaseActivity
 import com.task.ui.component.home.adapter.DrawerAdapter
-import com.task.ui.component.home.fragment.dashboard.DashboardFragment
+import com.task.ui.component.home.fragment.projectdetail.ProjectDetailsFragment
+import com.task.ui.component.home.fragment.projectlist.ProjectListFragment
+import com.task.ui.component.home.fragment.projectworkdetail.ProjectWorkDetailsFragment
 import com.task.utils.EnumIntUtils
 import com.task.utils.SingleEvent
 import com.task.utils.setupSnackbar
@@ -26,8 +28,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeActivity : BaseActivity() {
 
     private lateinit var drawerAdapter: DrawerAdapter
-    private val dashboardFragment =
-        DashboardFragment()
+    private val projectDetailsFragment =
+        ProjectDetailsFragment()
+
+    private val projectWorkDetailsFragment = ProjectWorkDetailsFragment()
+
+    private val projectListFragment = ProjectListFragment()
 
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var binding: ActivityHomeBinding
@@ -50,8 +56,8 @@ class HomeActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initRecyclerView()
-        bindDrawerData(homeViewModel.loadDrawerData())
-        changeFragment(EnumIntUtils.ZERO.code, args)
+        bindDrawerData(homeViewModel.loadDrawerData(this))
+        changeFragment(EnumIntUtils.ONE.code, args)
     }
 
 
@@ -106,15 +112,21 @@ class HomeActivity : BaseActivity() {
         })
     }
 
-    private fun changeFragment(position: Int, bundle: Bundle) {
+    fun changeFragment(position: Int, bundle: Bundle?) {
         when (position) {
             EnumIntUtils.ZERO.code -> {
-                loadFragment(dashboardFragment, bundle)
+                loadFragment(projectDetailsFragment, bundle)
+            }
+            EnumIntUtils.ONE.code -> {
+                loadFragment(projectListFragment, bundle)
+            }
+            EnumIntUtils.TWO.code -> {
+                loadFragment(projectWorkDetailsFragment, bundle)
             }
         }
     }
 
-    private fun loadFragment(fragment: Fragment, bundle: Bundle) {
+    private fun loadFragment(fragment: Fragment, bundle: Bundle?) {
         val transaction = supportFragmentManager.beginTransaction()
         fragment.arguments = bundle
         transaction.replace(R.id.chsHomeScreenFramelayout, fragment)
@@ -141,5 +153,18 @@ class HomeActivity : BaseActivity() {
 
     private fun observeToast(event: LiveData<SingleEvent<Any>>) {
         binding.root.showToast(this, event, Snackbar.LENGTH_LONG)
+    }
+
+    override fun onBackPressed() {
+        val fragment =
+            supportFragmentManager.findFragmentById(R.id.chsHomeScreenFramelayout)
+        if (fragment !is OnBackPressedListner || !(fragment as OnBackPressedListner?)!!.onBackPressed()) {
+            super.onBackPressed()
+        }
+    }
+
+
+    interface OnBackPressedListner {
+        fun onBackPressed(): Boolean
     }
 }

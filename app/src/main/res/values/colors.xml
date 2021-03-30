@@ -12,6 +12,7 @@
     <color name="colorOrange">#FF7A59</color>
     <color name="colorBlue">#1F8EAD</color>
     <color name="colorCharcoal">#2E3F50</color>
+    <color name="colorLightCharcoal">#3C5168</color>
     <color name="colorAliceBlue">#F7FCFE</color>
     <color name="colorLightGrey">#515151</color>
     <color name="colorGold">#F1C40F</color>
@@ -19,4 +20,5 @@
     <color name="colorGreen">#9FE554</color>
     <color name="colorJet">#333333</color>
     <color name="colorDarkGreen">#38b000</color>
+    <color name="colorBackground">#e8e8e8</color>
 </resources>

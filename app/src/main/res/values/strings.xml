@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Rent a Maid</string>
     <string name="job_detail">Job Detail</string>
+    <string name="project_detail">Project Detail</string>
     <string name="start_work_time">Start work time</string>
     <string name="end_work_time">End work time</string>
     <string name="no_data">No Data</string>
@@ -15,8 +16,8 @@
     </string>
     <string name="recipe_title_preview">this is the recipe name</string>
     <string name="recipe">Recipes</string>
-    <string name="no_internet">Please check your internet connection</string>
-    <string name="network_error">Network error, could get data,please try again!</string>
+    <string name="no_internet">Es scheint, dass die App nicht mit dem Internet verbunden ist. Überprüfen Sie bitte Ihre Internetverbindung.</string>
+    <string name="network_error">Netzwerkfehler, könnte Daten erhalten, bitte versuchen Sie es erneut!</string>
     <string name="refresh">refresh</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_recipes">Recipes</string>
@@ -25,9 +26,9 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >4 characters</string>
-    <string name="invalid_username_and_password">please check your username and password</string>
+    <string name="invalid_username">Ungültige E-Mail Adresse</string>
+    <string name="invalid_password">Das Passwort muss> 4 Zeichen lang sein</string>
+    <string name="invalid_username_and_password">Bitte überprüfen Sie Ihre E-Mail-Adresse und Ihr Passwort</string>
     <string name="add_to_favorite">Add to favorite</string>
     <string name="test_password">ahmed</string>
     <string name="test_email">ahmed@ahmed.ahmed</string>
@@ -35,6 +36,7 @@
     <string name="login_to_continue">Login to continue.</string>
     <string name="mobile_number">Mobile Number*</string>
     <string name="user_name">Username</string>
+    <string name="user_email">Email</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="login">Login</string>
@@ -49,5 +51,31 @@
     <string name="tap_to_resume">Tap to resume</string>
     <string name="travel_time">Travel time</string>
     <string name="work_time">Work time</string>
-    <string name="zeros">00:00:00</string>
+    <string name="zeros">000</string>
+    <string name="assigned_tasks">Assigned tasks</string>
+    <string name="team">Team:</string>
+    <string name="location">Project Location:</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="all_tasks">All Tasks</string>
+    <string name="team_lead"><b><i> [TL]</i></b></string>
+    <string name="team_leader">Team Lead</string>
+    <string name="project">Project</string>
+    <string name="hrs">Hrs</string>
+    <string name="home">Home</string>
+    <string name="project_details">Project Details</string>
+    <string name="account_details">Account Details</string>
+    <string name="drive_time_start_ideal">Drive time start (Ideal):</string>
+    <string name="work_starts_at_location">Work starts at location:</string>
+    <string name="no_internet_splash">It seems that the app is not connected to the internet. Please check your internet connection, please close and reopen</string>
+    <string name="title_travel_start_time">Directions</string>
+    <string name="title_travel_end_time">At the Finish</string>
+    <string name="action_stop">STOP</string>
+    <string name="action_start">START</string>
+    <string name="msg_start_work_time">Start work time</string>
+    <string name="msg_end_work_time">End work time</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="msg_leave_comments">Leave your comments</string>
+    <string name="title_msg_travel_time">Are you confirm to lock travel time?</string>
 </resources>

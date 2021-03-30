@@ -1,8 +1,9 @@
 package com.task.data.remote
 
+import androidx.viewbinding.BuildConfig
 import com.task.data.remote.moshiFactories.MyKotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
-import com.task.BuildConfig
+
 import com.task.data.remote.moshiFactories.MyStandardJsonAdapters
 import com.task.BASE_URL
 import okhttp3.Interceptor
@@ -14,9 +15,6 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Created by AhmedEltaher
- */
 
 private const val timeoutRead = 30   //In seconds
 private const val contentType = "Content-Type"
@@ -42,9 +40,10 @@ class ServiceGenerator @Inject constructor() {
     private val logger: HttpLoggingInterceptor
         get() {
             val loggingInterceptor = HttpLoggingInterceptor()
-            if (BuildConfig.DEBUG) {
-                loggingInterceptor.apply { level = HttpLoggingInterceptor.Level.BODY }
-            }
+            loggingInterceptor.apply { level = HttpLoggingInterceptor.Level.BODY }
+//            if (BuildConfig.DEBUG) {
+//
+//            }
             return loggingInterceptor
         }
 

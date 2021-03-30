@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import com.google.android.material.snackbar.Snackbar
 import com.task.data.Resource
 import com.task.data.dto.login.LoginResponse
-import com.task.databinding.LoginActivityBinding
+import com.task.databinding.ActivityLoginBinding
 import com.task.ui.base.BaseActivity
 import com.task.ui.component.home.HomeActivity
 import com.task.ui.component.recipes.RecipesListActivity
@@ -19,21 +19,19 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginActivity : BaseActivity() {
 
     private val loginViewModel: LoginViewModel by viewModels()
-    private lateinit var binding: LoginActivityBinding
+    private lateinit var binding: ActivityLoginBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.login.setOnClickListener {
-            doLogin()
-        }
         binding.laLoginButton.setOnClickListener {
-            navigateToHomeScreen()
+            doLogin()
+            //navigateToHomeScreen()
         }
     }
 
     override fun initViewBinding() {
-        binding = LoginActivityBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
     }
@@ -46,8 +44,8 @@ class LoginActivity : BaseActivity() {
 
     private fun doLogin() {
         loginViewModel.doLogin(
-            binding.username.text.trim().toString(),
-            binding.password.text.toString()
+            binding.laUserEmailEditText.text?.trim().toString(),
+            binding.laPasswordEditText.text.toString()
         )
     }
 
@@ -56,13 +54,17 @@ class LoginActivity : BaseActivity() {
             is Resource.Loading -> binding.loaderView.toVisible()
             is Resource.Success -> status.data?.let {
                 binding.loaderView.toGone()
-                navigateToMainScreen()
+                navigateToHomeScreen()
             }
             is Resource.DataError -> {
                 binding.loaderView.toGone()
                 status.errorCode?.let {
                     loginViewModel.showToastMessage(it)
                 }
+            }
+            is Resource.Failure -> status.data?.let {
+                binding.loaderView.toGone()
+                loginViewModel.showFailureToastMessage(it.message)
             }
         }
     }
@@ -76,6 +78,7 @@ class LoginActivity : BaseActivity() {
     private fun navigateToHomeScreen() {
         val nextScreenIntent = Intent(this, HomeActivity::class.java)
         startActivity(nextScreenIntent)
+        finish()
     }
 
     private fun observeSnackBarMessages(event: LiveData<SingleEvent<Any>>) {

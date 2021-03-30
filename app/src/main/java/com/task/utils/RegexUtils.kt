@@ -3,10 +3,6 @@ package com.task.utils
 import java.util.regex.Pattern
 
 
-/**
- * Created by ahmedeltaher on 14/10/2017.
- */
-
 object RegexUtils {
     private val EMAIL_ADDRESS: Pattern = Pattern.compile(
         "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
@@ -20,5 +16,13 @@ object RegexUtils {
 
     fun isValidEmail(email: String): Boolean {
         return EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    fun removeLastChar(s: String?): String? {
+        val lastIndex = s?.lastIndexOf("")
+        if (lastIndex != null) {
+            return s.substring(0, lastIndex - 1)
+        }
+        return " "
     }
 }
