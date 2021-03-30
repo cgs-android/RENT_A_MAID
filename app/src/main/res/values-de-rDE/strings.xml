@@ -49,11 +49,11 @@
     <string name="team_leader_tl">Team Leader (TL)</string>
     <string name="start">Start</string>
     <string name="end">Beenden</string>
-    <string name="tap_to_pause">Berühren bei Pause</string>
-    <string name="tap_to_resume">Berühren zum Fortsetzen</string>
+    <string name="tap_to_pause">PAUSE</string>
+    <string name="tap_to_resume">FORTSETZEN</string>
     <string name="travel_time">Fahrtzeit</string>
     <string name="work_time">Arbeitszeit</string>
-    <string name="zeros">00:00:00</string>
+    <string name="zeros">000</string>
     <string name="assigned_tasks">Zugeordnete Projekte</string>
     <string name="team">Team:</string>
     <string name="location">Projektort:</string>
@@ -64,7 +64,7 @@
     <string name="team_leader">Team Lead</string>
     <string name="project">Projekt</string>
     <string name="hrs">Uhr</string>
-    <string name="drive_time_start_ideal">Fahrtzeit Beginn (Idealerweise):</string>
+    <string name="drive_time_start_ideal">Fahrtzeit Beginn:</string>
     <string name="work_starts_at_location">Arbeitsbeginn:</string>
     <string name="home">Startseite</string>
     <string name="project_details">Projektdetails</string>
@@ -73,4 +73,10 @@
     <string name="title_travel_end_time">Am Ziel</string>
     <string name="action_stop">STOP</string>
     <string name="action_start">START</string>
+    <string name="msg_start_work_time">Arbeitsbeginn</string>
+    <string name="msg_end_work_time">Arbeitsendzeit</string>
+    <string name="action_cancel">Abbrechen</string>
+    <string name="action_confirm">Bestätigen</string>
+    <string name="msg_leave_comments">Hinterlasse deine Kommentare</string>
+    <string name="title_msg_travel_time">Bestätigen Sie, die Reisezeit zu sperren?</string>
 </resources>

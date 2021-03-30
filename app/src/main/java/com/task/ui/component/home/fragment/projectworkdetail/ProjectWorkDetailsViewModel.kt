@@ -1,17 +1,20 @@
-package com.task.ui.component.home.fragment.projectdetail
+package com.task.ui.component.home.fragment.projectworkdetail
 
+import android.app.Activity
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.task.R
 import com.task.data.DataRepositorySource
 import com.task.data.Resource
+import com.task.data.dto.drawer.DrawerResponse
 import com.task.data.dto.projectdetails.ProjectDetailsRequest
 import com.task.data.dto.projectdetails.ProjectDetailsResponse
 import com.task.data.dto.projectlist.ProjectListRequest
 import com.task.data.dto.projectlist.ProjectListsResponse
+import com.task.data.dto.worktime.WorkLogResponse
 import com.task.ui.base.BaseViewModel
-import com.task.utils.DialogHelper
 import com.task.utils.SingleEvent
 import com.task.utils.wrapEspressoIdlingResource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,10 +23,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProjectDetailsViewModel @Inject constructor(
+class ProjectWorkDetailsViewModel @Inject constructor(
     private val mDataRepositoryRepository: DataRepositorySource
 ) :
     BaseViewModel() {
+
+    private var workLogResponseList: MutableList<WorkLogResponse> = mutableListOf()
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     private val showSnackBarPrivate = MutableLiveData<SingleEvent<Any>>()
@@ -38,20 +43,11 @@ class ProjectDetailsViewModel @Inject constructor(
     private val projectDetailsPrivate = MutableLiveData<Resource<ProjectDetailsResponse>>()
     val projectDetails: LiveData<Resource<ProjectDetailsResponse>> get() = projectDetailsPrivate
 
-    fun getProjectDetails(projectId: String) {
-        viewModelScope.launch {
-            projectDetailsPrivate.value = Resource.Loading()
-            wrapEspressoIdlingResource {
-                mDataRepositoryRepository.requestProjectDeatils(
-                    projectDetailsRequest = ProjectDetailsRequest(
-                        getToken(),
-                        projectId
-                    )
-                ).collect {
-                    projectDetailsPrivate.value = it
-                }
-            }
-        }
+    fun loadWorkLogData(
+        activity: Activity, workLogResponse: WorkLogResponse
+    ): MutableList<WorkLogResponse> {
+        this.workLogResponseList.add(workLogResponse)
+        return workLogResponseList
     }
 
 
@@ -62,5 +58,9 @@ class ProjectDetailsViewModel @Inject constructor(
 
     fun showFailureToastMessage(error: String) {
         showToastPrivate.value = SingleEvent(error)
+    }
+
+    fun clearList() {
+        workLogResponseList = mutableListOf()
     }
 }

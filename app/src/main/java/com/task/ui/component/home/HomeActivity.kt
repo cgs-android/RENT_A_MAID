@@ -17,6 +17,7 @@ import com.task.ui.base.BaseActivity
 import com.task.ui.component.home.adapter.DrawerAdapter
 import com.task.ui.component.home.fragment.projectdetail.ProjectDetailsFragment
 import com.task.ui.component.home.fragment.projectlist.ProjectListFragment
+import com.task.ui.component.home.fragment.projectworkdetail.ProjectWorkDetailsFragment
 import com.task.utils.EnumIntUtils
 import com.task.utils.SingleEvent
 import com.task.utils.setupSnackbar
@@ -29,6 +30,8 @@ class HomeActivity : BaseActivity() {
     private lateinit var drawerAdapter: DrawerAdapter
     private val projectDetailsFragment =
         ProjectDetailsFragment()
+
+    private val projectWorkDetailsFragment = ProjectWorkDetailsFragment()
 
     private val projectListFragment = ProjectListFragment()
 
@@ -116,6 +119,9 @@ class HomeActivity : BaseActivity() {
             }
             EnumIntUtils.ONE.code -> {
                 loadFragment(projectListFragment, bundle)
+            }
+            EnumIntUtils.TWO.code -> {
+                loadFragment(projectWorkDetailsFragment, bundle)
             }
         }
     }

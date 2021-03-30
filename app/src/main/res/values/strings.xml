@@ -51,7 +51,7 @@
     <string name="tap_to_resume">Tap to resume</string>
     <string name="travel_time">Travel time</string>
     <string name="work_time">Work time</string>
-    <string name="zeros">00:00:00</string>
+    <string name="zeros">000</string>
     <string name="assigned_tasks">Assigned tasks</string>
     <string name="team">Team:</string>
     <string name="location">Project Location:</string>
@@ -72,4 +72,10 @@
     <string name="title_travel_end_time">At the Finish</string>
     <string name="action_stop">STOP</string>
     <string name="action_start">START</string>
+    <string name="msg_start_work_time">Start work time</string>
+    <string name="msg_end_work_time">End work time</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="msg_leave_comments">Leave your comments</string>
+    <string name="title_msg_travel_time">Are you confirm to lock travel time?</string>
 </resources>

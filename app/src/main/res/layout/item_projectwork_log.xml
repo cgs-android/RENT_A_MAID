@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorCharcoal"
+    android:paddingBottom="@dimen/_10sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintIpwlWholeWorkTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <com.task.utils.font.CustomFontTextViewMedium
+            android:id="@+id/textIpwlWorkTimeStartHint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:gravity="start"
+            android:text="@string/start_work_time"
+            android:textColor="@color/colorAliceBlue"
+            android:textSize="@dimen/_12sdp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/textIpwlWorkTimeEndHint"
+            app:layout_constraintHorizontal_weight="0.2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.task.utils.font.CustomFontTextViewMedium
+            android:id="@+id/textIpwlWorkTimeEndHint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_1sdp"
+            android:gravity="end"
+            android:text="@string/end_work_time"
+            android:textColor="@color/colorAliceBlue"
+            android:textSize="@dimen/_12sdp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="0.2"
+            app:layout_constraintStart_toEndOf="@+id/textIpwlWorkTimeStartHint"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.task.utils.font.CustomFontTextViewBold
+            android:id="@+id/textIpwlWorkTimeStart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:gravity="start"
+            android:text="08:10"
+            android:textColor="@color/colorOrange"
+            android:textSize="@dimen/_16sdp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/textIpwlWorkTimeEndHint"
+            app:layout_constraintHorizontal_weight="0.2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textIpwlWorkTimeStartHint" />
+
+
+        <com.task.utils.font.CustomFontTextViewBold
+            android:id="@+id/textIpwlWorkTimeEnd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_1sdp"
+            android:gravity="end"
+            android:text="00:00"
+            android:textColor="@color/colorOrange"
+            android:textSize="@dimen/_16sdp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="0.2"
+            app:layout_constraintStart_toEndOf="@+id/textIpwlWorkTimeStartHint"
+            app:layout_constraintTop_toBottomOf="@+id/textIpwlWorkTimeEndHint" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

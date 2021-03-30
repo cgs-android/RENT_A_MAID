@@ -57,26 +57,14 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <com.task.utils.font.CustomFontTextViewMedium
-                android:id="@+id/pliProjectDateTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:textColor="@color/colorAliceBlue"
-                android:textSize="@dimen/_11sdp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
             <ImageView
+                android:id="@+id/imagePwdUpDownArrow"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_9sdp"
                 android:layout_marginEnd="@dimen/_3sdp"
                 android:src="@drawable/ic_right_arrow"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_14sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/pdfProjectIdTextView">
 
                 <com.task.utils.font.CustomFontTextViewMedium
@@ -223,7 +211,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintddfTravelTimeHint"
+            android:id="@+id/constraintPwdTravelTimeHint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -237,7 +225,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:gravity="center"
-                android:text="@string/travel_time"
+                android:text="@string/work_time"
                 android:textColor="@color/colorAliceBlue"
                 android:textSize="@dimen/_13sdp"
                 android:visibility="visible"
@@ -245,87 +233,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintWholeTravelTime"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerFpwdTravelTimeList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_30sdp"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:layout_marginEnd="@dimen/_30sdp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/constraintddfTravelTimeHint">
-
-
-            <com.task.utils.font.CustomFontTextViewMedium
-                android:id="@+id/textddfTravelTimeStartHint"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:gravity="start"
-                android:text="@string/title_travel_start_time"
-                android:textColor="@color/colorAliceBlue"
-                android:textSize="@dimen/_12sdp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@+id/textddfTravelTimeEndHint"
-                app:layout_constraintHorizontal_weight="0.2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <com.task.utils.font.CustomFontTextViewMedium
-                android:id="@+id/textddfTravelTimeEndHint"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_1sdp"
-                android:gravity="end"
-                android:text="@string/title_travel_end_time"
-                android:textColor="@color/colorAliceBlue"
-                android:textSize="@dimen/_12sdp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="0.2"
-                app:layout_constraintStart_toEndOf="@+id/textddfTravelTimeStartHint"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <com.task.utils.font.CustomFontTextViewBold
-                android:id="@+id/textddfTravelTimeStart"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:gravity="start"
-                android:text="08:10"
-                android:textColor="@color/colorOrange"
-                android:textSize="@dimen/_16sdp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@+id/textddfTravelTimeEndHint"
-                app:layout_constraintHorizontal_weight="0.2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textddfTravelTimeStartHint" />
-
-
-            <com.task.utils.font.CustomFontTextViewBold
-                android:id="@+id/textddfTravelTimeEnd"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_1sdp"
-                android:gravity="end"
-                android:text="00:00"
-                android:textColor="@color/colorOrange"
-                android:textSize="@dimen/_16sdp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="0.2"
-                app:layout_constraintStart_toEndOf="@+id/textddfTravelTimeStartHint"
-                app:layout_constraintTop_toBottomOf="@+id/textddfTravelTimeEndHint" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@+id/constraintPwdTravelTimeHint" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -333,7 +246,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
-            app:layout_constraintTop_toBottomOf="@+id/constraintWholeTravelTime">
+            android:paddingBottom="@dimen/_30sdp"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerFpwdTravelTimeList">
 
 
             <com.task.utils.font.CustomFontTextViewBold
@@ -373,11 +287,12 @@
                 android:text="@string/tap_to_pause"
                 android:textColor="@color/colorAliceBlue"
                 android:textSize="@dimen/_13sdp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dfTimerTextView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <RelativeLayout
             android:id="@+id/ddfProgressBar"
