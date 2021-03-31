@@ -77,6 +77,11 @@
     <string name="msg_end_work_time">Arbeitsendzeit</string>
     <string name="action_cancel">Abbrechen</string>
     <string name="action_confirm">Bestätigen</string>
-    <string name="msg_leave_comments">Hinterlasse deine Kommentare</string>
-    <string name="title_msg_travel_time">Bestätigen Sie, die Reisezeit zu sperren?</string>
+    <string name="title_time_stamp">Zeitstempel</string>
+    <string name="title_stamp_in">Einstempeln</string>
+    <string name="title_stamp_off">Abstempeln</string>
+    <string name="title_are_you_there">Bist Du am Ziel?</string>
+    <string name="title_end_of_work">Feierabend?</string>
+    <string name="msg_leave_comments">Kommentare hinterlassen</string>
+    <string name="title_msg_travel_time">Soll die Fahrzeit jetzt eingestellt werden?</string>
 </resources>

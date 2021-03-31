@@ -76,6 +76,11 @@
     <string name="msg_end_work_time">End work time</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_confirm">Confirm</string>
+    <string name="title_stamp_in">Stamp in</string>
+    <string name="title_stamp_off">Stamp off</string>
+    <string name="title_time_stamp">Time stamp</string>
+    <string name="title_are_you_there">Are you there?</string>
+    <string name="title_end_of_work">End of working day?</string>
     <string name="msg_leave_comments">Leave your comments</string>
-    <string name="title_msg_travel_time">Are you confirm to lock travel time?</string>
+    <string name="title_msg_travel_time">Should the drive time now be discontinued?</string>
 </resources>

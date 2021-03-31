@@ -1,19 +1,17 @@
 package com.task.ui.component.home
 
 import android.app.Activity
-import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.task.R
 import com.task.data.DataRepository
-import com.task.data.Resource
 import com.task.data.dto.drawer.DrawerResponse
-import com.task.data.dto.recipes.RecipesItem
 import com.task.ui.base.BaseViewModel
 import com.task.utils.SingleEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val mDataRepository: DataRepository) :

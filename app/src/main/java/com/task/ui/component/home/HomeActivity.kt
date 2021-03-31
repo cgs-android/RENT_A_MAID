@@ -15,7 +15,7 @@ import com.task.data.dto.drawer.DrawerResponse
 import com.task.databinding.ActivityHomeBinding
 import com.task.ui.base.BaseActivity
 import com.task.ui.component.home.adapter.DrawerAdapter
-import com.task.ui.component.home.fragment.projectdetail.ProjectDetailsFragment
+import com.task.ui.component.home.fragment.projecttraveldetail.ProjectTravelDetailsFragment
 import com.task.ui.component.home.fragment.projectlist.ProjectListFragment
 import com.task.ui.component.home.fragment.projectworkdetail.ProjectWorkDetailsFragment
 import com.task.utils.EnumIntUtils
@@ -29,7 +29,7 @@ class HomeActivity : BaseActivity() {
 
     private lateinit var drawerAdapter: DrawerAdapter
     private val projectDetailsFragment =
-        ProjectDetailsFragment()
+        ProjectTravelDetailsFragment()
 
     private val projectWorkDetailsFragment = ProjectWorkDetailsFragment()
 
@@ -38,7 +38,7 @@ class HomeActivity : BaseActivity() {
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var binding: ActivityHomeBinding
 
-    var args = Bundle()
+    private var args = Bundle()
 
     override fun observeViewModel() {
         observeSnackBarMessages(homeViewModel.showSnackBar)
@@ -58,6 +58,38 @@ class HomeActivity : BaseActivity() {
         initRecyclerView()
         bindDrawerData(homeViewModel.loadDrawerData(this))
         changeFragment(EnumIntUtils.ONE.code, args)
+    }
+
+    override fun onBackPressed() {
+        val fragment =
+            supportFragmentManager.findFragmentById(R.id.chsHomeScreenFramelayout)
+        if (fragment !is OnBackPressedListner || !(fragment as OnBackPressedListner?)!!.onBackPressed()) {
+            super.onBackPressed()
+        }
+    }
+
+
+    fun drawerOpenAndClose() {
+        if (binding.ahDashboardDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+            binding.ahDashboardDrawerLayout.closeDrawer(Gravity.LEFT)
+        } else {
+            binding.ahDashboardDrawerLayout.openDrawer(Gravity.LEFT)
+        }
+    }
+
+
+    fun changeFragment(position: Int, bundle: Bundle?) {
+        when (position) {
+            EnumIntUtils.ZERO.code -> {
+                loadFragment(projectDetailsFragment, bundle)
+            }
+            EnumIntUtils.ONE.code -> {
+                loadFragment(projectListFragment, bundle)
+            }
+            EnumIntUtils.TWO.code -> {
+                loadFragment(projectWorkDetailsFragment, bundle)
+            }
+        }
     }
 
 
@@ -112,19 +144,6 @@ class HomeActivity : BaseActivity() {
         })
     }
 
-    fun changeFragment(position: Int, bundle: Bundle?) {
-        when (position) {
-            EnumIntUtils.ZERO.code -> {
-                loadFragment(projectDetailsFragment, bundle)
-            }
-            EnumIntUtils.ONE.code -> {
-                loadFragment(projectListFragment, bundle)
-            }
-            EnumIntUtils.TWO.code -> {
-                loadFragment(projectWorkDetailsFragment, bundle)
-            }
-        }
-    }
 
     private fun loadFragment(fragment: Fragment, bundle: Bundle?) {
         val transaction = supportFragmentManager.beginTransaction()
@@ -132,14 +151,6 @@ class HomeActivity : BaseActivity() {
         transaction.replace(R.id.chsHomeScreenFramelayout, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
-    }
-
-    fun drawerOpenAndClose() {
-        if (binding.ahDashboardDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-            binding.ahDashboardDrawerLayout.closeDrawer(Gravity.LEFT)
-        } else {
-            binding.ahDashboardDrawerLayout.openDrawer(Gravity.LEFT)
-        }
     }
 
 
@@ -153,14 +164,6 @@ class HomeActivity : BaseActivity() {
 
     private fun observeToast(event: LiveData<SingleEvent<Any>>) {
         binding.root.showToast(this, event, Snackbar.LENGTH_LONG)
-    }
-
-    override fun onBackPressed() {
-        val fragment =
-            supportFragmentManager.findFragmentById(R.id.chsHomeScreenFramelayout)
-        if (fragment !is OnBackPressedListner || !(fragment as OnBackPressedListner?)!!.onBackPressed()) {
-            super.onBackPressed()
-        }
     }
 
 

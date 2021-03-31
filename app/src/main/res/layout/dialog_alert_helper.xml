@@ -62,11 +62,13 @@
             android:backgroundTint="@color/colorLightGrey"
             android:hint="@string/msg_leave_comments"
             android:imeOptions="actionDone"
-            android:inputType="text|textNoSuggestions|textCapWords"
+            android:inputType="textMultiLine|textNoSuggestions|textCapWords"
+            android:lines="3"
+            android:maxLines="10"
             android:paddingBottom="@dimen/_10sdp"
-            android:singleLine="true"
+            android:singleLine="false"
             android:text=""
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorCharcoal"
             android:textColorHint="@color/colorLightGrey"
             android:textSize="@dimen/_13sdp"
             android:visibility="gone"
@@ -79,41 +81,47 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:paddingBottom="@dimen/_5sdp"
         app:layout_constraintTop_toBottomOf="@+id/constraintDahMessage">
 
 
-        <com.task.utils.font.CustomFontTextViewMedium
+        <com.task.utils.font.CustomButtonMedium
             android:id="@+id/textDahPositiveAction"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_30sdp"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_15sdp"
-            android:gravity="end"
-            android:padding="@dimen/_10sdp"
+            android:background="@drawable/button_radius"
+            android:gravity="center"
             android:text="@string/action_confirm"
-            android:textColor="@color/colorBlack"
+            android:textAllCaps="false"
+            android:textColor="@color/colorCharcoal"
             android:textSize="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="0.1"
+            app:layout_constraintStart_toEndOf="@+id/textDahNegativeAction"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.task.utils.font.CustomFontTextViewMedium
+        <com.task.utils.font.CustomButtonMedium
             android:id="@+id/textDahNegativeAction"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_30sdp"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_15sdp"
-            android:gravity="end"
-            android:padding="@dimen/_10sdp"
+            android:background="@drawable/button_radius"
+            android:gravity="center"
             android:text="@string/action_cancel"
-            android:textColor="@color/colorBlack"
+            android:textAllCaps="false"
+            android:textColor="@color/colorCharcoal"
             android:textSize="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textDahPositiveAction"
+            app:layout_constraintHorizontal_weight="0.1"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 

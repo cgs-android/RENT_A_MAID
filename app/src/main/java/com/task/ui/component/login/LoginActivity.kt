@@ -10,7 +10,6 @@ import com.task.data.dto.login.LoginResponse
 import com.task.databinding.ActivityLoginBinding
 import com.task.ui.base.BaseActivity
 import com.task.ui.component.home.HomeActivity
-import com.task.ui.component.recipes.RecipesListActivity
 import com.task.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +25,6 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding.laLoginButton.setOnClickListener {
             doLogin()
-            //navigateToHomeScreen()
         }
     }
 
@@ -69,11 +67,6 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    private fun navigateToMainScreen() {
-        val nextScreenIntent = Intent(this, RecipesListActivity::class.java)
-        startActivity(nextScreenIntent)
-        finish()
-    }
 
     private fun navigateToHomeScreen() {
         val nextScreenIntent = Intent(this, HomeActivity::class.java)

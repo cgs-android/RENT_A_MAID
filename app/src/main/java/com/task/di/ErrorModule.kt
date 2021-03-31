@@ -10,7 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-// with @Module we Telling Dagger that, this is a Dagger module
+
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class ErrorModule {

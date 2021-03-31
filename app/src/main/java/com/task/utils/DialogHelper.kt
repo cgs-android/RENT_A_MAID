@@ -16,6 +16,7 @@ class DialogHelper @Inject constructor(val activity: Activity) {
 
     fun showAlertDialog(
         lister: DialogPickListener,
+        title: String,
         msg: String,
         positive: String,
         negative: String, showCommentBox: Boolean = false
@@ -37,6 +38,12 @@ class DialogHelper @Inject constructor(val activity: Activity) {
 
         alertView.textDahMessage.apply {
             text = msg
+        }
+
+        alertView.textDahHeader.apply {
+            if (!title.isNullOrEmpty()) {
+                text = title
+            }
         }
 
         alertView.textDahNegativeAction.apply {

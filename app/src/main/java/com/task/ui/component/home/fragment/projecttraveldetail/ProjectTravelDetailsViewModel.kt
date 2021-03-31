@@ -1,4 +1,4 @@
-package com.task.ui.component.home.fragment.projectdetail
+package com.task.ui.component.home.fragment.projecttraveldetail
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
@@ -6,12 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.task.data.DataRepositorySource
 import com.task.data.Resource
-import com.task.data.dto.projectdetails.ProjectDetailsRequest
-import com.task.data.dto.projectdetails.ProjectDetailsResponse
-import com.task.data.dto.projectlist.ProjectListRequest
-import com.task.data.dto.projectlist.ProjectListsResponse
+import com.task.data.dto.projecttraveldetails.ProjectTravelDetailsRequest
+import com.task.data.dto.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.ui.base.BaseViewModel
-import com.task.utils.DialogHelper
 import com.task.utils.SingleEvent
 import com.task.utils.wrapEspressoIdlingResource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProjectDetailsViewModel @Inject constructor(
+class ProjectTravelDetailsViewModel @Inject constructor(
     private val mDataRepositoryRepository: DataRepositorySource
 ) :
     BaseViewModel() {
@@ -35,15 +32,15 @@ class ProjectDetailsViewModel @Inject constructor(
 
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    private val projectDetailsPrivate = MutableLiveData<Resource<ProjectDetailsResponse>>()
-    val projectDetails: LiveData<Resource<ProjectDetailsResponse>> get() = projectDetailsPrivate
+    private val projectDetailsPrivate = MutableLiveData<Resource<ProjectTravelDetailsResponse>>()
+    val projectTravelDetails: LiveData<Resource<ProjectTravelDetailsResponse>> get() = projectDetailsPrivate
 
     fun getProjectDetails(projectId: String) {
         viewModelScope.launch {
             projectDetailsPrivate.value = Resource.Loading()
             wrapEspressoIdlingResource {
                 mDataRepositoryRepository.requestProjectDeatils(
-                    projectDetailsRequest = ProjectDetailsRequest(
+                    projectTravelDetailsRequest = ProjectTravelDetailsRequest(
                         getToken(),
                         projectId
                     )

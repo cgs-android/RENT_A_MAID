@@ -1,4 +1,4 @@
-package com.task.ui.component.home.fragment.projectdetail
+package com.task.ui.component.home.fragment.projecttraveldetail
 
 import android.os.Build
 import android.os.Bundle
@@ -15,9 +15,9 @@ import com.google.gson.GsonBuilder
 import com.task.BUNDLE_PROJECT_DETAILS
 import com.task.R
 import com.task.data.Resource
-import com.task.data.dto.projectdetails.ProjectDetailsResponse
+import com.task.data.dto.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.projectlist.ProjectListDataResponse
-import com.task.databinding.FragmentProjectDetailsBinding
+import com.task.databinding.FragmentProjectTravelDetailsBinding
 import com.task.ui.base.BaseFragment
 import com.task.ui.component.home.HomeActivity
 import com.task.utils.*
@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class ProjectDetailsFragment : BaseFragment(), View.OnClickListener,
+class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     HomeActivity.OnBackPressedListner {
 
     @Inject
@@ -40,8 +40,6 @@ class ProjectDetailsFragment : BaseFragment(), View.OnClickListener,
     private var mPauseAndResume: Boolean = false
     private var mCountTimer = 0
     private lateinit var homeActivity: HomeActivity
-    private var mTravelTime: String = ""
-    private var mWorkTime: String = ""
 
     private var mTeamMember: String? = ""
     private var mTeamLead: String? = ""
@@ -49,14 +47,14 @@ class ProjectDetailsFragment : BaseFragment(), View.OnClickListener,
     private var mtimerStatus: Int = 0
     private var mEndTime: String? = ""
 
-    private var projectDetailsResponse: ProjectDetailsResponse? = null
+    private var projectTravelDetailsResponse: ProjectTravelDetailsResponse? = null
 
-    private lateinit var projectDetailsViewModel: ProjectDetailsViewModel
+    private lateinit var projectTravelDetailsViewModel: ProjectTravelDetailsViewModel
 
-    private lateinit var binding: FragmentProjectDetailsBinding
+    private lateinit var binding: FragmentProjectTravelDetailsBinding
 
 
-    var timerHandler: Handler = Handler()
+    private var timerHandler: Handler = Handler()
     private var timerRunnable: Runnable = object : Runnable {
         override fun run() {
             val millis = System.currentTimeMillis() - mStartTime
@@ -92,17 +90,138 @@ class ProjectDetailsFragment : BaseFragment(), View.OnClickListener,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProjectDetailsBinding.inflate(layoutInflater, container, false)
+        binding = FragmentProjectTravelDetailsBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun observeViewModel() {
-        observeToast(projectDetailsViewModel.showToast)
-        observe(projectDetailsViewModel.projectDetails, ::handleProjectDetailResult)
+        observeToast(projectTravelDetailsViewModel.showToast)
+        observe(projectTravelDetailsViewModel.projectTravelDetails, ::handleProjectDetailResult)
+    }
+
+    override fun initOnClickListeners() {
+        binding.dfPauseTextView.setOnClickListener(this)
+        binding.dfTimerTextView.setOnClickListener(this)
+        binding.ddfWholeConstraintLayout.setOnClickListener(this)
+        hiMenuNavigationImageView.setOnClickListener(this)
+    }
+
+    override fun initAppHeader() {
+
+    }
+
+    override fun init() {
+        homeActivity = activity as HomeActivity
+    }
+
+    override fun apiCallBacks(event: Int) {
+        when (event) {
+            EnumIntUtils.ZERO.code -> {
+                projectTravelDetailsViewModel.getProjectDetails(getBundleProjectListDataResponse().project_details.id)
+            }
+        }
     }
 
 
-    private fun handleProjectDetailResult(status: Resource<ProjectDetailsResponse>) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        projectTravelDetailsViewModel =
+            ViewModelProviders.of(this).get(ProjectTravelDetailsViewModel::class.java)
+        observeViewModel()
+        apiCallBacks(0)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onClick(v: View?) {
+        when (v) {
+            binding.dfPauseTextView -> {
+                if (mPauseAndResume) {
+                    mPauseAndResume = false
+                    binding.dfPauseTextView.apply {
+                        text = this.resources.getString(R.string.tap_to_pause)
+                        setTextColor(this.resources.getColor(R.color.colorAliceBlue))
+                        resumeTimerClock()
+                    }
+                } else {
+                    mPauseAndResume = true
+                    binding.dfPauseTextView.apply {
+                        text = this.resources.getString(R.string.tap_to_resume)
+                        setTextColor(this.resources.getColor(R.color.colorRed))
+                        endTimerClock()
+                    }
+                }
+            }
+            hiMenuNavigationImageView -> {
+                homeActivity.drawerOpenAndClose()
+            }
+            binding.dfTimerTextView -> {
+                val dateTimeFormatter =
+                    DateTimeFormatter.ofPattern("HH:mm").format(LocalTime.now()).toString()
+                when (mtimerStatus) {
+                    0 -> {
+                        binding.textddfTravelTimeStart.text = dateTimeFormatter
+                        visibleTravelTimeStart()
+                        startTimerClock()
+                        binding.dfTimerTextView.text =
+                            requireActivity().getString(R.string.action_stop)
+                        mtimerStatus = 1
+                    }
+
+                    1 -> {
+                        binding.dfTimerTextView.text =
+                            requireActivity().getString(R.string.action_stop)
+
+                        dialogHelper.showAlertDialog(
+                            object : DialogHelper.DialogPickListener {
+                                override fun onPositiveClicked() {
+                                    visibleTravelTimeEnd()
+                                    binding.textddfTravelTimeEnd.text = dateTimeFormatter
+                                    resetTimerClock()
+                                    binding.dfTimerConstraintLayout.visibility = View.GONE
+                                    mtimerStatus = 0
+                                    binding.textddfTravelTimeEnd.setTextColor(
+                                        requireActivity().resources.getColor(
+                                            R.color.colorAliceBlue
+                                        )
+                                    )
+                                    binding.textddfTravelTimeStart.setTextColor(
+                                        requireActivity().resources.getColor(
+                                            R.color.colorAliceBlue
+                                        )
+                                    )
+                                    val args = Bundle()
+                                    val jsonString =
+                                        GsonBuilder().create().toJson(projectTravelDetailsResponse)
+                                    args.putString(BUNDLE_PROJECT_DETAILS, jsonString)
+                                    homeActivity.changeFragment(EnumIntUtils.TWO.code, args)
+                                }
+
+                                override fun onNegativeClicked() {
+
+                                }
+                            },
+                            requireActivity().resources.getString(R.string.title_are_you_there),
+                            requireActivity().resources.getString(R.string.title_msg_travel_time),
+                            requireActivity().resources.getString(R.string.action_confirm),
+                            requireActivity().resources.getString(R.string.action_cancel), false
+                        )
+                    }
+                }
+            }
+            binding.ddfWholeConstraintLayout -> {
+            }
+        }
+    }
+
+
+    override fun onBackPressed(): Boolean {
+        val arg = Bundle()
+        homeActivity.changeFragment(EnumIntUtils.ONE.code, arg)
+        return true
+    }
+
+
+    private fun handleProjectDetailResult(status: Resource<ProjectTravelDetailsResponse>) {
         when (status) {
             is Resource.Loading -> binding.ddfProgressBar.toVisible()
             is Resource.Success -> status.data?.let {
@@ -112,18 +231,18 @@ class ProjectDetailsFragment : BaseFragment(), View.OnClickListener,
             is Resource.DataError -> {
                 binding.ddfProgressBar.toGone()
                 status.errorCode?.let {
-                    projectDetailsViewModel.showToastMessage(it)
+                    projectTravelDetailsViewModel.showToastMessage(it)
                 }
             }
             is Resource.Failure -> status.data?.let {
                 binding.ddfProgressBar.toGone()
-                projectDetailsViewModel.showFailureToastMessage(it.message)
+                projectTravelDetailsViewModel.showFailureToastMessage(it.message)
             }
         }
     }
 
-    private fun bindProjectDetailsData(projectDetailsResponse: ProjectDetailsResponse) {
-        this.projectDetailsResponse = projectDetailsResponse
+    private fun bindProjectDetailsData(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
+        this.projectTravelDetailsResponse = projectTravelDetailsResponse
         when (getBundleProjectListDataResponse().project_details.projectStatusColor) {
             1 -> {
                 binding.ddfProjectStatusImageView.setColorFilter(
@@ -161,7 +280,7 @@ class ProjectDetailsFragment : BaseFragment(), View.OnClickListener,
                     R.string.zeros
                 ) + getBundleProjectListDataResponse().project_details.id
             )
-        projectDetailsResponse.let {
+        projectTravelDetailsResponse.let {
 
             binding.pdfProjectLocationDescriptionTextView.text =
                 String.format(
@@ -218,21 +337,6 @@ class ProjectDetailsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
-    override fun initOnClickListeners() {
-        binding.dfPauseTextView.setOnClickListener(this)
-        binding.dfTimerTextView.setOnClickListener(this)
-        binding.ddfWholeConstraintLayout.setOnClickListener(this)
-        hiMenuNavigationImageView.setOnClickListener(this)
-    }
-
-    override fun initAppHeader() {
-
-    }
-
-    override fun init() {
-        homeActivity = activity as HomeActivity
-    }
-
 
     private fun getBundleProjectListDataResponse(): ProjectListDataResponse {
         val args = arguments
@@ -241,22 +345,6 @@ class ProjectDetailsFragment : BaseFragment(), View.OnClickListener,
             .fromJson(projectListJsonString, ProjectListDataResponse::class.java)
     }
 
-    override fun apiCallBacks(event: Int) {
-        when (event) {
-            EnumIntUtils.ZERO.code -> {
-                projectDetailsViewModel.getProjectDetails(getBundleProjectListDataResponse().project_details.id)
-            }
-        }
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        projectDetailsViewModel =
-            ViewModelProviders.of(this).get(ProjectDetailsViewModel::class.java)
-        observeViewModel()
-        apiCallBacks(0)
-    }
 
     private fun startTimerClock() {
         mCountTimer = 0
@@ -288,84 +376,6 @@ class ProjectDetailsFragment : BaseFragment(), View.OnClickListener,
         binding.root.showToast(this, event, Snackbar.LENGTH_LONG)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onClick(v: View?) {
-        when (v) {
-            binding.dfPauseTextView -> {
-                if (mPauseAndResume) {
-                    mPauseAndResume = false
-                    binding.dfPauseTextView.text = this.resources.getString(R.string.tap_to_pause)
-                    binding.dfPauseTextView.setTextColor(this.resources.getColor(R.color.colorAliceBlue))
-                    resumeTimerClock()
-                } else {
-                    mPauseAndResume = true
-                    binding.dfPauseTextView.text = this.resources.getString(R.string.tap_to_resume)
-                    binding.dfPauseTextView.setTextColor(this.resources.getColor(R.color.colorRed))
-                    endTimerClock()
-                }
-            }
-            hiMenuNavigationImageView -> {
-                homeActivity.drawerOpenAndClose()
-            }
-            binding.dfTimerTextView -> {
-                val dateTimeFormatter =
-                    DateTimeFormatter.ofPattern("HH:mm").format(LocalTime.now()).toString()
-                when (mtimerStatus) {
-                    0 -> {
-                        binding.textddfTravelTimeStart.text = dateTimeFormatter
-                        visibleTravelTimeStart()
-                        startTimerClock()
-                        binding.dfTimerTextView.text =
-                            requireActivity().getString(R.string.action_stop)
-                        mtimerStatus = 1
-                    }
-
-                    1 -> {
-                        binding.dfTimerTextView.text =
-                            requireActivity().getString(R.string.action_stop)
-
-                        dialogHelper.showAlertDialog(
-                            object : DialogHelper.DialogPickListener {
-
-                                override fun onPositiveClicked() {
-                                    visibleTravelTimeEnd()
-                                    binding.textddfTravelTimeEnd.text = dateTimeFormatter
-                                    resetTimerClock()
-                                    binding.dfTimerConstraintLayout.visibility = View.GONE
-                                    mtimerStatus = 0
-                                    binding.textddfTravelTimeEnd.setTextColor(
-                                        requireActivity().resources.getColor(
-                                            R.color.colorAliceBlue
-                                        )
-                                    )
-                                    binding.textddfTravelTimeStart.setTextColor(
-                                        requireActivity().resources.getColor(
-                                            R.color.colorAliceBlue
-                                        )
-                                    )
-                                    val args = Bundle()
-                                    val jsonString =
-                                        GsonBuilder().create().toJson(projectDetailsResponse)
-                                    args.putString(BUNDLE_PROJECT_DETAILS, jsonString)
-                                    homeActivity.changeFragment(EnumIntUtils.TWO.code, args)
-                                }
-
-                                override fun onNegativeClicked() {
-
-                                }
-                            },
-                            requireActivity().resources.getString(R.string.title_msg_travel_time),
-                            requireActivity().resources.getString(R.string.action_confirm),
-                            requireActivity().resources.getString(R.string.action_cancel), false
-                        )
-                    }
-                }
-            }
-            binding.ddfWholeConstraintLayout -> {
-            }
-
-        }
-    }
 
     private fun visibleTravelTimeStart() {
         binding.constraintWholeTravelTime.visibility = View.VISIBLE
@@ -376,13 +386,6 @@ class ProjectDetailsFragment : BaseFragment(), View.OnClickListener,
     private fun visibleTravelTimeEnd() {
         binding.textddfTravelTimeEndHint.visibility = View.VISIBLE
         binding.textddfTravelTimeEnd.visibility = View.VISIBLE
-    }
-
-
-    override fun onBackPressed(): Boolean {
-        val arg = Bundle()
-        homeActivity.changeFragment(EnumIntUtils.ONE.code, arg)
-        return true
     }
 
 
