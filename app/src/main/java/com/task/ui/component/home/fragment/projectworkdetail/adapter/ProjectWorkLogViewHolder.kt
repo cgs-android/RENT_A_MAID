@@ -18,10 +18,6 @@ class ProjectWorkLogViewHolder(private val itemBinding: ItemProjectworkLogBindin
         position: Int,
         context: Context
     ) {
-        itemBinding.textIpwlWorkTimeStartHint.apply {
-            //text = workLogResponse.travelTimeHint
-        }
-
         itemBinding.textIpwlWorkTimeStart.apply {
             text = workLogResponse.travelTime
         }

@@ -1,12 +1,9 @@
 package com.task.ui.component.home.fragment.projectworkdetail
 
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
@@ -25,8 +22,6 @@ import com.task.ui.component.home.fragment.projectworkdetail.adapter.ProjectWork
 import com.task.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.item_header.*
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 
@@ -38,10 +33,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
     @Inject
     lateinit var dialogHelper: DialogHelper
 
-    private var mStartTime: Long = 0
-    private var mPauseTimer: Boolean = false
     private var mPauseAndResume: Boolean = false
-    private var mCountTimer = 0
     private lateinit var homeActivity: HomeActivity
 
 
@@ -50,7 +42,6 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
 
     private var mtimerStatus: Int = 0
     private var mDrawerFlag: Boolean = true
-    private var mEndTime: String? = ""
 
     private lateinit var projectWorkLogAdapter: ProjectWorkLogAdapter
 
@@ -58,34 +49,6 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
 
     private lateinit var binding: FragmentProjectWorkDetailsBinding
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private val mCurrentTime =
-        DateTimeFormatter.ofPattern("HH:mm").format(LocalTime.now()).toString()
-
-    private var timerHandler: Handler = Handler()
-    private var timerRunnable: Runnable = object : Runnable {
-        override fun run() {
-            val millis = System.currentTimeMillis() - mStartTime
-            var seconds = (millis / 1000).toInt()
-            val minutes = seconds / 60
-            seconds %= 60
-
-            val timeTickers = String.format(
-                "%02d:%02d:%02d",
-                mCountTimer / 3600,
-                mCountTimer % 3600 / 60,
-                mCountTimer % 60
-            )
-            /*String.format("%d:%02d", minutes, seconds)*/
-            //binding.dfTimerTextView.text = timeTickers
-            mEndTime = timeTickers
-            println(mEndTime)
-            if (!mPauseTimer) {
-                mCountTimer++
-                timerHandler.postDelayed(this, 1000)
-            }
-        }
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -108,7 +71,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun initOnClickListeners() {
-        binding.dfPauseTextView.setOnClickListener(this)
+        binding.fpwdPauseTextView.setOnClickListener(this)
         binding.imagePwdUpDownArrow.setOnClickListener(this)
         binding.ddfWholeConstraintLayout.setOnClickListener(this)
         binding.dfTimerTextView.setOnClickListener(this)
@@ -137,135 +100,144 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         bindProjectDetailsData(getBundleProjectListDataResponse())
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onClick(v: View?) {
-        when (v) {
-            binding.dfPauseTextView -> {
-                if (mPauseAndResume) {
-                    binding.dfTimerTextView.visibility = View.VISIBLE
-                    mPauseAndResume = false
-                    binding.dfPauseTextView.text = this.resources.getString(R.string.tap_to_pause)
-                    binding.dfPauseTextView.setTextColor(this.resources.getColor(R.color.colorAliceBlue))
-                    resumeTimerClock()
-                    bindDrawerData(
-                        projectWorkDetailsViewModel.loadWorkLogData(
-                            requireActivity(),
-                            WorkLogResponse(
-                                mCurrentTime,
-                                requireActivity().resources.getString(R.string.title_stamp_in),
-                                true
-                            )
-                        )
-                    )
-                } else {
-                    binding.dfTimerTextView.visibility = View.GONE
-                    mPauseAndResume = true
-                    binding.dfPauseTextView.text = this.resources.getString(R.string.tap_to_resume)
-                    binding.dfPauseTextView.setTextColor(this.resources.getColor(R.color.colorRed))
-                    endTimerClock()
-                    bindDrawerData(
-                        projectWorkDetailsViewModel.loadWorkLogData(
-                            requireActivity(),
-                            WorkLogResponse(
-                                mCurrentTime,
-                                requireActivity().resources.getString(R.string.title_stamp_off),
-                                true
-                            )
-                        )
-                    )
-                }
-            }
-            hiMenuNavigationImageView -> {
-                homeActivity.drawerOpenAndClose()
-            }
-            binding.dfTimerTextView -> {
-                val dateTimeFormatter =
-                    DateTimeFormatter.ofPattern("HH:mm").format(LocalTime.now()).toString()
-                when (mtimerStatus) {
+    private fun loadAndReloadCurrentTimeAdapter(statusMsg: Int) {
+        bindDrawerData(
+            projectWorkDetailsViewModel.loadWorkLogData(
+                requireActivity(),
+                WorkLogResponse(
+                    DateUtils.returnCurrentTime(),
+                    requireActivity().resources.getString(statusMsg),
+                    true
+                )
+            )
+        )
+    }
 
-                    0 -> {
-                        binding.dfPauseTextView.visibility = View.VISIBLE
-                        binding.constraintFpwdWholeTimeStamp.visibility = View.VISIBLE
 
-                        startTimerClock()
-                        binding.dfTimerTextView.text =
-                            requireActivity().getString(R.string.action_stop)
-                        mtimerStatus = 1
-                        bindDrawerData(
-                            projectWorkDetailsViewModel.loadWorkLogData(
-                                requireActivity(),
-                                WorkLogResponse(
-                                    mCurrentTime,
-                                    requireActivity().resources.getString(R.string.title_stamp_in),
-                                    true
-                                )
-                            )
-                        )
-
-                    }
-                    1 -> {
-                        binding.dfTimerTextView.text =
-                            requireActivity().getString(R.string.action_stop)
-                        dialogHelper.showAlertDialog(
-                            object : DialogHelper.DialogPickListener {
-
-                                override fun onPositiveClicked() {
-                                    resetTimerClock()
-
-                                    binding.dfTimerConstraintLayout.visibility = View.GONE
-                                    mtimerStatus = 0
-                                    bindDrawerData(
-                                        projectWorkDetailsViewModel.loadWorkLogData(
-                                            requireActivity(),
-                                            WorkLogResponse(
-                                                mCurrentTime,
-                                                requireActivity().resources.getString(R.string.title_stamp_off),
-                                                true
-                                            )
-                                        )
-                                    )
-                                }
-
-                                override fun onNegativeClicked() {
-
-                                }
-                            },
-                            requireActivity().resources.getString(R.string.title_end_of_work),
-                            requireActivity().resources.getString(R.string.title_msg_travel_time),
-                            requireActivity().resources.getString(R.string.action_confirm),
-                            requireActivity().resources.getString(R.string.action_cancel), true
-                        )
+    private fun onPauseAndResume(status: Boolean) {
+        status.let {
+            when (it) {
+                true -> {
+                    binding.fpwdPauseTextView.apply {
+                        binding.dfTimerTextView.visibility = View.VISIBLE
+                        mPauseAndResume = false
+                        text = this.resources.getString(R.string.tap_to_pause)
+                        setTextColor(this.resources.getColor(R.color.colorAliceBlue))
+                        loadAndReloadCurrentTimeAdapter(R.string.title_stamp_in)
                     }
                 }
-
+                false -> {
+                    binding.fpwdPauseTextView.apply {
+                        binding.dfTimerTextView.visibility = View.GONE
+                        mPauseAndResume = true
+                        text = this.resources.getString(R.string.tap_to_resume)
+                        setTextColor(this.resources.getColor(R.color.colorRed))
+                        loadAndReloadCurrentTimeAdapter(R.string.title_stamp_off)
+                    }
+                }
             }
-            binding.ddfWholeConstraintLayout -> {
-                if (mDrawerFlag) {
+        }
+
+    }
+
+    private fun setTimerText(timeText: Int) {
+        binding.dfTimerTextView.text =
+            requireActivity().getString(timeText)
+    }
+
+    private fun setDrawerImage(imageDrawable: Int) {
+        binding.imagePwdUpDownArrow.apply {
+            setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    requireActivity().resources,
+                    imageDrawable, requireActivity().theme
+                )
+            )
+        }
+    }
+
+    private fun onStartStopTimer(timerStatus: Int) {
+        timerStatus.let {
+            when (it) {
+                0 -> {
+                    setTimerText(R.string.action_stop)
+                    binding.fpwdPauseTextView.visibility = View.VISIBLE
+                    binding.constraintFpwdWholeTimeStamp.visibility = View.VISIBLE
+                    mtimerStatus = 1
+                    loadAndReloadCurrentTimeAdapter(R.string.title_stamp_in)
+                }
+                1 -> {
+                    setTimerText(R.string.action_stop)
+                    driveTimeCloseLogDialog()
+                }
+            }
+        }
+    }
+
+    private fun driveTimeCloseLogDialog() {
+        dialogHelper.showAlertDialog(
+            object : DialogHelper.DialogPickListener {
+                override fun onPositiveClicked() {
+                    binding.dfTimerConstraintLayout.visibility = View.GONE
+                    mtimerStatus = 0
+                    loadAndReloadCurrentTimeAdapter(R.string.title_stamp_off)
+                }
+
+                override fun onNegativeClicked() {
+
+                }
+            },
+            requireActivity().resources.getString(R.string.title_end_of_work),
+            requireActivity().resources.getString(R.string.title_msg_travel_time),
+            requireActivity().resources.getString(R.string.action_confirm),
+            requireActivity().resources.getString(R.string.action_cancel), true
+        )
+    }
+
+
+    private fun openCloseArrowDrawer(drawerFlag: Boolean) {
+        drawerFlag.let {
+            when (it) {
+                true -> {
                     binding.pliProjectDetailsConstraintLayout.visibility = View.VISIBLE
-                    binding.imagePwdUpDownArrow.setImageDrawable(
-                        ResourcesCompat.getDrawable(
-                            requireActivity().resources,
-                            R.drawable.ic_down_arrow, requireActivity().theme
-                        )
-                    )
-                    mDrawerFlag = false
-                } else {
+                    binding.imagePwdUpDownArrow.apply {
+                        setDrawerImage(R.drawable.ic_down_arrow)
+                        mDrawerFlag = false
+                    }
+                }
+
+                false -> {
                     binding.pliProjectDetailsConstraintLayout.visibility = View.GONE
-                    binding.imagePwdUpDownArrow.setImageDrawable(
-                        ResourcesCompat.getDrawable(
-                            requireActivity().resources,
-                            R.drawable.ic_right_arrow, requireActivity().theme
-                        )
-                    )
-                    mDrawerFlag = true
+                    binding.imagePwdUpDownArrow.apply {
+                        setDrawerImage(R.drawable.ic_right_arrow)
+                        mDrawerFlag = true
+                    }
                 }
             }
         }
     }
 
 
+    override fun onClick(v: View?) {
+        when (v) {
+            binding.fpwdPauseTextView -> {
+                onPauseAndResume(mPauseAndResume)
+            }
+            hiMenuNavigationImageView -> {
+                homeActivity.drawerOpenAndClose()
+            }
+            binding.dfTimerTextView -> {
+                onStartStopTimer(mtimerStatus)
+            }
+            binding.ddfWholeConstraintLayout -> {
+                openCloseArrowDrawer(mDrawerFlag)
+            }
+        }
+    }
+
+
     override fun onBackPressed(): Boolean {
-        binding.dfPauseTextView.visibility = View.GONE
+        binding.fpwdPauseTextView.visibility = View.GONE
         mtimerStatus = 0
         projectWorkDetailsViewModel.clearList()
         val arg = Bundle()
@@ -310,71 +282,90 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
-    private fun bindProjectDetailsData(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
+    private fun bindProjectId(projectId: String) {
+        projectId.let {
+            binding.pdfProjectIdTextView.apply {
+                text = String.format(
+                    requireActivity().resources.getString(
+                        R.string.project
+                    ) + " " + requireActivity().resources.getString(
+                        R.string.zeros
+                    ) + projectId
+                )
+            }
 
-        binding.pdfProjectIdTextView.text =
-            String.format(
-                requireActivity().resources.getString(
-                    R.string.project
-                ) + requireActivity().resources.getString(
-                    R.string.zeros
-                ) + projectTravelDetailsResponse.data.project_details.id
-            )
+        }
+    }
+
+    private fun bindProjectDescriptionDetails(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
         projectTravelDetailsResponse.let {
-
-            binding.pdfProjectLocationDescriptionTextView.text =
-                String.format(
+            binding.pdfProjectLocationDescriptionTextView.apply {
+                text = String.format(
                     it.data.project_location.company_name + "\n" +
                             it.data.project_location.address_line1 + "" +
                             it.data.project_location.address_line2 + "\n" +
                             it.data.project_location.pincode + " " +
                             it.data.project_location.city
                 )
+            }
 
-            binding.ddfWorkStartTimeTextView.text =
-                String.format(
+            binding.ddfWorkStartTimeTextView.apply {
+                text = String.format(
                     it.data.project_details.work_start_time + " " + requireActivity().resources.getString(
                         R.string.hrs
                     )
                 )
+            }
 
+        }
+    }
 
+    private fun bindProjectTeamMembers(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
+        projectTravelDetailsResponse.let {
             mTeamLead = ""
             mTeamMember = ""
-            for (team in it.data.team_members) {
-                if (team.Roles.rolename.contains(
-                        requireActivity().resources.getString(
-                            R.string.team_leader
-                        )
-                    )
-                ) {
-                    mTeamLead =
-                        String.format(
-                            team.Users.first_name + " " + team.Users.last_name + requireActivity().getString(
-                                R.string.team_lead
+            it.data.team_members.let {
+                for (team in it) {
+                    if (team.Roles.rolename.contains(
+                            requireActivity().resources.getString(
+                                R.string.team_leader
                             )
                         )
-                } else {
-                    mTeamMember +=
-                        String.format(team.Users.first_name + " " + team.Users.last_name + ", ")
+                    ) {
+                        mTeamLead =
+                            String.format(
+                                team.Users.first_name + " " + team.Users.last_name + requireActivity().getString(
+                                    R.string.team_lead
+                                )
+                            )
+                    } else {
+                        mTeamMember +=
+                            String.format(team.Users.first_name + " " + team.Users.last_name + ", ")
+                    }
                 }
-            }
-
-            if (!mTeamMember.isNullOrEmpty()) {
-                mTeamMember = RegexUtils.removeLastChar(mTeamMember)
-            }
-            if (mTeamLead.isNullOrEmpty()) {
-                binding.pdfProjectDescriptionTextView.text = mTeamMember
-            } else {
-                if (mTeamMember.isNullOrBlank()) {
-                    binding.pdfProjectDescriptionTextView.text = mTeamLead
-                } else {
-                    binding.pdfProjectDescriptionTextView.text =
-                        String.format(mTeamLead + "\n" + mTeamMember)
+                if (!mTeamMember.isNullOrEmpty()) {
+                    mTeamMember = RegexUtils.removeLastChar(mTeamMember)
                 }
+                if (mTeamLead.isNullOrEmpty()) {
+                    binding.pdfProjectDescriptionTextView.text = mTeamMember
+                } else {
+                    if (mTeamMember.isNullOrBlank()) {
+                        binding.pdfProjectDescriptionTextView.text = mTeamLead
+                    } else {
+                        binding.pdfProjectDescriptionTextView.text =
+                            String.format(mTeamLead + "\n" + mTeamMember)
+                    }
 
+                }
             }
         }
+    }
+
+
+    private fun bindProjectDetailsData(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
+        bindProjectId(projectTravelDetailsResponse.data.project_details.id)
+        bindProjectDescriptionDetails(projectTravelDetailsResponse)
+        bindProjectTeamMembers(projectTravelDetailsResponse)
     }
 
 
@@ -383,32 +374,6 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         val projectListJsonString = args?.getString(BUNDLE_PROJECT_DETAILS)
         return GsonBuilder().create()
             .fromJson(projectListJsonString, ProjectTravelDetailsResponse::class.java)
-    }
-
-
-    private fun startTimerClock() {
-        mCountTimer = 0
-        timerHandler.removeCallbacks(timerRunnable)
-        mStartTime = System.currentTimeMillis()
-        timerHandler.postDelayed(timerRunnable, 0)
-    }
-
-
-    private fun resumeTimerClock() {
-        mPauseTimer = false
-        timerHandler.removeCallbacks(timerRunnable)
-        timerHandler.postDelayed(timerRunnable, 0)
-    }
-
-    private fun endTimerClock() {
-        mPauseTimer = true
-        timerHandler.removeCallbacks(timerRunnable)
-    }
-
-
-    private fun resetTimerClock() {
-        mCountTimer = 0
-        timerHandler.removeCallbacks(timerRunnable)
     }
 
 

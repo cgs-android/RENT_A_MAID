@@ -323,7 +323,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/dfTimeHintTextView" />
 
             <com.task.utils.font.CustomFontTextViewBold
-                android:id="@+id/dfPauseTextView"
+                android:id="@+id/fpwdPauseTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
