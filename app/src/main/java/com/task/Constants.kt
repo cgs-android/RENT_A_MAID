@@ -10,6 +10,7 @@ const val RECIPE_ITEM_KEY = "RECIPE_ITEM_KEY"
 
 const val DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss"
 const val FORMATTED_DATE = "dd.MM.yyyy"
+const val FORMATTED_TIME = "HH:mm"
 
 ////bundles
 const val BUNDLE_PROJECT_DETAILS = "bundle_proj_details"

@@ -16,15 +16,6 @@ class ProjectWorkLogAdapter(
     private val workLogResponse: MutableList<WorkLogResponse>
 ) : RecyclerView.Adapter<ProjectWorkLogViewHolder>() {
 
-    private val onItemClickListener: IProjectListListener = object : IProjectListListener {
-        override fun onProjectItemSelected(
-            position: Int
-        ) {
-
-        }
-
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectWorkLogViewHolder {
         val itemBinding =
             ItemProjectworkLogBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -43,5 +34,16 @@ class ProjectWorkLogAdapter(
     override fun getItemCount(): Int {
         return workLogResponse.size
     }
+
+    private val onItemClickListener: IProjectListListener = object : IProjectListListener {
+        override fun onProjectItemSelected(
+            position: Int
+        ) {
+
+        }
+
+    }
+
+
 }
 

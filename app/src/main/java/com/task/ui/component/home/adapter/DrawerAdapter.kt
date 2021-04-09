@@ -14,12 +14,6 @@ class DrawerAdapter(
     private val drawerResponse: List<DrawerResponse>
 ) : RecyclerView.Adapter<DrawerViewHolder>() {
 
-    private val onItemClickListener: IDrawerItemListener = object : IDrawerItemListener {
-        override fun onItemSelected(position: Int) {
-            homeViewModel.onDrawerItemOnTap(position)
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DrawerViewHolder {
         val itemBinding =
             ItemDrawerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -33,5 +27,13 @@ class DrawerAdapter(
     override fun getItemCount(): Int {
         return drawerResponse.size
     }
+
+    private val onItemClickListener: IDrawerItemListener = object : IDrawerItemListener {
+        override fun onItemSelected(position: Int) {
+            homeViewModel.onDrawerItemOnTap(position)
+        }
+    }
+
+
 }
 

@@ -16,17 +16,6 @@ class ProjectListAdapter(
     private val context: Context
 ) : RecyclerView.Adapter<ProjectListViewHolder>() {
 
-    private val onItemClickListener: IProjectListListener = object : IProjectListListener {
-        override fun onProjectItemSelected(
-            position: Int
-        ) {
-            projectListViewModel.onProjectListItemOnTap(
-                projectListsResponse.data[position], position
-            )
-        }
-
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectListViewHolder {
         val itemBinding =
             ItemProjectlistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -46,5 +35,18 @@ class ProjectListAdapter(
     override fun getItemCount(): Int {
         return projectListsResponse.data.size
     }
+
+    private val onItemClickListener: IProjectListListener = object : IProjectListListener {
+        override fun onProjectItemSelected(
+            position: Int
+        ) {
+            projectListViewModel.onProjectListItemOnTap(
+                projectListsResponse.data[position], position
+            )
+        }
+
+    }
+
+
 }
 

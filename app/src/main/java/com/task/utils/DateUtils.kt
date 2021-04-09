@@ -1,9 +1,14 @@
 package com.task.utils
 
+import android.os.Build
 import com.task.DATE_FORMAT_DEFAULT
 import com.task.FORMATTED_DATE
+import com.task.FORMATTED_TIME
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 object DateUtils {
@@ -42,5 +47,21 @@ object DateUtils {
         }
         return ""
     }
+
+    fun returnCurrentTime(): String {
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                DateTimeFormatter.ofPattern(FORMATTED_TIME).format(LocalTime.now()).toString()
+            } else {
+                val date = Date()
+                val formatter = SimpleDateFormat(FORMATTED_TIME, Locale.getDefault())
+                formatter.format(date)
+            }
+        } catch (e: Exception) {
+            ""
+        }
+
+    }
+
 
 }

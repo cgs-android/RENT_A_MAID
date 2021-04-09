@@ -1,4 +1,4 @@
-package com.task.data.dto.projectdetails
+package com.task.data.dto.projecttraveldetails
 
 import com.task.data.dto.projectlist.TeamMembers
 

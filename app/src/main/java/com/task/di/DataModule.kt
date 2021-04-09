@@ -8,7 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-// Tells Dagger this is a Dagger module
+
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DataModule {

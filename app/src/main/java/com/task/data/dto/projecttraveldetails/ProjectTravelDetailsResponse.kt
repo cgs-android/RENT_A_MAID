@@ -1,6 +1,6 @@
-package com.task.data.dto.projectdetails
+package com.task.data.dto.projecttraveldetails
 
-open class ProjectDetailsResponse(
+open class ProjectTravelDetailsResponse(
     val status: Boolean,
     val message: String,
     val data: ProjectDetailsDataResponse

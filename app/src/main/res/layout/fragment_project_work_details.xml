@@ -225,11 +225,55 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:gravity="center"
-                android:text="@string/work_time"
+                android:text="@string/title_time_stamp"
                 android:textColor="@color/colorAliceBlue"
                 android:textSize="@dimen/_13sdp"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintFpwdWholeTimeStamp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/constraintPwdTravelTimeHint">
+
+
+            <com.task.utils.font.CustomFontTextViewMedium
+                android:id="@+id/textFpwdStampInHint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:gravity="start"
+                android:text="@string/title_stamp_in"
+                android:textColor="@color/colorAliceBlue"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toStartOf="@+id/textFpwdStampOffHint"
+                app:layout_constraintHorizontal_weight="0.2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.task.utils.font.CustomFontTextViewMedium
+                android:id="@+id/textFpwdStampOffHint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_1sdp"
+                android:gravity="center"
+                android:text="@string/title_stamp_off"
+                android:textColor="@color/colorAliceBlue"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="0.2"
+                app:layout_constraintStart_toEndOf="@+id/textFpwdStampInHint"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -238,7 +282,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
-            app:layout_constraintTop_toBottomOf="@+id/constraintPwdTravelTimeHint" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintFpwdWholeTimeStamp" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -279,7 +323,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/dfTimeHintTextView" />
 
             <com.task.utils.font.CustomFontTextViewBold
-                android:id="@+id/dfPauseTextView"
+                android:id="@+id/fpwdPauseTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"

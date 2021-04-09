@@ -26,13 +26,6 @@ class AppModule {
         return LocalData(context)
     }
 
-//    @Provides
-//    @Singleton
-//    fun provideDialogHelperRepository(@ActivityContext context: Activity): DialogHelper {
-//        return DialogHelper(context)
-//    }
-
-
     @Provides
     @Singleton
     fun provideCoroutineContext(): CoroutineContext {

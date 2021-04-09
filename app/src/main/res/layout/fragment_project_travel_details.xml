@@ -237,7 +237,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:gravity="center"
-                android:text="@string/travel_time"
+                android:text="@string/title_time_stamp"
                 android:textColor="@color/colorAliceBlue"
                 android:textSize="@dimen/_13sdp"
                 android:visibility="visible"

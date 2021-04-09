@@ -1,24 +1,24 @@
-package com.task.ui.component.home.fragment.projectworkdetail
+package com.task.ui.component.home.fragment.projecttraveldetail
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import com.task.BUNDLE_PROJECT_DETAILS
 import com.task.R
 import com.task.data.Resource
 import com.task.data.dto.projecttraveldetails.ProjectTravelDetailsResponse
-import com.task.data.dto.worktime.WorkLogResponse
-import com.task.databinding.FragmentProjectWorkDetailsBinding
+import com.task.data.dto.projectlist.ProjectListDataResponse
+import com.task.databinding.FragmentProjectTravelDetailsBinding
 import com.task.ui.base.BaseFragment
 import com.task.ui.component.home.HomeActivity
-import com.task.ui.component.home.fragment.projectworkdetail.adapter.ProjectWorkLogAdapter
 import com.task.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.item_header.*
@@ -26,9 +26,8 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
+class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     HomeActivity.OnBackPressedListner {
-
 
     @Inject
     lateinit var dialogHelper: DialogHelper
@@ -36,23 +35,20 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
     private var mPauseAndResume: Boolean = false
     private lateinit var homeActivity: HomeActivity
 
-
     private var mTeamMember: String? = ""
     private var mTeamLead: String? = ""
 
     private var mtimerStatus: Int = 0
-    private var mDrawerFlag: Boolean = true
 
-    private lateinit var projectWorkLogAdapter: ProjectWorkLogAdapter
+    private var projectTravelDetailsResponse: ProjectTravelDetailsResponse? = null
 
-    private lateinit var projectWorkDetailsViewModel: ProjectWorkDetailsViewModel
+    private lateinit var projectTravelDetailsViewModel: ProjectTravelDetailsViewModel
 
-    private lateinit var binding: FragmentProjectWorkDetailsBinding
+    private lateinit var binding: FragmentProjectTravelDetailsBinding
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
     }
 
 
@@ -61,19 +57,17 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProjectWorkDetailsBinding.inflate(layoutInflater, container, false)
+        binding = FragmentProjectTravelDetailsBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun observeViewModel() {
-        observeToast(projectWorkDetailsViewModel.showToast)
-        observe(projectWorkDetailsViewModel.projectTravelDetails, ::handleProjectDetailResult)
+        observeToast(projectTravelDetailsViewModel.showToast)
+        observe(projectTravelDetailsViewModel.projectTravelDetails, ::handleProjectDetailResult)
     }
 
     override fun initOnClickListeners() {
-        binding.fpwdPauseTextView.setOnClickListener(this)
-        binding.imagePwdUpDownArrow.setOnClickListener(this)
-        binding.ddfWholeConstraintLayout.setOnClickListener(this)
+        binding.dfPauseTextView.setOnClickListener(this)
         binding.dfTimerTextView.setOnClickListener(this)
         hiMenuNavigationImageView.setOnClickListener(this)
     }
@@ -87,30 +81,94 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun apiCallBacks(event: Int) {
-
+        when (event) {
+            EnumIntUtils.ZERO.code -> {
+                projectTravelDetailsViewModel.getProjectDetails(getBundleProjectListDataResponse().project_details.id)
+            }
+        }
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecyclerView()
-        projectWorkDetailsViewModel =
-            ViewModelProviders.of(this).get(ProjectWorkDetailsViewModel::class.java)
+        projectTravelDetailsViewModel =
+            ViewModelProviders.of(this).get(ProjectTravelDetailsViewModel::class.java)
         observeViewModel()
-        bindProjectDetailsData(getBundleProjectListDataResponse())
+        apiCallBacks(0)
     }
 
-    private fun loadAndReloadCurrentTimeAdapter(statusMsg: Int) {
-        bindDrawerData(
-            projectWorkDetailsViewModel.loadWorkLogData(
-                requireActivity(),
-                WorkLogResponse(
-                    DateUtils.returnCurrentTime(),
-                    requireActivity().resources.getString(statusMsg),
-                    true
-                )
-            )
+
+    private fun setTimerText(timeText: Int) {
+        binding.dfTimerTextView.text =
+            requireActivity().getString(timeText)
+    }
+
+    override fun onClick(v: View?) {
+        when (v) {
+            binding.dfPauseTextView -> {
+                onPauseAndResume(mPauseAndResume)
+            }
+            hiMenuNavigationImageView -> {
+                homeActivity.drawerOpenAndClose()
+            }
+            binding.dfTimerTextView -> {
+                onStartStopTimer(mtimerStatus)
+            }
+        }
+    }
+
+
+    private fun driveTimeCloseLogDialog() {
+        dialogHelper.showAlertDialog(
+            object : DialogHelper.DialogPickListener {
+                @RequiresApi(Build.VERSION_CODES.O)
+                override fun onPositiveClicked() {
+                    visibleTravelTimeEnd()
+                    binding.textddfTravelTimeEnd.apply {
+                        text = DateUtils.returnCurrentTime()
+                        mtimerStatus = 0
+                        setTextColor(
+                            requireActivity().resources.getColor(
+                                R.color.colorAliceBlue
+                            )
+                        )
+                    }
+                    binding.dfTimerConstraintLayout.visibility = View.GONE
+                    binding.textddfTravelTimeStart.setTextColor(
+                        requireActivity().resources.getColor(
+                            R.color.colorAliceBlue
+                        )
+                    )
+                    navigateToWorkDetails()
+                }
+
+                override fun onNegativeClicked() {
+
+                }
+            },
+            requireActivity().resources.getString(R.string.title_are_you_there),
+            requireActivity().resources.getString(R.string.title_msg_travel_time),
+            requireActivity().resources.getString(R.string.action_confirm),
+            requireActivity().resources.getString(R.string.action_cancel), false
         )
+    }
+
+    private fun navigateToWorkDetails() {
+        projectTravelDetailsResponse.let {
+            val args = Bundle()
+            val jsonString =
+                GsonBuilder().create().toJson(projectTravelDetailsResponse)
+            args.putString(BUNDLE_PROJECT_DETAILS, jsonString)
+            homeActivity.changeFragment(EnumIntUtils.TWO.code, args)
+        }
+
+    }
+
+
+    override fun onBackPressed(): Boolean {
+        val arg = Bundle()
+        homeActivity.changeFragment(EnumIntUtils.ONE.code, arg)
+        return true
     }
 
 
@@ -118,21 +176,17 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         status.let {
             when (it) {
                 true -> {
-                    binding.fpwdPauseTextView.apply {
-                        binding.dfTimerTextView.visibility = View.VISIBLE
+                    binding.dfPauseTextView.apply {
                         mPauseAndResume = false
                         text = this.resources.getString(R.string.tap_to_pause)
                         setTextColor(this.resources.getColor(R.color.colorAliceBlue))
-                        loadAndReloadCurrentTimeAdapter(R.string.title_stamp_in)
                     }
                 }
                 false -> {
-                    binding.fpwdPauseTextView.apply {
-                        binding.dfTimerTextView.visibility = View.GONE
+                    binding.dfPauseTextView.apply {
                         mPauseAndResume = true
                         text = this.resources.getString(R.string.tap_to_resume)
                         setTextColor(this.resources.getColor(R.color.colorRed))
-                        loadAndReloadCurrentTimeAdapter(R.string.title_stamp_off)
                     }
                 }
             }
@@ -140,31 +194,16 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
 
     }
 
-    private fun setTimerText(timeText: Int) {
-        binding.dfTimerTextView.text =
-            requireActivity().getString(timeText)
-    }
-
-    private fun setDrawerImage(imageDrawable: Int) {
-        binding.imagePwdUpDownArrow.apply {
-            setImageDrawable(
-                ResourcesCompat.getDrawable(
-                    requireActivity().resources,
-                    imageDrawable, requireActivity().theme
-                )
-            )
-        }
-    }
-
     private fun onStartStopTimer(timerStatus: Int) {
         timerStatus.let {
             when (it) {
                 0 -> {
+                    binding.textddfTravelTimeStart.apply {
+                        mtimerStatus = 1
+                        text = DateUtils.returnCurrentTime()
+                    }
+                    visibleTravelTimeStart()
                     setTimerText(R.string.action_stop)
-                    binding.fpwdPauseTextView.visibility = View.VISIBLE
-                    binding.constraintFpwdWholeTimeStamp.visibility = View.VISIBLE
-                    mtimerStatus = 1
-                    loadAndReloadCurrentTimeAdapter(R.string.title_stamp_in)
                 }
                 1 -> {
                     setTimerText(R.string.action_stop)
@@ -174,110 +213,51 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
-    private fun driveTimeCloseLogDialog() {
-        dialogHelper.showAlertDialog(
-            object : DialogHelper.DialogPickListener {
-                override fun onPositiveClicked() {
-                    binding.dfTimerConstraintLayout.visibility = View.GONE
-                    mtimerStatus = 0
-                    loadAndReloadCurrentTimeAdapter(R.string.title_stamp_off)
+    private fun handleProjectDetailResult(status: Resource<ProjectTravelDetailsResponse>) {
+        status.let {
+            when (it) {
+                is Resource.Loading -> binding.ddfProgressBar.toVisible()
+                is Resource.Success -> status.data?.let {
+                    binding.ddfProgressBar.toGone()
+                    bindProjectDetailsData(it)
                 }
-
-                override fun onNegativeClicked() {
-
+                is Resource.DataError -> {
+                    binding.ddfProgressBar.toGone()
+                    status.errorCode?.let {
+                        projectTravelDetailsViewModel.showToastMessage(it)
+                    }
                 }
-            },
-            requireActivity().resources.getString(R.string.title_end_of_work),
-            requireActivity().resources.getString(R.string.title_msg_travel_time),
-            requireActivity().resources.getString(R.string.action_confirm),
-            requireActivity().resources.getString(R.string.action_cancel), true
+                is Resource.Failure -> status.data?.let {
+                    binding.ddfProgressBar.toGone()
+                    projectTravelDetailsViewModel.showFailureToastMessage(it.message)
+                }
+            }
+        }
+    }
+
+    private fun projectStatusColor(color: Int) {
+        binding.ddfProjectStatusImageView.setColorFilter(
+            ContextCompat.getColor(
+                requireContext(),
+                color
+            )
         )
     }
 
-
-    private fun openCloseArrowDrawer(drawerFlag: Boolean) {
-        drawerFlag.let {
+    private fun changeStatusColor(colorStatus: Int?) {
+        colorStatus?.let {
             when (it) {
-                true -> {
-                    binding.pliProjectDetailsConstraintLayout.visibility = View.VISIBLE
-                    binding.imagePwdUpDownArrow.apply {
-                        setDrawerImage(R.drawable.ic_down_arrow)
-                        mDrawerFlag = false
-                    }
+                1 -> {
+                    projectStatusColor(R.color.colorGreen)
                 }
-
-                false -> {
-                    binding.pliProjectDetailsConstraintLayout.visibility = View.GONE
-                    binding.imagePwdUpDownArrow.apply {
-                        setDrawerImage(R.drawable.ic_right_arrow)
-                        mDrawerFlag = true
-                    }
+                -1 -> {
+                    projectStatusColor(R.color.colorBlue)
+                    //goneStartButton()
                 }
-            }
-        }
-    }
-
-
-    override fun onClick(v: View?) {
-        when (v) {
-            binding.fpwdPauseTextView -> {
-                onPauseAndResume(mPauseAndResume)
-            }
-            hiMenuNavigationImageView -> {
-                homeActivity.drawerOpenAndClose()
-            }
-            binding.dfTimerTextView -> {
-                onStartStopTimer(mtimerStatus)
-            }
-            binding.ddfWholeConstraintLayout -> {
-                openCloseArrowDrawer(mDrawerFlag)
-            }
-        }
-    }
-
-
-    override fun onBackPressed(): Boolean {
-        binding.fpwdPauseTextView.visibility = View.GONE
-        mtimerStatus = 0
-        projectWorkDetailsViewModel.clearList()
-        val arg = Bundle()
-        homeActivity.changeFragment(EnumIntUtils.ONE.code, arg)
-        return true
-    }
-
-
-    private fun initRecyclerView() {
-        val layoutManager = GridLayoutManager(context, 2)
-        binding.recyclerFpwdTravelTimeList.layoutManager = layoutManager
-        binding.recyclerFpwdTravelTimeList.setHasFixedSize(true)
-
-    }
-
-
-    private fun bindDrawerData(workLogResponse: MutableList<WorkLogResponse>) {
-        if (!(workLogResponse.isNullOrEmpty())) {
-            projectWorkLogAdapter = ProjectWorkLogAdapter(requireContext(), workLogResponse)
-            binding.recyclerFpwdTravelTimeList.adapter = projectWorkLogAdapter
-        }
-    }
-
-
-    private fun handleProjectDetailResult(status: Resource<ProjectTravelDetailsResponse>) {
-        when (status) {
-            is Resource.Loading -> binding.ddfProgressBar.toVisible()
-            is Resource.Success -> status.data?.let {
-                binding.ddfProgressBar.toGone()
-                bindProjectDetailsData(it)
-            }
-            is Resource.DataError -> {
-                binding.ddfProgressBar.toGone()
-                status.errorCode?.let {
-                    projectWorkDetailsViewModel.showToastMessage(it)
+                0 -> {
+                    projectStatusColor(R.color.colorOrange)
+                    //goneStartButton()
                 }
-            }
-            is Resource.Failure -> status.data?.let {
-                binding.ddfProgressBar.toGone()
-                projectWorkDetailsViewModel.showFailureToastMessage(it.message)
             }
         }
     }
@@ -361,24 +341,37 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
-
     private fun bindProjectDetailsData(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
-        bindProjectId(projectTravelDetailsResponse.data.project_details.id)
+        this.projectTravelDetailsResponse = projectTravelDetailsResponse
+        changeStatusColor(getBundleProjectListDataResponse().project_details.projectStatusColor)
+        bindProjectId(getBundleProjectListDataResponse().project_details.id)
         bindProjectDescriptionDetails(projectTravelDetailsResponse)
         bindProjectTeamMembers(projectTravelDetailsResponse)
     }
 
 
-    private fun getBundleProjectListDataResponse(): ProjectTravelDetailsResponse {
+    private fun getBundleProjectListDataResponse(): ProjectListDataResponse {
         val args = arguments
         val projectListJsonString = args?.getString(BUNDLE_PROJECT_DETAILS)
         return GsonBuilder().create()
-            .fromJson(projectListJsonString, ProjectTravelDetailsResponse::class.java)
+            .fromJson(projectListJsonString, ProjectListDataResponse::class.java)
     }
 
 
     private fun observeToast(event: LiveData<SingleEvent<Any>>) {
         binding.root.showToast(this, event, Snackbar.LENGTH_LONG)
+    }
+
+
+    private fun visibleTravelTimeStart() {
+        binding.constraintWholeTravelTime.visibility = View.VISIBLE
+        binding.textddfTravelTimeStartHint.visibility = View.VISIBLE
+        binding.textddfTravelTimeStart.visibility = View.VISIBLE
+    }
+
+    private fun visibleTravelTimeEnd() {
+        binding.textddfTravelTimeEndHint.visibility = View.VISIBLE
+        binding.textddfTravelTimeEnd.visibility = View.VISIBLE
     }
 
 
