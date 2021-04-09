@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
@@ -11,13 +12,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import com.task.BUNDLE_PROJECT_DETAILS
+import com.task.BUNDLE_PROJECT_STATUS
 import com.task.R
 import com.task.data.Resource
-import com.task.data.dto.projecttraveldetails.ProjectTravelDetailsResponse
+import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.worktime.WorkLogResponse
 import com.task.databinding.FragmentProjectWorkDetailsBinding
 import com.task.ui.base.BaseFragment
 import com.task.ui.component.home.HomeActivity
+import com.task.ui.component.home.fragment.projecttraveldetail.ProjectTravelDetailsViewModel
 import com.task.ui.component.home.fragment.projectworkdetail.adapter.ProjectWorkLogAdapter
 import com.task.utils.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,12 +53,6 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
     private lateinit var binding: FragmentProjectWorkDetailsBinding
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,7 +64,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
 
     override fun observeViewModel() {
         observeToast(projectWorkDetailsViewModel.showToast)
-        observe(projectWorkDetailsViewModel.projectTravelDetails, ::handleProjectDetailResult)
+        observe(projectWorkDetailsViewModel.projectWorkDetails, ::handleProjectDetailResult)
     }
 
     override fun initOnClickListeners() {
@@ -87,7 +84,11 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun apiCallBacks(event: Int) {
-
+        when (event) {
+            EnumIntUtils.ZERO.code -> {
+                projectWorkDetailsViewModel.getProjectDetails()
+            }
+        }
     }
 
 
@@ -97,7 +98,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         projectWorkDetailsViewModel =
             ViewModelProviders.of(this).get(ProjectWorkDetailsViewModel::class.java)
         observeViewModel()
-        bindProjectDetailsData(getBundleProjectListDataResponse())
+        apiCallBacks(EnumIntUtils.ZERO.code)
     }
 
     private fun loadAndReloadCurrentTimeAdapter(statusMsg: Int) {
@@ -290,7 +291,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                         R.string.project
                     ) + " " + requireActivity().resources.getString(
                         R.string.zeros
-                    ) + projectId
+                    ) + it
                 )
             }
 
@@ -364,16 +365,57 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
 
     private fun bindProjectDetailsData(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
         bindProjectId(projectTravelDetailsResponse.data.project_details.id)
+        changeStatusColor(getBundelProjectStatusColor())
         bindProjectDescriptionDetails(projectTravelDetailsResponse)
         bindProjectTeamMembers(projectTravelDetailsResponse)
     }
 
+
+    private fun changeStatusColor(colorStatus: Int?) {
+        colorStatus?.let {
+            when (it) {
+                1 -> {
+                    projectStatusColor(R.color.colorGreen)
+                }
+                -1 -> {
+                    projectStatusColor(R.color.colorBlue)
+                    goneStartButton()
+                }
+                0 -> {
+                    projectStatusColor(R.color.colorOrange)
+                    goneStartButton()
+                }
+            }
+        }
+    }
+
+
+    private fun goneStartButton() {
+        binding.textddfTravelTimeHint.visibility = View.GONE
+        binding.dfTimerConstraintLayout.visibility = View.GONE
+    }
+
+
+    private fun projectStatusColor(color: Int) {
+        binding.ddfProjectStatusImageView.setColorFilter(
+            ContextCompat.getColor(
+                requireContext(),
+                color
+            )
+        )
+    }
 
     private fun getBundleProjectListDataResponse(): ProjectTravelDetailsResponse {
         val args = arguments
         val projectListJsonString = args?.getString(BUNDLE_PROJECT_DETAILS)
         return GsonBuilder().create()
             .fromJson(projectListJsonString, ProjectTravelDetailsResponse::class.java)
+    }
+
+    private fun getBundelProjectStatusColor(): Int? {
+        val args = arguments
+        val statusColor: Int? = args?.getInt(BUNDLE_PROJECT_STATUS)
+        return statusColor
     }
 
 

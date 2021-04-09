@@ -7,12 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.task.data.DataRepository
 import com.task.data.DataRepositorySource
 import com.task.data.Resource
-import com.task.data.dto.login.LoginRequest
-import com.task.data.dto.login.LoginResponse
+import com.task.data.dto.credential.login.LoginRequest
+import com.task.data.dto.credential.login.LoginResponse
 import com.task.data.error.CHECK_YOUR_FIELDS
 import com.task.data.error.PASS_WORD_ERROR
 import com.task.data.error.USER_NAME_ERROR
-import com.task.data.local.LocalData
 import com.task.ui.base.BaseViewModel
 import com.task.utils.NetworkConnectivity
 import com.task.utils.RegexUtils.isValidEmail

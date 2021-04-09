@@ -6,7 +6,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.LiveData
 import com.google.android.material.snackbar.Snackbar
 import com.task.data.Resource
-import com.task.data.dto.login.LoginResponse
+import com.task.data.dto.credential.login.LoginResponse
 import com.task.databinding.ActivityLoginBinding
 import com.task.ui.base.BaseActivity
 import com.task.ui.component.home.HomeActivity

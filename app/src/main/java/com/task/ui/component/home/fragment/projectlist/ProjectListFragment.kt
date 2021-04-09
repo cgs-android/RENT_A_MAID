@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import com.task.BUNDLE_PROJECT_DETAILS
+import com.task.BUNDLE_PROJECT_STATUS
+import com.task.R
 import com.task.data.Resource
-import com.task.data.dto.projectlist.ProjectListDataResponse
-import com.task.data.dto.projectlist.ProjectListsResponse
+import com.task.data.dto.project.projectlist.ProjectListDataResponse
+import com.task.data.dto.project.projectlist.ProjectListsResponse
 import com.task.databinding.FragmentProjectlistBinding
 import com.task.ui.base.BaseFragment
 import com.task.ui.component.home.HomeActivity
@@ -31,10 +33,6 @@ class ProjectListFragment : BaseFragment(), View.OnClickListener,
     private lateinit var projectListViewModel: ProjectListViewModel
 
     private lateinit var binding: FragmentProjectlistBinding
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -142,13 +140,45 @@ class ProjectListFragment : BaseFragment(), View.OnClickListener,
 
 
     private fun observerProjectClickEvent(event: SingleEvent<ProjectListDataResponse>) {
+        var userRoleBool: Boolean = false
         event.getContentIfNotHandled()?.let {
-            val args = Bundle()
-            val jsonString = GsonBuilder().create().toJson(it)
-            args.putString(BUNDLE_PROJECT_DETAILS, jsonString)
-            homeActivity.changeFragment(EnumIntUtils.ZERO.code, args)
+            it.project_details.id.let {
+                projectListViewModel.localPrefStoreProjectId(it)
+            }
+            it.team_members.let {
+                for (team in it) {
+                    when (team.Roles.rolename) {
+                        requireActivity().resources.getString(
+                            R.string.team_leader
+                        ) -> {
+                            if (projectListViewModel.getLoginUserId()
+                                    .equals(team.Users.id)
+                            ) {
+                                userRoleBool = true
+                            }
+                        }
+                    }
+                }
+            }
+            when (userRoleBool) {
+                true -> {
+                    val args = Bundle()
+                    val jsonString = GsonBuilder().create().toJson(it)
+                    args.putString(BUNDLE_PROJECT_DETAILS, jsonString)
+                    homeActivity.changeFragment(EnumIntUtils.ZERO.code, args)
+                }
+                else -> {
+                    val args = Bundle()
+                    it.project_details.projectStatusColor?.let { it1 ->
+                        args.putInt(
+                            BUNDLE_PROJECT_STATUS,
+                            it1
+                        )
+                    }
+                    homeActivity.changeFragment(EnumIntUtils.TWO.code, args)
+                }
+            }
         }
     }
-
-
 }
+

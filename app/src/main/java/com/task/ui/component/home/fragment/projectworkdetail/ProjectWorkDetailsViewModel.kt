@@ -4,13 +4,18 @@ import android.app.Activity
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.task.data.DataRepositorySource
 import com.task.data.Resource
-import com.task.data.dto.projecttraveldetails.ProjectTravelDetailsResponse
+import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
+import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.worktime.WorkLogResponse
 import com.task.ui.base.BaseViewModel
 import com.task.utils.SingleEvent
+import com.task.utils.wrapEspressoIdlingResource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,13 +36,29 @@ class ProjectWorkDetailsViewModel @Inject constructor(
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     private val projectDetailsPrivate = MutableLiveData<Resource<ProjectTravelDetailsResponse>>()
-    val projectTravelDetails: LiveData<Resource<ProjectTravelDetailsResponse>> get() = projectDetailsPrivate
+    val projectWorkDetails: LiveData<Resource<ProjectTravelDetailsResponse>> get() = projectDetailsPrivate
 
     fun loadWorkLogData(
         activity: Activity, workLogResponse: WorkLogResponse
     ): MutableList<WorkLogResponse> {
         this.workLogResponseList.add(workLogResponse)
         return workLogResponseList
+    }
+
+    fun getProjectDetails() {
+        viewModelScope.launch {
+            projectDetailsPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                mDataRepositoryRepository.requestProjectDeatils(
+                    projectTravelDetailsRequest = ProjectTravelDetailsRequest(
+                        getToken(),
+                        getProjectId()
+                    )
+                ).collect {
+                    projectDetailsPrivate.value = it
+                }
+            }
+        }
     }
 
 

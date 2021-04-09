@@ -23,12 +23,13 @@ import com.task.utils.SingleEvent
 import com.task.utils.setupSnackbar
 import com.task.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import org.osmdroid.views.MapView
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity() {
 
     private lateinit var drawerAdapter: DrawerAdapter
-    private val projectDetailsFragment =
+    private val projectTravelDetailsFragment =
         ProjectTravelDetailsFragment()
 
     private val projectWorkDetailsFragment = ProjectWorkDetailsFragment()
@@ -39,6 +40,7 @@ class HomeActivity : BaseActivity() {
     private lateinit var binding: ActivityHomeBinding
 
     private var args = Bundle()
+
 
     override fun observeViewModel() {
         observeSnackBarMessages(homeViewModel.showSnackBar)
@@ -81,7 +83,7 @@ class HomeActivity : BaseActivity() {
     fun changeFragment(position: Int, bundle: Bundle?) {
         when (position) {
             EnumIntUtils.ZERO.code -> {
-                loadFragment(projectDetailsFragment, bundle)
+                loadFragment(projectTravelDetailsFragment, bundle)
             }
             EnumIntUtils.ONE.code -> {
                 loadFragment(projectListFragment, bundle)

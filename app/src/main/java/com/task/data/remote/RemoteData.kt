@@ -1,12 +1,16 @@
 package com.task.data.remote
 
 import com.task.data.Resource
-import com.task.data.dto.login.LoginRequest
-import com.task.data.dto.login.LoginResponse
-import com.task.data.dto.projecttraveldetails.ProjectTravelDetailsRequest
-import com.task.data.dto.projecttraveldetails.ProjectTravelDetailsResponse
-import com.task.data.dto.projectlist.ProjectListRequest
-import com.task.data.dto.projectlist.ProjectListsResponse
+import com.task.data.dto.credential.login.LoginRequest
+import com.task.data.dto.credential.login.LoginResponse
+import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
+import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
+import com.task.data.dto.project.projectlist.ProjectListRequest
+import com.task.data.dto.project.projectlist.ProjectListsResponse
+import com.task.data.dto.project.travelend.TravelEndRequest
+import com.task.data.dto.project.travelend.TravelEndResponse
+import com.task.data.dto.project.travelstart.TravelStartRequest
+import com.task.data.dto.project.travelstart.TravelStartResponse
 import com.task.data.error.NETWORK_ERROR
 import com.task.data.error.NO_INTERNET_CONNECTION
 import com.task.data.local.LocalData
@@ -14,6 +18,7 @@ import com.task.data.remote.service.CredentialService
 import com.task.data.remote.service.ProjectService
 import com.task.utils.EnumIntUtils
 import com.task.utils.NetworkConnectivity
+import com.task.utils.SingleEvent
 import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
@@ -102,6 +107,56 @@ constructor(
             }
             else -> {
                 Resource.DataError(errorCode = responseCode)
+            }
+        }
+    }
+
+    override suspend fun requestTravelStartTime(travelStartRequest: TravelStartRequest): SingleEvent<Resource<TravelStartResponse>> {
+        val projectService = serviceGenerator.createService(ProjectService::class.java)
+        if (!networkConnectivity.isConnected()) {
+            return SingleEvent(Resource.DataError(errorCode = NO_INTERNET_CONNECTION))
+        }
+        val travelStartTimeData = projectService.postTravelStartTime(travelStartRequest)
+        return when (val responseCode = travelStartTimeData.code()) {
+            EnumIntUtils.SUCCESS_CODE.code -> {
+                if (travelStartTimeData.isSuccessful) {
+                    val responseBody = travelStartTimeData.body()
+                    if (responseBody!!.status) {
+                        SingleEvent(Resource.Success(data = responseBody))
+                    } else {
+                        SingleEvent(Resource.Failure(failureData = responseBody))
+                    }
+                } else {
+                    SingleEvent(Resource.DataError(errorCode = responseCode))
+                }
+            }
+            else -> {
+                SingleEvent(Resource.DataError(errorCode = responseCode))
+            }
+        }
+    }
+
+    override suspend fun requestTravelEndTime(travelEndRequest: TravelEndRequest): SingleEvent<Resource<TravelEndResponse>> {
+        val projectService = serviceGenerator.createService(ProjectService::class.java)
+        if (!networkConnectivity.isConnected()) {
+            return SingleEvent(Resource.DataError(errorCode = NO_INTERNET_CONNECTION))
+        }
+        val travelEndTimeData = projectService.postTravelEndTime(travelEndRequest)
+        return when (val responseCode = travelEndTimeData.code()) {
+            EnumIntUtils.SUCCESS_CODE.code -> {
+                if (travelEndTimeData.isSuccessful) {
+                    val responseBody = travelEndTimeData.body()
+                    if (responseBody!!.status) {
+                        SingleEvent(Resource.Success(data = responseBody))
+                    } else {
+                        SingleEvent(Resource.Failure(failureData = responseBody))
+                    }
+                } else {
+                    SingleEvent(Resource.DataError(errorCode = responseCode))
+                }
+            }
+            else -> {
+                SingleEvent(Resource.DataError(errorCode = responseCode))
             }
         }
     }

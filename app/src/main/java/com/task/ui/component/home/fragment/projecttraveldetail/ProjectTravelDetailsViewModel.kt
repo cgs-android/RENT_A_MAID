@@ -6,8 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.task.data.DataRepositorySource
 import com.task.data.Resource
-import com.task.data.dto.projecttraveldetails.ProjectTravelDetailsRequest
-import com.task.data.dto.projecttraveldetails.ProjectTravelDetailsResponse
+import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
+import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
+import com.task.data.dto.project.travelend.TravelEndRequest
+import com.task.data.dto.project.travelend.TravelEndResponse
+import com.task.data.dto.project.travelstart.TravelStartRequest
+import com.task.data.dto.project.travelstart.TravelStartResponse
 import com.task.ui.base.BaseViewModel
 import com.task.utils.SingleEvent
 import com.task.utils.wrapEspressoIdlingResource
@@ -35,14 +39,22 @@ class ProjectTravelDetailsViewModel @Inject constructor(
     private val projectDetailsPrivate = MutableLiveData<Resource<ProjectTravelDetailsResponse>>()
     val projectTravelDetails: LiveData<Resource<ProjectTravelDetailsResponse>> get() = projectDetailsPrivate
 
-    fun getProjectDetails(projectId: String) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val travelStartPrivate = MutableLiveData<SingleEvent<Resource<TravelStartResponse>>>()
+    val travelStart: LiveData<SingleEvent<Resource<TravelStartResponse>>> get() = travelStartPrivate
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val travelEndPrivate = MutableLiveData<SingleEvent<Resource<TravelEndResponse>>>()
+    val travelEnd: LiveData<SingleEvent<Resource<TravelEndResponse>>> get() = travelEndPrivate
+
+    fun getProjectDetails() {
         viewModelScope.launch {
             projectDetailsPrivate.value = Resource.Loading()
             wrapEspressoIdlingResource {
                 mDataRepositoryRepository.requestProjectDeatils(
                     projectTravelDetailsRequest = ProjectTravelDetailsRequest(
                         getToken(),
-                        projectId
+                        getProjectId()
                     )
                 ).collect {
                     projectDetailsPrivate.value = it
@@ -51,6 +63,41 @@ class ProjectTravelDetailsViewModel @Inject constructor(
         }
     }
 
+    fun postTravelStartTime(startedAt: String, startGeoLocation: String) {
+        viewModelScope.launch {
+            travelStartPrivate.value = SingleEvent(Resource.Loading())
+            wrapEspressoIdlingResource {
+                mDataRepositoryRepository.requestTravelStartTime(
+                    travelStartRequest = TravelStartRequest(
+                        getToken(),
+                        getProjectId(),
+                        startedAt,
+                        startGeoLocation
+                    )
+                ).collect {
+                    travelStartPrivate.value = it
+                }
+            }
+        }
+    }
+
+    fun postTravelEndTime(endAt: String, endGeoLocation: String) {
+        viewModelScope.launch {
+            travelEndPrivate.value = SingleEvent(Resource.Loading())
+            wrapEspressoIdlingResource {
+                mDataRepositoryRepository.requestTravelEndTime(
+                    travelEndRequest = TravelEndRequest(
+                        getToken(),
+                        getTravelStartId(),
+                        endAt,
+                        endGeoLocation
+                    )
+                ).collect {
+                    travelEndPrivate.value = it
+                }
+            }
+        }
+    }
 
     fun showToastMessage(errorCode: Int) {
         val error = errorManager.getError(errorCode)
@@ -59,5 +106,13 @@ class ProjectTravelDetailsViewModel @Inject constructor(
 
     fun showFailureToastMessage(error: String) {
         showToastPrivate.value = SingleEvent(error)
+    }
+
+    fun showSuccessToastMessage(success: String) {
+        showToastPrivate.value = SingleEvent(success)
+    }
+
+    fun storeLocalTravelStartId(travelStartId: Int) {
+        localRepository.putTravelStartId(travelStartId)
     }
 }

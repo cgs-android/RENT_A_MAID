@@ -1,13 +1,9 @@
 package com.task.data.local
 
 import android.content.Context
-import android.content.SharedPreferences
 import com.google.gson.GsonBuilder
 import com.task.*
-import com.task.data.Resource
-import com.task.data.dto.login.LoginRequest
-import com.task.data.dto.login.LoginResponse
-import com.task.data.error.PASS_WORD_ERROR
+import com.task.data.dto.credential.login.LoginResponse
 import javax.inject.Inject
 
 
@@ -26,6 +22,28 @@ class LocalData @Inject constructor(val context: Context) {
         //We read JSON String which was saved.
         val value = sharedPref.getString(PREF_LOGIN_DATA_KEY, null)
         return GsonBuilder().create().fromJson(value, LoginResponse::class.java)
+    }
+
+    fun putProjectId(projectId: String) {
+        val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
+        sharedPref.edit().putString(PREF_PROJECT_ID_KEY, projectId).apply()
+    }
+
+    fun getProjectId(): String {
+        val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
+        val value: String? = sharedPref.getString(PREF_PROJECT_ID_KEY, "")
+        return value!!
+    }
+
+    fun putTravelStartId(travelStartId: Int) {
+        val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
+        sharedPref.edit().putInt(PREF_TRAVEL_START_ID_KEY, travelStartId).apply()
+    }
+
+    fun getTravelStartId(): Int {
+        val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
+        val value: Int? = sharedPref.getInt(PREF_TRAVEL_START_ID_KEY, 0)
+        return value!!
     }
 
 

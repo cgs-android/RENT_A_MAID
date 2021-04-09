@@ -19,5 +19,16 @@ abstract class BaseViewModel : ViewModel() {
         return localRepository.getLoginResponseData().data.token
     }
 
+    fun getUserId(): Int {
+        return localRepository.getLoginResponseData().data.id
+    }
+
+    fun getTravelStartId(): String {
+        return localRepository.getTravelStartId().toString()
+    }
+
+    fun getProjectId(): String {
+        return localRepository.getProjectId()
+    }
 
 }

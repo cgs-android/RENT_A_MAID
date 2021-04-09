@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.task.data.dto.projectlist.ProjectListsResponse
+import com.task.data.dto.project.projectlist.ProjectListsResponse
 import com.task.databinding.ItemProjectlistBinding
 import com.task.ui.component.home.fragment.projectlist.ProjectListViewModel
 import com.task.ui.component.home.fragment.projectlist.listener.IProjectListListener
@@ -46,7 +46,5 @@ class ProjectListAdapter(
         }
 
     }
-
-
 }
 

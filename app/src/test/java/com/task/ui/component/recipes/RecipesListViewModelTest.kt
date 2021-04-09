@@ -63,8 +63,8 @@ class RecipesListViewModelTest {
         recipesListViewModel.recipesLiveData.observeForever { }
 
         //3-verify
-        val isEmptyList = recipesListViewModel.recipesLiveData.value?.data?.recipesList.isNullOrEmpty()
-        assertEquals(recipesModel, recipesListViewModel.recipesLiveData.value?.data)
+        val isEmptyList = recipesListViewModel.recipesLiveData.value.data.recipesList.isNullOrEmpty()
+        assertEquals(recipesModel, recipesListViewModel.recipesLiveData.value.data)
         assertEquals(false,isEmptyList)
     }
 
@@ -85,8 +85,8 @@ class RecipesListViewModelTest {
         recipesListViewModel.recipesLiveData.observeForever { }
 
         //3-verify
-        val isEmptyList = recipesListViewModel.recipesLiveData.value?.data?.recipesList.isNullOrEmpty()
-        assertEquals(recipesModel, recipesListViewModel.recipesLiveData.value?.data)
+        val isEmptyList = recipesListViewModel.recipesLiveData.value.data.recipesList.isNullOrEmpty()
+        assertEquals(recipesModel, recipesListViewModel.recipesLiveData.value.data)
         assertEquals(true, isEmptyList)
     }
 
@@ -107,7 +107,7 @@ class RecipesListViewModelTest {
         recipesListViewModel.recipesLiveData.observeForever { }
 
         //3-verify
-        assertEquals(NETWORK_ERROR, recipesListViewModel.recipesLiveData.value?.errorCode)
+        assertEquals(NETWORK_ERROR, recipesListViewModel.recipesLiveData.value.errorCode)
     }
 
     @Test

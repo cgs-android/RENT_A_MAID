@@ -1,6 +1,6 @@
-package com.task.data.dto.projecttraveldetails
+package com.task.data.dto.project.projecttraveldetails
 
-import com.task.data.dto.projectlist.TeamMembers
+import com.task.data.dto.project.projectlist.TeamMembers
 
 open class ProjectDetailsDataResponse(
     val project_details: ProjectDetails,

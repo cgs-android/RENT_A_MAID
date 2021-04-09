@@ -3,8 +3,8 @@ package com.task.ui.component.login
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.task.data.DataRepository
 import com.task.data.Resource
-import com.task.data.dto.login.LoginRequest
-import com.task.data.dto.login.LoginResponse
+import com.task.data.dto.credential.login.LoginRequest
+import com.task.data.dto.credential.login.LoginResponse
 import com.task.data.error.CHECK_YOUR_FIELDS
 import com.task.data.error.PASS_WORD_ERROR
 import com.task.data.error.USER_NAME_ERROR

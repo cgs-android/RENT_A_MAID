@@ -15,10 +15,6 @@ abstract class BaseFragment : Fragment() {
     abstract fun apiCallBacks(event: Int)
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
@@ -26,18 +22,5 @@ abstract class BaseFragment : Fragment() {
         initAppHeader()
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-    }
 
 }

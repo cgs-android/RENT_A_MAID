@@ -1,13 +1,18 @@
 package com.task.data
 
-import com.task.data.dto.login.LoginRequest
-import com.task.data.dto.login.LoginResponse
-import com.task.data.dto.projecttraveldetails.ProjectTravelDetailsRequest
-import com.task.data.dto.projecttraveldetails.ProjectTravelDetailsResponse
-import com.task.data.dto.projectlist.ProjectListRequest
-import com.task.data.dto.projectlist.ProjectListsResponse
+import com.task.data.dto.credential.login.LoginRequest
+import com.task.data.dto.credential.login.LoginResponse
+import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
+import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
+import com.task.data.dto.project.projectlist.ProjectListRequest
+import com.task.data.dto.project.projectlist.ProjectListsResponse
+import com.task.data.dto.project.travelend.TravelEndRequest
+import com.task.data.dto.project.travelend.TravelEndResponse
+import com.task.data.dto.project.travelstart.TravelStartRequest
+import com.task.data.dto.project.travelstart.TravelStartResponse
 import com.task.data.local.LocalData
 import com.task.data.remote.RemoteData
+import com.task.utils.SingleEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -37,6 +42,18 @@ class DataRepository @Inject constructor(
     override suspend fun requestProjectDeatils(projectTravelDetailsRequest: ProjectTravelDetailsRequest): Flow<Resource<ProjectTravelDetailsResponse>> {
         return flow {
             emit(remoteRepository.requestProjectDeatils(projectTravelDetailsRequest))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestTravelStartTime(travelStartRequest: TravelStartRequest): Flow<SingleEvent<Resource<TravelStartResponse>>> {
+        return flow {
+            emit(remoteRepository.requestTravelStartTime(travelStartRequest))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestTravelEndTime(travelEndRequest: TravelEndRequest): Flow<SingleEvent<Resource<TravelEndResponse>>> {
+        return flow {
+            emit(remoteRepository.requestTravelEndTime(travelEndRequest))
         }.flowOn(ioDispatcher)
     }
 

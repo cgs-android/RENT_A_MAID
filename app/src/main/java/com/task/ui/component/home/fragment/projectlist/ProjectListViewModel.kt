@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.task.data.DataRepositorySource
 import com.task.data.Resource
-import com.task.data.dto.projectlist.ProjectListDataResponse
-import com.task.data.dto.projectlist.ProjectListRequest
-import com.task.data.dto.projectlist.ProjectListsResponse
+import com.task.data.dto.project.projectlist.ProjectListDataResponse
+import com.task.data.dto.project.projectlist.ProjectListRequest
+import com.task.data.dto.project.projectlist.ProjectListsResponse
 import com.task.ui.base.BaseViewModel
 import com.task.utils.SingleEvent
 import com.task.utils.wrapEspressoIdlingResource
@@ -63,6 +63,10 @@ class ProjectListViewModel @Inject constructor(
         openProjectDetailsPrivate.value = SingleEvent(projectListDataResponse)
     }
 
+    fun localPrefStoreProjectId(projectId: String) {
+        localRepository.putProjectId(projectId)
+    }
+
 
     fun showFailureToastMessage(error: String) {
         showToastPrivate.value = SingleEvent(error)
@@ -71,5 +75,9 @@ class ProjectListViewModel @Inject constructor(
     fun showToastMessage(errorCode: Int) {
         val error = errorManager.getError(errorCode)
         showToastPrivate.value = SingleEvent(error.description)
+    }
+
+    fun getLoginUserId(): String {
+        return getUserId().toString()
     }
 }

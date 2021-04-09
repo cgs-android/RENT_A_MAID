@@ -6,6 +6,7 @@ buildscript {
         google()
         jcenter()
         mavenCentral()
+        mavenLocal()
         maven { url "https://jitpack.io" }
     }
     dependencies {
@@ -23,6 +24,7 @@ allprojects {
         google()
         jcenter()
         mavenCentral()
+        mavenLocal()
         maven { url "https://jitpack.io" }
     }
 }
@@ -60,5 +62,6 @@ ext {
     googleMaterial = '1.3.0'
     swipeButton = '2.0.0'
     gsonVersion = '2.8.6'
+    openStreetVersion = '6.1.10'
 
 }

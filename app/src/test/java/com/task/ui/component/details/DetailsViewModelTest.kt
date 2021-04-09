@@ -71,7 +71,7 @@ class DetailsViewModelTest {
 
         //3-verify
         val recipesData = detailsViewModel.isFavourite.value
-        assertEquals(isFavourites, recipesData?.data)
+        assertEquals(isFavourites, recipesData.data)
     }
 
     @Test
@@ -91,7 +91,7 @@ class DetailsViewModelTest {
 
         //3-verify
         val recipesData = detailsViewModel.isFavourite.value
-        assertEquals(isFavourites, recipesData?.data)
+        assertEquals(isFavourites, recipesData.data)
     }
 
     @Test
@@ -111,6 +111,6 @@ class DetailsViewModelTest {
 
         //3-verify
         val recipesData = detailsViewModel.isFavourite.value
-        assertEquals(isFavourites, recipesData?.data)
+        assertEquals(isFavourites, recipesData.data)
     }
 }

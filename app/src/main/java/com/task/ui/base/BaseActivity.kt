@@ -2,9 +2,12 @@ package com.task.ui.base
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.VmPolicy
 import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.task.BuildConfig
 import java.util.*
 
 
@@ -15,6 +18,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        strictModeViloationPolicy()
         initViewBinding()
         observeViewModel()
     }
@@ -43,5 +47,33 @@ abstract class BaseActivity : AppCompatActivity() {
         val configuration = Configuration()
         configuration.setLocale(dLocale)
         wrapper.applyOverrideConfiguration(configuration)
+    }
+
+    private fun strictModePolicy() {
+        val policy =
+            StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+    }
+
+    open fun strictModeViloationPolicy() {
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectNetwork() // or .detectAll() for all detectable problems
+                    .penaltyLog()
+                    .permitAll()
+                    .build()
+            )
+            StrictMode.setVmPolicy(
+                VmPolicy.Builder()
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .penaltyDeath()
+                    .build()
+            )
+        }
     }
 }
