@@ -58,7 +58,7 @@ class DialogHelper @Inject constructor(val activity: Activity) {
             text = positive
             setOnClickListener {
                 alertDialog?.dismiss()
-                lister.onPositiveClicked()
+                lister.onPositiveClicked(alertView.editDahComments.text.toString())
             }
         }
 
@@ -66,7 +66,7 @@ class DialogHelper @Inject constructor(val activity: Activity) {
     }
 
     interface DialogPickListener {
-        fun onPositiveClicked()
+        fun onPositiveClicked(message: String)
         fun onNegativeClicked()
     }
 

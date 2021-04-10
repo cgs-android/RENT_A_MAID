@@ -8,6 +8,10 @@ import com.task.data.dto.project.travelend.TravelEndRequest
 import com.task.data.dto.project.travelend.TravelEndResponse
 import com.task.data.dto.project.travelstart.TravelStartRequest
 import com.task.data.dto.project.travelstart.TravelStartResponse
+import com.task.data.dto.worktime.workend.WorkEndRequest
+import com.task.data.dto.worktime.workend.WorkEndResponse
+import com.task.data.dto.worktime.workstart.WorkStartRequest
+import com.task.data.dto.worktime.workstart.WorkStartResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -24,5 +28,11 @@ interface ProjectService {
 
     @POST("apis/project-travels/end.json")
     suspend fun postTravelEndTime(@Body travelEndRequest: TravelEndRequest): Response<TravelEndResponse>
+
+    @POST("apis/work-logs/start.json")
+    suspend fun postWorkStartTime(@Body workStartRequest: WorkStartRequest): Response<WorkStartResponse>
+
+    @POST("apis/work-logs/end.json")
+    suspend fun postWorkEndTime(@Body workEndRequest: WorkEndRequest): Response<WorkEndResponse>
 
 }

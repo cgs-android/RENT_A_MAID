@@ -4,9 +4,9 @@ import android.os.Build
 import com.task.DATE_FORMAT_DEFAULT
 import com.task.FORMATTED_DATE
 import com.task.FORMATTED_TIME
+import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -61,6 +61,12 @@ object DateUtils {
             ""
         }
 
+    }
+
+    fun getCurrentDateTime(): String {
+        val dateFormat: DateFormat = SimpleDateFormat(DATE_FORMAT_DEFAULT, Locale.getDefault())
+        val date = Date()
+        return dateFormat.format(date)
     }
 
 

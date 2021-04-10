@@ -88,13 +88,13 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
 
             EnumIntUtils.ONE.code -> {
                 projectTravelDetailsViewModel.postTravelStartTime(
-                    "2021-04-01 00:03:00",
+                    DateUtils.getCurrentDateTime(),
                     "Chennai"
                 )
             }
             EnumIntUtils.TWO.code -> {
                 projectTravelDetailsViewModel.postTravelEndTime(
-                    "2021-04-01 00:03:00",
+                    DateUtils.getCurrentDateTime(),
                     "Chennai"
 
                 )
@@ -136,7 +136,8 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
         dialogHelper.showAlertDialog(
             object : DialogHelper.DialogPickListener {
                 @RequiresApi(Build.VERSION_CODES.O)
-                override fun onPositiveClicked() {
+
+                override fun onPositiveClicked(message: String) {
                     apiCallBacks(EnumIntUtils.TWO.code)
                 }
 
@@ -253,6 +254,8 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                     binding.ddfProgressBar.toGone()
                     projectTravelDetailsViewModel.showFailureToastMessage(it.message)
                 }
+                else -> {
+                }
             }
         }
     }
@@ -279,6 +282,8 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                     binding.ddfProgressBar.toGone()
                     projectTravelDetailsViewModel.showFailureToastMessage(it.message)
                 }
+                else -> {
+                }
             }
         }
     }
@@ -304,6 +309,8 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 is Resource.Failure -> it.data?.let {
                     binding.ddfProgressBar.toGone()
                     projectTravelDetailsViewModel.showFailureToastMessage(it.message)
+                }
+                else -> {
                 }
             }
         }

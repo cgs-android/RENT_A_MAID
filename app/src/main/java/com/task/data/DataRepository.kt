@@ -10,6 +10,10 @@ import com.task.data.dto.project.travelend.TravelEndRequest
 import com.task.data.dto.project.travelend.TravelEndResponse
 import com.task.data.dto.project.travelstart.TravelStartRequest
 import com.task.data.dto.project.travelstart.TravelStartResponse
+import com.task.data.dto.worktime.workend.WorkEndRequest
+import com.task.data.dto.worktime.workend.WorkEndResponse
+import com.task.data.dto.worktime.workstart.WorkStartRequest
+import com.task.data.dto.worktime.workstart.WorkStartResponse
 import com.task.data.local.LocalData
 import com.task.data.remote.RemoteData
 import com.task.utils.SingleEvent
@@ -54,6 +58,21 @@ class DataRepository @Inject constructor(
     override suspend fun requestTravelEndTime(travelEndRequest: TravelEndRequest): Flow<SingleEvent<Resource<TravelEndResponse>>> {
         return flow {
             emit(remoteRepository.requestTravelEndTime(travelEndRequest))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestWorkStartTime(workStartRequest: WorkStartRequest): Flow<SingleEvent<Resource<WorkStartResponse>>> {
+        return flow {
+            emit(remoteRepository.requestWorkStartTime(workStartRequest))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestWorkEndTime(
+        workEndRequest: WorkEndRequest,
+        event: Int
+    ): Flow<SingleEvent<Resource<WorkEndResponse>>> {
+        return flow {
+            emit(remoteRepository.requestWorkEndTime(workEndRequest, event))
         }.flowOn(ioDispatcher)
     }
 

@@ -9,7 +9,15 @@ import com.task.data.DataRepositorySource
 import com.task.data.Resource
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
+import com.task.data.dto.project.travelend.TravelEndRequest
+import com.task.data.dto.project.travelend.TravelEndResponse
+import com.task.data.dto.project.travelstart.TravelStartRequest
+import com.task.data.dto.project.travelstart.TravelStartResponse
 import com.task.data.dto.worktime.WorkLogResponse
+import com.task.data.dto.worktime.workend.WorkEndRequest
+import com.task.data.dto.worktime.workend.WorkEndResponse
+import com.task.data.dto.worktime.workstart.WorkStartRequest
+import com.task.data.dto.worktime.workstart.WorkStartResponse
 import com.task.ui.base.BaseViewModel
 import com.task.utils.SingleEvent
 import com.task.utils.wrapEspressoIdlingResource
@@ -38,6 +46,16 @@ class ProjectWorkDetailsViewModel @Inject constructor(
     private val projectDetailsPrivate = MutableLiveData<Resource<ProjectTravelDetailsResponse>>()
     val projectWorkDetails: LiveData<Resource<ProjectTravelDetailsResponse>> get() = projectDetailsPrivate
 
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val workStartPrivate = MutableLiveData<SingleEvent<Resource<WorkStartResponse>>>()
+    val workStart: LiveData<SingleEvent<Resource<WorkStartResponse>>> get() = workStartPrivate
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val workEndPrivate = MutableLiveData<SingleEvent<Resource<WorkEndResponse>>>()
+    val workEnd: LiveData<SingleEvent<Resource<WorkEndResponse>>> get() = workEndPrivate
+
+
     fun loadWorkLogData(
         activity: Activity, workLogResponse: WorkLogResponse
     ): MutableList<WorkLogResponse> {
@@ -61,6 +79,42 @@ class ProjectWorkDetailsViewModel @Inject constructor(
         }
     }
 
+    fun postWorkStartTime(startedAt: String) {
+        viewModelScope.launch {
+            workStartPrivate.value = SingleEvent(Resource.Loading())
+            wrapEspressoIdlingResource {
+                mDataRepositoryRepository.requestWorkStartTime(
+                    workStartRequest = WorkStartRequest(
+                        getToken(),
+                        getProjectId(),
+                        startedAt,
+                    )
+                ).collect {
+                    workStartPrivate.value = it
+                }
+            }
+        }
+    }
+
+    fun postWorkEndTime(endAt: String, comment: String, status: String, events: Int) {
+        viewModelScope.launch {
+            workEndPrivate.value = SingleEvent(Resource.Loading())
+            wrapEspressoIdlingResource {
+                mDataRepositoryRepository.requestWorkEndTime(
+                    workEndRequest = WorkEndRequest(
+                        getToken(),
+                        getTravelStartId(),
+                        endAt,
+                        comment,
+                        status
+                    ), event = events
+                ).collect {
+                    workEndPrivate.value = it
+                }
+            }
+        }
+    }
+
 
     fun showToastMessage(errorCode: Int) {
         val error = errorManager.getError(errorCode)
@@ -73,5 +127,9 @@ class ProjectWorkDetailsViewModel @Inject constructor(
 
     fun clearList() {
         workLogResponseList = mutableListOf()
+    }
+
+    fun storeLocalTravelStartId(travelStartId: Int) {
+        localRepository.putTravelStartId(travelStartId)
     }
 }

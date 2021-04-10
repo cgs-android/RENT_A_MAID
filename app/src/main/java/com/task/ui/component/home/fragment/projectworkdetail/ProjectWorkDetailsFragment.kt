@@ -16,7 +16,11 @@ import com.task.BUNDLE_PROJECT_STATUS
 import com.task.R
 import com.task.data.Resource
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
+import com.task.data.dto.project.travelend.TravelEndResponse
+import com.task.data.dto.project.travelstart.TravelStartResponse
 import com.task.data.dto.worktime.WorkLogResponse
+import com.task.data.dto.worktime.workend.WorkEndResponse
+import com.task.data.dto.worktime.workstart.WorkStartResponse
 import com.task.databinding.FragmentProjectWorkDetailsBinding
 import com.task.ui.base.BaseFragment
 import com.task.ui.component.home.HomeActivity
@@ -65,6 +69,8 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
     override fun observeViewModel() {
         observeToast(projectWorkDetailsViewModel.showToast)
         observe(projectWorkDetailsViewModel.projectWorkDetails, ::handleProjectDetailResult)
+        observeEvent(projectWorkDetailsViewModel.workStart, ::handleWorkStartResult)
+        observeEvent(projectWorkDetailsViewModel.workEnd, ::handleWorkEndResult)
     }
 
     override fun initOnClickListeners() {
@@ -88,7 +94,20 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
             EnumIntUtils.ZERO.code -> {
                 projectWorkDetailsViewModel.getProjectDetails()
             }
+
+            EnumIntUtils.ONE.code -> {
+                projectWorkDetailsViewModel.postWorkStartTime(DateUtils.getCurrentDateTime(),)
+            }
         }
+    }
+
+    fun apiEndWorkTime(event: Int, comment: String = "", status: String = "") {
+        projectWorkDetailsViewModel.postWorkEndTime(
+            DateUtils.getCurrentDateTime(),
+            comment,
+            status,
+            event
+        )
     }
 
 
@@ -125,6 +144,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                         text = this.resources.getString(R.string.tap_to_pause)
                         setTextColor(this.resources.getColor(R.color.colorAliceBlue))
                         loadAndReloadCurrentTimeAdapter(R.string.title_stamp_in)
+                        apiCallBacks(EnumIntUtils.ONE.code)
                     }
                 }
                 false -> {
@@ -134,6 +154,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                         text = this.resources.getString(R.string.tap_to_resume)
                         setTextColor(this.resources.getColor(R.color.colorRed))
                         loadAndReloadCurrentTimeAdapter(R.string.title_stamp_off)
+                        apiEndWorkTime(EnumIntUtils.ZERO.code)
                     }
                 }
             }
@@ -166,6 +187,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                     binding.constraintFpwdWholeTimeStamp.visibility = View.VISIBLE
                     mtimerStatus = 1
                     loadAndReloadCurrentTimeAdapter(R.string.title_stamp_in)
+                    apiCallBacks(EnumIntUtils.ONE.code)
                 }
                 1 -> {
                     setTimerText(R.string.action_stop)
@@ -178,10 +200,10 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
     private fun driveTimeCloseLogDialog() {
         dialogHelper.showAlertDialog(
             object : DialogHelper.DialogPickListener {
-                override fun onPositiveClicked() {
-                    binding.dfTimerConstraintLayout.visibility = View.GONE
-                    mtimerStatus = 0
-                    loadAndReloadCurrentTimeAdapter(R.string.title_stamp_off)
+
+
+                override fun onPositiveClicked(message: String) {
+                    apiEndWorkTime(EnumIntUtils.ONE.code, message)
                 }
 
                 override fun onNegativeClicked() {
@@ -281,6 +303,68 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                 projectWorkDetailsViewModel.showFailureToastMessage(it.message)
             }
         }
+    }
+
+    private fun handleWorkStartResult(status: SingleEvent<Resource<WorkStartResponse>>) {
+        status.getContentIfNotHandled()?.let {
+            when (it) {
+                is Resource.Loading -> {
+                    binding.ddfProgressBar.toVisible()
+                    binding.ddfProgressBar.setBackgroundResource(0)
+                }
+                is Resource.Success -> it.data.let {
+                    binding.ddfProgressBar.toGone()
+                    projectWorkDetailsViewModel.storeLocalTravelStartId(it!!.data.id)
+                }
+                is Resource.DataError -> {
+                    binding.ddfProgressBar.toGone()
+                    it.errorCode?.let {
+                        projectWorkDetailsViewModel.showToastMessage(it)
+                    }
+                }
+                is Resource.Failure -> it.data?.let {
+                    binding.ddfProgressBar.toGone()
+                    projectWorkDetailsViewModel.showFailureToastMessage(it.message)
+                }
+                else -> {
+                }
+            }
+        }
+    }
+
+    private fun handleWorkEndResult(status: SingleEvent<Resource<WorkEndResponse>>) {
+        status.getContentIfNotHandled()?.let {
+            when (it) {
+                is Resource.Loading -> {
+                    binding.ddfProgressBar.toVisible()
+                    binding.ddfProgressBar.setBackgroundResource(0)
+                }
+                is Resource.Success -> it.data.let {
+                    binding.ddfProgressBar.toGone()
+                }
+
+                is Resource.SuccessHandling -> it.data.let {
+                    binding.ddfProgressBar.toGone()
+                    onSuccessUpdateWorkTimer()
+                }
+                is Resource.DataError -> {
+                    binding.ddfProgressBar.toGone()
+                    it.errorCode?.let {
+                        projectWorkDetailsViewModel.showToastMessage(it)
+                    }
+                }
+                is Resource.Failure -> it.data?.let {
+                    binding.ddfProgressBar.toGone()
+                    projectWorkDetailsViewModel.showFailureToastMessage(it.message)
+                }
+            }
+        }
+    }
+
+    private fun onSuccessUpdateWorkTimer() {
+        binding.dfTimerConstraintLayout.visibility = View.GONE
+        mtimerStatus = 0
+        loadAndReloadCurrentTimeAdapter(R.string.title_stamp_off)
     }
 
     private fun bindProjectId(projectId: String) {

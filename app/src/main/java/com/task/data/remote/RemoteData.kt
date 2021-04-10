@@ -11,6 +11,10 @@ import com.task.data.dto.project.travelend.TravelEndRequest
 import com.task.data.dto.project.travelend.TravelEndResponse
 import com.task.data.dto.project.travelstart.TravelStartRequest
 import com.task.data.dto.project.travelstart.TravelStartResponse
+import com.task.data.dto.worktime.workend.WorkEndRequest
+import com.task.data.dto.worktime.workend.WorkEndResponse
+import com.task.data.dto.worktime.workstart.WorkStartRequest
+import com.task.data.dto.worktime.workstart.WorkStartResponse
 import com.task.data.error.NETWORK_ERROR
 import com.task.data.error.NO_INTERNET_CONNECTION
 import com.task.data.local.LocalData
@@ -151,6 +155,71 @@ constructor(
                     } else {
                         SingleEvent(Resource.Failure(failureData = responseBody))
                     }
+                } else {
+                    SingleEvent(Resource.DataError(errorCode = responseCode))
+                }
+            }
+            else -> {
+                SingleEvent(Resource.DataError(errorCode = responseCode))
+            }
+        }
+    }
+
+    override suspend fun requestWorkStartTime(workStartRequest: WorkStartRequest): SingleEvent<Resource<WorkStartResponse>> {
+        val projectService = serviceGenerator.createService(ProjectService::class.java)
+        if (!networkConnectivity.isConnected()) {
+            return SingleEvent(Resource.DataError(errorCode = NO_INTERNET_CONNECTION))
+        }
+        val workStartTimeData = projectService.postWorkStartTime(workStartRequest)
+        return when (val responseCode = workStartTimeData.code()) {
+            EnumIntUtils.SUCCESS_CODE.code -> {
+                if (workStartTimeData.isSuccessful) {
+                    val responseBody = workStartTimeData.body()
+                    if (responseBody!!.status) {
+                        SingleEvent(Resource.Success(data = responseBody))
+                    } else {
+                        SingleEvent(Resource.Failure(failureData = responseBody))
+                    }
+                } else {
+                    SingleEvent(Resource.DataError(errorCode = responseCode))
+                }
+            }
+            else -> {
+                SingleEvent(Resource.DataError(errorCode = responseCode))
+            }
+        }
+    }
+
+    override suspend fun requestWorkEndTime(
+        workEndRequest: WorkEndRequest,
+        event: Int
+    ): SingleEvent<Resource<WorkEndResponse>> {
+        val projectService = serviceGenerator.createService(ProjectService::class.java)
+        if (!networkConnectivity.isConnected()) {
+            return SingleEvent(Resource.DataError(errorCode = NO_INTERNET_CONNECTION))
+        }
+        val workEndTimeData = projectService.postWorkEndTime(workEndRequest)
+        return when (val responseCode = workEndTimeData.code()) {
+            EnumIntUtils.SUCCESS_CODE.code -> {
+                if (workEndTimeData.isSuccessful) {
+                    val responseBody = workEndTimeData.body()
+
+                    if (responseBody!!.status) {
+                        when (event) {
+                            EnumIntUtils.ZERO.code -> {
+                                SingleEvent(Resource.Success(data = responseBody))
+                            }
+                            EnumIntUtils.ONE.code -> {
+                                SingleEvent(Resource.SuccessHandling(data = responseBody))
+                            }
+                            else -> {
+                                SingleEvent(Resource.Success(data = responseBody))
+                            }
+                        }
+                    } else {
+                        SingleEvent(Resource.Failure(failureData = responseBody))
+                    }
+
                 } else {
                     SingleEvent(Resource.DataError(errorCode = responseCode))
                 }

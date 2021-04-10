@@ -11,6 +11,10 @@ import com.task.data.dto.project.travelend.TravelEndRequest
 import com.task.data.dto.project.travelend.TravelEndResponse
 import com.task.data.dto.project.travelstart.TravelStartRequest
 import com.task.data.dto.project.travelstart.TravelStartResponse
+import com.task.data.dto.worktime.workend.WorkEndRequest
+import com.task.data.dto.worktime.workend.WorkEndResponse
+import com.task.data.dto.worktime.workstart.WorkStartRequest
+import com.task.data.dto.worktime.workstart.WorkStartResponse
 import com.task.utils.SingleEvent
 import kotlinx.coroutines.flow.Flow
 
@@ -21,4 +25,9 @@ interface DataRepositorySource {
     suspend fun requestProjectDeatils(projectTravelDetailsRequest: ProjectTravelDetailsRequest): Flow<Resource<ProjectTravelDetailsResponse>>
     suspend fun requestTravelStartTime(travelStartRequest: TravelStartRequest): Flow<SingleEvent<Resource<TravelStartResponse>>>
     suspend fun requestTravelEndTime(travelEndRequest: TravelEndRequest): Flow<SingleEvent<Resource<TravelEndResponse>>>
+    suspend fun requestWorkStartTime(workStartRequest: WorkStartRequest): Flow<SingleEvent<Resource<WorkStartResponse>>>
+    suspend fun requestWorkEndTime(
+        workEndRequest: WorkEndRequest,
+        event: Int
+    ): Flow<SingleEvent<Resource<WorkEndResponse>>>
 }

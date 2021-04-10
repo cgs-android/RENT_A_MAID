@@ -11,6 +11,10 @@ import com.task.data.dto.project.travelend.TravelEndRequest
 import com.task.data.dto.project.travelend.TravelEndResponse
 import com.task.data.dto.project.travelstart.TravelStartRequest
 import com.task.data.dto.project.travelstart.TravelStartResponse
+import com.task.data.dto.worktime.workend.WorkEndRequest
+import com.task.data.dto.worktime.workend.WorkEndResponse
+import com.task.data.dto.worktime.workstart.WorkStartRequest
+import com.task.data.dto.worktime.workstart.WorkStartResponse
 import com.task.utils.SingleEvent
 
 
@@ -20,4 +24,9 @@ internal interface RemoteDataSource {
     suspend fun requestProjectDeatils(projectTravelDetailsRequest: ProjectTravelDetailsRequest): Resource<ProjectTravelDetailsResponse>
     suspend fun requestTravelStartTime(travelStartRequest: TravelStartRequest): SingleEvent<Resource<TravelStartResponse>>
     suspend fun requestTravelEndTime(travelEndRequest: TravelEndRequest): SingleEvent<Resource<TravelEndResponse>>
+    suspend fun requestWorkStartTime(workStartRequest: WorkStartRequest): SingleEvent<Resource<WorkStartResponse>>
+    suspend fun requestWorkEndTime(
+        workEndRequest: WorkEndRequest,
+        event: Int
+    ): SingleEvent<Resource<WorkEndResponse>>
 }
