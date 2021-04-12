@@ -3,6 +3,8 @@ package com.task.data
 
 import com.task.data.dto.credential.login.LoginRequest
 import com.task.data.dto.credential.login.LoginResponse
+import com.task.data.dto.project.gettraveldetails.GetTravelRequest
+import com.task.data.dto.project.gettraveldetails.GetTravelResponse
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.project.projectlist.ProjectListRequest
@@ -30,4 +32,6 @@ interface DataRepositorySource {
         workEndRequest: WorkEndRequest,
         event: Int
     ): Flow<SingleEvent<Resource<WorkEndResponse>>>
+
+    suspend fun getTravelDetails(getTravelRequest: GetTravelRequest): Flow<Resource<GetTravelResponse>>
 }

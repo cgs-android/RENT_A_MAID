@@ -1,9 +1,7 @@
 package com.task.utils
 
 import android.os.Build
-import com.task.DATE_FORMAT_DEFAULT
-import com.task.FORMATTED_DATE
-import com.task.FORMATTED_TIME
+import com.task.*
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -37,7 +35,7 @@ object DateUtils {
 
     fun formatDate(date: String): String {
         val dateFormat =
-            SimpleDateFormat(DATE_FORMAT_DEFAULT, Locale.getDefault())
+            SimpleDateFormat(DATE_TIME_FORMAT_DEFAULT, Locale.getDefault())
         var convertedDate: Date? = Date()
         try {
             convertedDate = dateFormat.parse(date)
@@ -60,13 +58,31 @@ object DateUtils {
         } catch (e: Exception) {
             ""
         }
-
     }
 
     fun getCurrentDateTime(): String {
+        val dateFormat: DateFormat = SimpleDateFormat(DATE_TIME_FORMAT_DEFAULT, Locale.getDefault())
+        val date = Date()
+        return dateFormat.format(date)
+    }
+
+    fun getCurrentDate(): String {
         val dateFormat: DateFormat = SimpleDateFormat(DATE_FORMAT_DEFAULT, Locale.getDefault())
         val date = Date()
         return dateFormat.format(date)
+    }
+
+    fun returnCurrentTime(date: String): String {
+        val dateFormat =
+            SimpleDateFormat(DATE_TIME_FORMAT_DEFAULT_FROM_SERVER, Locale.getDefault())
+        var convertedDate: Date? = Date()
+        try {
+            convertedDate = dateFormat.parse(date)
+            return SimpleDateFormat(FORMATTED_TIME, Locale.getDefault()).format(convertedDate)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        return ""
     }
 
 

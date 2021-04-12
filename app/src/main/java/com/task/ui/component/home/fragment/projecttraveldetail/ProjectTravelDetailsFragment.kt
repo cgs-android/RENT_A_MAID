@@ -15,6 +15,7 @@ import com.task.BUNDLE_PROJECT_DETAILS
 import com.task.BUNDLE_PROJECT_STATUS
 import com.task.R
 import com.task.data.Resource
+import com.task.data.dto.project.gettraveldetails.GetTravelResponse
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.project.projectlist.ProjectListDataResponse
 import com.task.data.dto.project.travelend.TravelEndResponse
@@ -62,6 +63,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     override fun observeViewModel() {
         observeToast(projectTravelDetailsViewModel.showToast)
         observe(projectTravelDetailsViewModel.projectTravelDetails, ::handleProjectDetailResult)
+        observe(projectTravelDetailsViewModel.getTravelDetails, ::handleGetProjectDetailResult)
         observeEvent(projectTravelDetailsViewModel.travelStart, ::handleTravelStartResult)
         observeEvent(projectTravelDetailsViewModel.travelEnd, ::handleTravelEndResult)
     }
@@ -69,6 +71,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     override fun initOnClickListeners() {
         binding.dfPauseTextView.setOnClickListener(this)
         binding.dfTimerTextView.setOnClickListener(this)
+        binding.fptdNextButton.setOnClickListener(this)
         hiMenuNavigationImageView.setOnClickListener(this)
     }
 
@@ -99,6 +102,9 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
 
                 )
             }
+            EnumIntUtils.THREE.code -> {
+                projectTravelDetailsViewModel.getTravelDetails()
+            }
         }
     }
 
@@ -122,6 +128,9 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
             }
             binding.dfTimerTextView -> {
                 onStartStopTimer(mtimerStatus)
+            }
+            binding.fptdNextButton -> {
+                navigateToWorkDetails()
             }
         }
     }
@@ -174,12 +183,6 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     private fun navigateToWorkDetails() {
         projectTravelDetailsResponse.let {
             val args = Bundle()
-            getBundleProjectListDataResponse().project_details.projectStatusColor?.let { it1 ->
-                args.putInt(
-                    BUNDLE_PROJECT_STATUS,
-                    it1
-                )
-            }
             homeActivity.changeFragment(EnumIntUtils.TWO.code, args)
         }
 
@@ -188,6 +191,8 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onBackPressed(): Boolean {
         mtimerStatus = 0
+        goneTravelTimeStart()
+        goneTravelTimeEnd()
         val arg = Bundle()
         homeActivity.changeFragment(EnumIntUtils.ONE.code, arg)
         return true
@@ -239,7 +244,9 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     private fun handleProjectDetailResult(status: Resource<ProjectTravelDetailsResponse>) {
         status.let {
             when (it) {
-                is Resource.Loading -> binding.ddfProgressBar.toVisible()
+                is Resource.Loading -> {
+                    binding.ddfProgressBar.toVisible()
+                }
                 is Resource.Success -> status.data?.let {
                     binding.ddfProgressBar.toGone()
                     bindProjectDetailsData(it)
@@ -258,6 +265,45 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 }
             }
         }
+    }
+
+    private fun handleGetProjectDetailResult(status: Resource<GetTravelResponse>) {
+        status.let {
+            when (it) {
+                is Resource.Loading -> {
+                    binding.ddfProgressBar.toVisible()
+                }
+                is Resource.Success -> status.data?.let {
+                    binding.ddfProgressBar.toGone()
+                    bindGetTravelTimeData(it)
+                }
+                is Resource.DataError -> {
+                    binding.ddfProgressBar.toGone()
+                    status.errorCode?.let {
+                        projectTravelDetailsViewModel.showToastMessage(it)
+                    }
+                }
+                is Resource.Failure -> status.data?.let {
+                    binding.ddfProgressBar.toGone()
+                    visibleStartButton()
+                    //goneTravelTimeStart()
+                    goneTravelTimeEnd()
+                    changeTimerStartHint()
+                }
+                else -> {
+                }
+            }
+        }
+    }
+
+    private fun changeTimerStopHint() {
+        mtimerStatus = 1
+        setTimerText(R.string.action_stop)
+    }
+
+    private fun changeTimerStartHint() {
+        mtimerStatus = 0
+        setTimerText(R.string.action_start)
     }
 
 
@@ -298,7 +344,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 is Resource.Success -> it.data.let {
                     binding.ddfProgressBar.toGone()
                     onSuccessUpdateTravelTimer()
-                    navigateToWorkDetails()
+                    visibleNextButton()
                 }
                 is Resource.DataError -> {
                     binding.ddfProgressBar.toGone()
@@ -349,6 +395,11 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
         binding.constraintddfTravelTimeHint.visibility = View.GONE
     }
 
+    private fun visibleStartButton() {
+        binding.dfTimerConstraintLayout.visibility = View.VISIBLE
+        binding.constraintddfTravelTimeHint.visibility = View.VISIBLE
+    }
+
     private fun bindProjectId(projectId: String) {
         projectId.let {
             binding.pdfProjectIdTextView.apply {
@@ -386,6 +437,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
 
         }
     }
+
 
     private fun bindProjectTeamMembers(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
         projectTravelDetailsResponse.let {
@@ -430,18 +482,59 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
 
     private fun bindProjectDetailsData(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
         this.projectTravelDetailsResponse = projectTravelDetailsResponse
-        changeStatusColor(getBundleProjectListDataResponse().project_details.projectStatusColor)
-        bindProjectId(getBundleProjectListDataResponse().project_details.id)
+        bindProjectStatusColor(projectTravelDetailsResponse)
+        bindProjectId(projectTravelDetailsResponse.data.project_details.id)
         bindProjectDescriptionDetails(projectTravelDetailsResponse)
         bindProjectTeamMembers(projectTravelDetailsResponse)
+        apiCallBacks(EnumIntUtils.THREE.code)
     }
 
+    private fun bindProjectStatusColor(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
+        val serverStartDate =
+            DateUtils.formatDate(projectTravelDetailsResponse.data.project_details.start_date)
+        serverStartDate.let {
+            changeStatusColor(
+                DateUtils.isTodayOrTomorrowProject(
+                    DateUtils.returnCurrentDate(),
+                    it
+                )
+            )
+        }
 
-    private fun getBundleProjectListDataResponse(): ProjectListDataResponse {
-        val args = arguments
-        val projectListJsonString = args?.getString(BUNDLE_PROJECT_DETAILS)
-        return GsonBuilder().create()
-            .fromJson(projectListJsonString, ProjectListDataResponse::class.java)
+    }
+
+    private fun bindGetTravelTimeData(getTravelResponse: GetTravelResponse) {
+        getTravelResponse.let {
+            if (it.data.started_at.isNotEmpty()) {
+                visibleTravelTimeStart()
+                binding.textddfTravelTimeStart.text =
+                    DateUtils.returnCurrentTime(it.data.started_at)
+                projectTravelDetailsViewModel.storeLocalTravelStartId(it.data.id)
+                visibleTimerHint()
+                goneNextButton()
+            } else {
+                goneTravelTimeStart()
+                goneNextButton()
+            }
+
+            if (it.data.ended_at.isNotEmpty()) {
+                visibleTravelTimeEnd()
+                binding.textddfTravelTimeEnd.text =
+                    DateUtils.returnCurrentTime(it.data.ended_at)
+                binding.dfTimerConstraintLayout.visibility = View.GONE
+                visibleTimerHint()
+                visibleNextButton()
+            } else {
+                goneTravelTimeEnd()
+                visibleStartButton()
+                changeTimerStopHint()
+                goneNextButton()
+            }
+        }
+    }
+
+    private fun visibleTimerHint() {
+        binding.constraintddfTravelTimeHint.visibility = View.VISIBLE
     }
 
 
@@ -459,6 +552,26 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     private fun visibleTravelTimeEnd() {
         binding.textddfTravelTimeEndHint.visibility = View.VISIBLE
         binding.textddfTravelTimeEnd.visibility = View.VISIBLE
+    }
+
+
+    private fun goneTravelTimeStart() {
+        binding.constraintWholeTravelTime.visibility = View.GONE
+        binding.textddfTravelTimeStartHint.visibility = View.GONE
+        binding.textddfTravelTimeStart.visibility = View.GONE
+    }
+
+    private fun goneTravelTimeEnd() {
+        binding.textddfTravelTimeEndHint.visibility = View.GONE
+        binding.textddfTravelTimeEnd.visibility = View.GONE
+    }
+
+    private fun visibleNextButton() {
+        binding.fptdNextButton.visibility = View.VISIBLE
+    }
+
+    private fun goneNextButton() {
+        binding.fptdNextButton.visibility = View.GONE
     }
 
 

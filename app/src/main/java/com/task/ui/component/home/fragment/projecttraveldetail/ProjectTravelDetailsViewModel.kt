@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.task.data.DataRepositorySource
 import com.task.data.Resource
+import com.task.data.dto.project.gettraveldetails.GetTravelRequest
+import com.task.data.dto.project.gettraveldetails.GetTravelResponse
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.project.travelend.TravelEndRequest
@@ -13,6 +15,7 @@ import com.task.data.dto.project.travelend.TravelEndResponse
 import com.task.data.dto.project.travelstart.TravelStartRequest
 import com.task.data.dto.project.travelstart.TravelStartResponse
 import com.task.ui.base.BaseViewModel
+import com.task.utils.DateUtils
 import com.task.utils.SingleEvent
 import com.task.utils.wrapEspressoIdlingResource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,6 +41,10 @@ class ProjectTravelDetailsViewModel @Inject constructor(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     private val projectDetailsPrivate = MutableLiveData<Resource<ProjectTravelDetailsResponse>>()
     val projectTravelDetails: LiveData<Resource<ProjectTravelDetailsResponse>> get() = projectDetailsPrivate
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val getTravelDetailsPrivate = MutableLiveData<Resource<GetTravelResponse>>()
+    val getTravelDetails: LiveData<Resource<GetTravelResponse>> get() = getTravelDetailsPrivate
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     private val travelStartPrivate = MutableLiveData<SingleEvent<Resource<TravelStartResponse>>>()
@@ -94,6 +101,23 @@ class ProjectTravelDetailsViewModel @Inject constructor(
                     )
                 ).collect {
                     travelEndPrivate.value = it
+                }
+            }
+        }
+    }
+
+    fun getTravelDetails() {
+        viewModelScope.launch {
+            getTravelDetailsPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                mDataRepositoryRepository.getTravelDetails(
+                    getTravelRequest = GetTravelRequest(
+                        getToken(),
+                        getProjectId(),
+                        DateUtils.getCurrentDate()
+                    )
+                ).collect {
+                    getTravelDetailsPrivate.value = it
                 }
             }
         }

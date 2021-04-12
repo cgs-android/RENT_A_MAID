@@ -3,6 +3,8 @@ package com.task.data.remote
 import com.task.data.Resource
 import com.task.data.dto.credential.login.LoginRequest
 import com.task.data.dto.credential.login.LoginResponse
+import com.task.data.dto.project.gettraveldetails.GetTravelRequest
+import com.task.data.dto.project.gettraveldetails.GetTravelResponse
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.project.projectlist.ProjectListRequest
@@ -29,4 +31,6 @@ internal interface RemoteDataSource {
         workEndRequest: WorkEndRequest,
         event: Int
     ): SingleEvent<Resource<WorkEndResponse>>
+
+    suspend fun getTravelDetails(getTravelRequest: GetTravelRequest): Resource<GetTravelResponse>
 }

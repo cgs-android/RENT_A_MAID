@@ -84,4 +84,5 @@
     <string name="title_end_of_work">Feierabend?</string>
     <string name="msg_leave_comments">Kommentare hinterlassen</string>
     <string name="title_msg_travel_time">Soll die Fahrzeit jetzt eingestellt werden?</string>
+    <string name="title_next">Nächster</string>
 </resources>

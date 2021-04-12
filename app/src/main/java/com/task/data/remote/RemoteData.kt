@@ -3,6 +3,8 @@ package com.task.data.remote
 import com.task.data.Resource
 import com.task.data.dto.credential.login.LoginRequest
 import com.task.data.dto.credential.login.LoginResponse
+import com.task.data.dto.project.gettraveldetails.GetTravelRequest
+import com.task.data.dto.project.gettraveldetails.GetTravelResponse
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.project.projectlist.ProjectListRequest
@@ -226,6 +228,31 @@ constructor(
             }
             else -> {
                 SingleEvent(Resource.DataError(errorCode = responseCode))
+            }
+        }
+    }
+
+    override suspend fun getTravelDetails(getTravelRequest: GetTravelRequest): Resource<GetTravelResponse> {
+        val projectService = serviceGenerator.createService(ProjectService::class.java)
+        if (!networkConnectivity.isConnected()) {
+            return Resource.DataError(errorCode = NO_INTERNET_CONNECTION)
+        }
+        val getTravelDetailData = projectService.getTravelDetails(getTravelRequest)
+        return when (val responseCode = getTravelDetailData.code()) {
+            EnumIntUtils.SUCCESS_CODE.code -> {
+                if (getTravelDetailData.isSuccessful) {
+                    val responseBody = getTravelDetailData.body()
+                    if (responseBody!!.status) {
+                        Resource.Success(data = responseBody)
+                    } else {
+                        Resource.Failure(failureData = responseBody)
+                    }
+                } else {
+                    Resource.DataError(errorCode = responseCode)
+                }
+            }
+            else -> {
+                Resource.DataError(errorCode = responseCode)
             }
         }
     }

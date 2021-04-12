@@ -9,7 +9,9 @@ const val BASE_URL = "https://webandappstudio.webgo.cc/rentamaid/"
 const val RECIPE_ITEM_KEY = "RECIPE_ITEM_KEY"
 
 
-const val DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss"
+const val DATE_TIME_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss"
+const val DATE_TIME_FORMAT_DEFAULT_FROM_SERVER = "yyyy-MM-dd'T'HH:mm:ss"
+const val DATE_FORMAT_DEFAULT = "yyyy-MM-dd"
 const val FORMATTED_DATE = "dd.MM.yyyy"
 const val FORMATTED_TIME = "HH:mm"
 

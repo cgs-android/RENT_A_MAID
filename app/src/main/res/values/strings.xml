@@ -82,5 +82,6 @@
     <string name="title_are_you_there">Are you there?</string>
     <string name="title_end_of_work">End of working day?</string>
     <string name="msg_leave_comments">Leave your comments</string>
+    <string name="title_next">Next</string>
     <string name="title_msg_travel_time">Should the drive time now be discontinued?</string>
 </resources>

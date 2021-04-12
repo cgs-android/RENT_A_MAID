@@ -6,6 +6,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,15 +16,14 @@ import com.task.data.dto.drawer.DrawerResponse
 import com.task.databinding.ActivityHomeBinding
 import com.task.ui.base.BaseActivity
 import com.task.ui.component.home.adapter.DrawerAdapter
-import com.task.ui.component.home.fragment.projecttraveldetail.ProjectTravelDetailsFragment
 import com.task.ui.component.home.fragment.projectlist.ProjectListFragment
+import com.task.ui.component.home.fragment.projecttraveldetail.ProjectTravelDetailsFragment
 import com.task.ui.component.home.fragment.projectworkdetail.ProjectWorkDetailsFragment
 import com.task.utils.EnumIntUtils
 import com.task.utils.SingleEvent
 import com.task.utils.setupSnackbar
 import com.task.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
-import org.osmdroid.views.MapView
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity() {
@@ -151,7 +151,10 @@ class HomeActivity : BaseActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         fragment.arguments = bundle
         transaction.replace(R.id.chsHomeScreenFramelayout, fragment)
-        transaction.addToBackStack(null)
+        supportFragmentManager.popBackStackImmediate(
+            null,
+            FragmentManager.POP_BACK_STACK_INCLUSIVE
+        );
         transaction.commit()
     }
 

@@ -264,7 +264,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         mtimerStatus = 0
         projectWorkDetailsViewModel.clearList()
         val arg = Bundle()
-        homeActivity.changeFragment(EnumIntUtils.ONE.code, arg)
+        homeActivity.changeFragment(EnumIntUtils.ZERO.code, arg)
         return true
     }
 
@@ -449,9 +449,23 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
 
     private fun bindProjectDetailsData(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
         bindProjectId(projectTravelDetailsResponse.data.project_details.id)
-        changeStatusColor(getBundelProjectStatusColor())
+        bindProjectStatusColor(projectTravelDetailsResponse)
         bindProjectDescriptionDetails(projectTravelDetailsResponse)
         bindProjectTeamMembers(projectTravelDetailsResponse)
+    }
+
+    private fun bindProjectStatusColor(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
+        val serverStartDate =
+            DateUtils.formatDate(projectTravelDetailsResponse.data.project_details.start_date)
+        serverStartDate.let {
+            changeStatusColor(
+                DateUtils.isTodayOrTomorrowProject(
+                    DateUtils.returnCurrentDate(),
+                    it
+                )
+            )
+        }
+
     }
 
 
@@ -463,11 +477,11 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                 }
                 -1 -> {
                     projectStatusColor(R.color.colorBlue)
-                    goneStartButton()
+                    //goneStartButton()
                 }
                 0 -> {
                     projectStatusColor(R.color.colorOrange)
-                    goneStartButton()
+                    //goneStartButton()
                 }
             }
         }
@@ -487,19 +501,6 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                 color
             )
         )
-    }
-
-    private fun getBundleProjectListDataResponse(): ProjectTravelDetailsResponse {
-        val args = arguments
-        val projectListJsonString = args?.getString(BUNDLE_PROJECT_DETAILS)
-        return GsonBuilder().create()
-            .fromJson(projectListJsonString, ProjectTravelDetailsResponse::class.java)
-    }
-
-    private fun getBundelProjectStatusColor(): Int? {
-        val args = arguments
-        val statusColor: Int? = args?.getInt(BUNDLE_PROJECT_STATUS)
-        return statusColor
     }
 
 

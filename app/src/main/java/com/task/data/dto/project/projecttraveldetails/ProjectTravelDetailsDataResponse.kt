@@ -14,6 +14,7 @@ data class ProjectDetails(
     val proj_comp_same_aadress: Boolean,
     val company_id: Int,
     val work_start_time: String,
+    val start_date: String,
 )
 
 data class ProjectLocation(
