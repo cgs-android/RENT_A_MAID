@@ -15,6 +15,8 @@ import com.task.BUNDLE_PROJECT_DETAILS
 import com.task.BUNDLE_PROJECT_STATUS
 import com.task.R
 import com.task.data.Resource
+import com.task.data.dto.project.getworkdetails.GetWorkDetailListData
+import com.task.data.dto.project.getworkdetails.GetWorkDetailListsResponse
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.project.travelend.TravelEndResponse
 import com.task.data.dto.project.travelstart.TravelStartResponse
@@ -24,6 +26,7 @@ import com.task.data.dto.worktime.workstart.WorkStartResponse
 import com.task.databinding.FragmentProjectWorkDetailsBinding
 import com.task.ui.base.BaseFragment
 import com.task.ui.component.home.HomeActivity
+import com.task.ui.component.home.fragment.projectlist.adapter.ProjectListAdapter
 import com.task.ui.component.home.fragment.projecttraveldetail.ProjectTravelDetailsViewModel
 import com.task.ui.component.home.fragment.projectworkdetail.adapter.ProjectWorkLogAdapter
 import com.task.utils.*
@@ -69,6 +72,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
     override fun observeViewModel() {
         observeToast(projectWorkDetailsViewModel.showToast)
         observe(projectWorkDetailsViewModel.projectWorkDetails, ::handleProjectDetailResult)
+        observe(projectWorkDetailsViewModel.getWorkDetails, ::handleGetWorkDetailResult)
         observeEvent(projectWorkDetailsViewModel.workStart, ::handleWorkStartResult)
         observeEvent(projectWorkDetailsViewModel.workEnd, ::handleWorkEndResult)
     }
@@ -94,9 +98,11 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
             EnumIntUtils.ZERO.code -> {
                 projectWorkDetailsViewModel.getProjectDetails()
             }
-
             EnumIntUtils.ONE.code -> {
-                projectWorkDetailsViewModel.postWorkStartTime(DateUtils.getCurrentDateTime(),)
+                projectWorkDetailsViewModel.postWorkStartTime(DateUtils.getCurrentDateTime())
+            }
+            EnumIntUtils.TWO.code -> {
+                projectWorkDetailsViewModel.getWorkDetails()
             }
         }
     }
@@ -120,19 +126,6 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         apiCallBacks(EnumIntUtils.ZERO.code)
     }
 
-    private fun loadAndReloadCurrentTimeAdapter(statusMsg: Int) {
-        bindDrawerData(
-            projectWorkDetailsViewModel.loadWorkLogData(
-                requireActivity(),
-                WorkLogResponse(
-                    DateUtils.returnCurrentTime(),
-                    requireActivity().resources.getString(statusMsg),
-                    true
-                )
-            )
-        )
-    }
-
 
     private fun onPauseAndResume(status: Boolean) {
         status.let {
@@ -143,7 +136,6 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                         mPauseAndResume = false
                         text = this.resources.getString(R.string.tap_to_pause)
                         setTextColor(this.resources.getColor(R.color.colorAliceBlue))
-                        loadAndReloadCurrentTimeAdapter(R.string.title_stamp_in)
                         apiCallBacks(EnumIntUtils.ONE.code)
                     }
                 }
@@ -153,7 +145,6 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                         mPauseAndResume = true
                         text = this.resources.getString(R.string.tap_to_resume)
                         setTextColor(this.resources.getColor(R.color.colorRed))
-                        loadAndReloadCurrentTimeAdapter(R.string.title_stamp_off)
                         apiEndWorkTime(EnumIntUtils.ZERO.code)
                     }
                 }
@@ -186,7 +177,6 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                     binding.fpwdPauseTextView.visibility = View.VISIBLE
                     binding.constraintFpwdWholeTimeStamp.visibility = View.VISIBLE
                     mtimerStatus = 1
-                    loadAndReloadCurrentTimeAdapter(R.string.title_stamp_in)
                     apiCallBacks(EnumIntUtils.ONE.code)
                 }
                 1 -> {
@@ -196,6 +186,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
             }
         }
     }
+
 
     private fun driveTimeCloseLogDialog() {
         dialogHelper.showAlertDialog(
@@ -270,16 +261,17 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
 
 
     private fun initRecyclerView() {
-        val layoutManager = GridLayoutManager(context, 2)
+        val layoutManager = GridLayoutManager(context, 1)
         binding.recyclerFpwdTravelTimeList.layoutManager = layoutManager
         binding.recyclerFpwdTravelTimeList.setHasFixedSize(true)
 
     }
 
 
-    private fun bindDrawerData(workLogResponse: MutableList<WorkLogResponse>) {
-        if (!(workLogResponse.isNullOrEmpty())) {
-            projectWorkLogAdapter = ProjectWorkLogAdapter(requireContext(), workLogResponse)
+    private fun bindDrawerData(getWorkDetailListData: List<GetWorkDetailListData>) {
+        if (!(getWorkDetailListData.isNullOrEmpty())) {
+            binding.constraintFpwdWholeTimeStamp.visibility = View.VISIBLE
+            projectWorkLogAdapter = ProjectWorkLogAdapter(requireContext(), getWorkDetailListData)
             binding.recyclerFpwdTravelTimeList.adapter = projectWorkLogAdapter
         }
     }
@@ -305,6 +297,63 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
+    private fun handleGetWorkDetailResult(status: Resource<GetWorkDetailListsResponse>) {
+        when (status) {
+            is Resource.Loading -> binding.ddfProgressBar.toVisible()
+            is Resource.Success -> status.data?.let {
+                binding.ddfProgressBar.toGone()
+                bindGetAllWorkDetails(it)
+            }
+            is Resource.DataError -> {
+                binding.ddfProgressBar.toGone()
+                status.errorCode?.let {
+                    projectWorkDetailsViewModel.showToastMessage(it)
+                }
+            }
+            is Resource.Failure -> status.data?.let {
+                binding.ddfProgressBar.toGone()
+            }
+        }
+    }
+
+
+    private fun bindGetAllWorkDetails(getWorkDetailListsResponse: GetWorkDetailListsResponse) {
+        getWorkDetailListsResponse.let {
+            if (!(getWorkDetailListsResponse.data.isNullOrEmpty())) {
+                bindDrawerData(it.data)
+                it.data.let { it1 ->
+                    val size: Int = it.data.size
+                    if (size > 0) {
+                        val startedAt: String = it1.get(size - 1).started_at
+                        val endedAt: String = it1.get(size - 1).ended_at
+                        val workStartId: Int = it1.get(size - 1).id
+
+                        if (startedAt.isNotEmpty() and endedAt.isNotEmpty()) {
+                            startTimerButtonHint()
+                        } else if (endedAt.isEmpty()) {
+                            projectWorkDetailsViewModel.storeLocalTravelStartId(workStartId)
+                            stopTimerButtonHint()
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+    }
+
+    private fun startTimerButtonHint() {
+        mtimerStatus = 0
+        setTimerText(R.string.action_start)
+    }
+
+    private fun stopTimerButtonHint() {
+        mtimerStatus = 1
+        binding.fpwdPauseTextView.visibility = View.VISIBLE
+        setTimerText(R.string.action_stop)
+    }
+
     private fun handleWorkStartResult(status: SingleEvent<Resource<WorkStartResponse>>) {
         status.getContentIfNotHandled()?.let {
             when (it) {
@@ -315,6 +364,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                 is Resource.Success -> it.data.let {
                     binding.ddfProgressBar.toGone()
                     projectWorkDetailsViewModel.storeLocalTravelStartId(it!!.data.id)
+                    apiCallBacks(EnumIntUtils.TWO.code)
                 }
                 is Resource.DataError -> {
                     binding.ddfProgressBar.toGone()
@@ -341,6 +391,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                 }
                 is Resource.Success -> it.data.let {
                     binding.ddfProgressBar.toGone()
+                    apiCallBacks(EnumIntUtils.TWO.code)
                 }
 
                 is Resource.SuccessHandling -> it.data.let {
@@ -364,7 +415,6 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
     private fun onSuccessUpdateWorkTimer() {
         binding.dfTimerConstraintLayout.visibility = View.GONE
         mtimerStatus = 0
-        loadAndReloadCurrentTimeAdapter(R.string.title_stamp_off)
     }
 
     private fun bindProjectId(projectId: String) {
@@ -452,6 +502,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         bindProjectStatusColor(projectTravelDetailsResponse)
         bindProjectDescriptionDetails(projectTravelDetailsResponse)
         bindProjectTeamMembers(projectTravelDetailsResponse)
+        apiCallBacks(EnumIntUtils.TWO.code)
     }
 
     private fun bindProjectStatusColor(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {

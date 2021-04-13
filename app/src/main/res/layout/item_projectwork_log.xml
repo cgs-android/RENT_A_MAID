@@ -10,45 +10,41 @@
         android:id="@+id/constraintIpwlWholeWorkTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_5sdp"
-        android:layout_marginEnd="@dimen/_20sdp"
         android:visibility="visible"
         app:layout_constraintTop_toTopOf="parent">
-
-
-        <com.task.utils.font.CustomFontTextViewMedium
-            android:id="@+id/textIpwlWorkTimeStartHint"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:gravity="center"
-            android:text="@string/start_work_time"
-            android:textColor="@color/colorAliceBlue"
-            android:textSize="@dimen/_12sdp"
-            android:visibility="gone"
-            app:layout_constraintHorizontal_weight="0.2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
 
         <com.task.utils.font.CustomFontTextViewBold
             android:id="@+id/textIpwlWorkTimeStart"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_30sdp"
             android:gravity="start"
             android:text="08:10"
             android:textColor="@color/colorOrange"
             android:textSize="@dimen/_16sdp"
             android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/textIpwlWorkTimeEnd"
             app:layout_constraintHorizontal_weight="0.2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textIpwlWorkTimeStartHint" />
+            app:layout_constraintTop_toTopOf="parent" />
 
+
+        <com.task.utils.font.CustomFontTextViewBold
+            android:id="@+id/textIpwlWorkTimeEnd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_30sdp"
+            android:gravity="end"
+            android:text="08:10"
+            android:textColor="@color/colorOrange"
+            android:textSize="@dimen/_16sdp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="0.2"
+            app:layout_constraintStart_toEndOf="@+id/textIpwlWorkTimeStart"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

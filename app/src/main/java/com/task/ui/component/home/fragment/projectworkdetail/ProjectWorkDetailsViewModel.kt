@@ -7,6 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.task.data.DataRepositorySource
 import com.task.data.Resource
+import com.task.data.dto.project.gettraveldetails.GetTravelResponse
+import com.task.data.dto.project.getworkdetails.GetWorkDetailListsResponse
+import com.task.data.dto.project.getworkdetails.GetWorkDetailRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.project.travelend.TravelEndRequest
@@ -19,6 +22,7 @@ import com.task.data.dto.worktime.workend.WorkEndResponse
 import com.task.data.dto.worktime.workstart.WorkStartRequest
 import com.task.data.dto.worktime.workstart.WorkStartResponse
 import com.task.ui.base.BaseViewModel
+import com.task.utils.DateUtils
 import com.task.utils.SingleEvent
 import com.task.utils.wrapEspressoIdlingResource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,6 +49,10 @@ class ProjectWorkDetailsViewModel @Inject constructor(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     private val projectDetailsPrivate = MutableLiveData<Resource<ProjectTravelDetailsResponse>>()
     val projectWorkDetails: LiveData<Resource<ProjectTravelDetailsResponse>> get() = projectDetailsPrivate
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val getWorkDetailsPrivate = MutableLiveData<Resource<GetWorkDetailListsResponse>>()
+    val getWorkDetails: LiveData<Resource<GetWorkDetailListsResponse>> get() = getWorkDetailsPrivate
 
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -74,6 +82,23 @@ class ProjectWorkDetailsViewModel @Inject constructor(
                     )
                 ).collect {
                     projectDetailsPrivate.value = it
+                }
+            }
+        }
+    }
+
+    fun getWorkDetails() {
+        viewModelScope.launch {
+            getWorkDetailsPrivate.value = Resource.Loading()
+            wrapEspressoIdlingResource {
+                mDataRepositoryRepository.getWorkDetails(
+                    getWorkDetailRequest = GetWorkDetailRequest(
+                        getToken(),
+                        getProjectId(),
+                        DateUtils.getCurrentDate()
+                    )
+                ).collect {
+                    getWorkDetailsPrivate.value = it
                 }
             }
         }
@@ -128,6 +153,8 @@ class ProjectWorkDetailsViewModel @Inject constructor(
     fun clearList() {
         workLogResponseList = mutableListOf()
     }
+
+
 
     fun storeLocalTravelStartId(travelStartId: Int) {
         localRepository.putTravelStartId(travelStartId)

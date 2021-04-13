@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.task.data.dto.project.getworkdetails.GetWorkDetailListData
 
 import com.task.data.dto.worktime.WorkLogResponse
 import com.task.databinding.ItemProjectlistBinding
@@ -13,7 +14,7 @@ import com.task.ui.component.home.fragment.projectlist.listener.IProjectListList
 
 class ProjectWorkLogAdapter(
     private val context: Context,
-    private val workLogResponse: MutableList<WorkLogResponse>
+    private val getWorkDetailListData: List<GetWorkDetailListData>
 ) : RecyclerView.Adapter<ProjectWorkLogViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectWorkLogViewHolder {
@@ -24,7 +25,7 @@ class ProjectWorkLogAdapter(
 
     override fun onBindViewHolder(holder: ProjectWorkLogViewHolder, position: Int) {
         holder.bind(
-            workLogResponse[position],
+            getWorkDetailListData[position],
             onItemClickListener,
             position,
             context
@@ -32,7 +33,7 @@ class ProjectWorkLogAdapter(
     }
 
     override fun getItemCount(): Int {
-        return workLogResponse.size
+        return getWorkDetailListData.size
     }
 
     private val onItemClickListener: IProjectListListener = object : IProjectListListener {

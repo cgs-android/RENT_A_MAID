@@ -5,6 +5,8 @@ import com.task.data.dto.credential.login.LoginRequest
 import com.task.data.dto.credential.login.LoginResponse
 import com.task.data.dto.project.gettraveldetails.GetTravelRequest
 import com.task.data.dto.project.gettraveldetails.GetTravelResponse
+import com.task.data.dto.project.getworkdetails.GetWorkDetailListsResponse
+import com.task.data.dto.project.getworkdetails.GetWorkDetailRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.project.projectlist.ProjectListRequest
@@ -33,4 +35,5 @@ internal interface RemoteDataSource {
     ): SingleEvent<Resource<WorkEndResponse>>
 
     suspend fun getTravelDetails(getTravelRequest: GetTravelRequest): Resource<GetTravelResponse>
+    suspend fun getWorkDetails(getWorkDetailRequest: GetWorkDetailRequest): Resource<GetWorkDetailListsResponse>
 }

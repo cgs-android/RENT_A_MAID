@@ -2,6 +2,8 @@ package com.task.data.remote.service
 
 import com.task.data.dto.project.gettraveldetails.GetTravelRequest
 import com.task.data.dto.project.gettraveldetails.GetTravelResponse
+import com.task.data.dto.project.getworkdetails.GetWorkDetailListsResponse
+import com.task.data.dto.project.getworkdetails.GetWorkDetailRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.project.projectlist.ProjectListRequest
@@ -39,5 +41,8 @@ interface ProjectService {
 
     @POST("apis/project-travels/get-today-travel-time.json")
     suspend fun getTravelDetails(@Body getTravelRequest: GetTravelRequest): Response<GetTravelResponse>
+
+    @POST("apis/work-logs/get-today-work-logs.json")
+    suspend fun getWorkDetails(@Body getWorkDetailRequest: GetWorkDetailRequest): Response<GetWorkDetailListsResponse>
 
 }

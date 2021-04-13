@@ -4,6 +4,8 @@ import com.task.data.dto.credential.login.LoginRequest
 import com.task.data.dto.credential.login.LoginResponse
 import com.task.data.dto.project.gettraveldetails.GetTravelRequest
 import com.task.data.dto.project.gettraveldetails.GetTravelResponse
+import com.task.data.dto.project.getworkdetails.GetWorkDetailListsResponse
+import com.task.data.dto.project.getworkdetails.GetWorkDetailRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsRequest
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
 import com.task.data.dto.project.projectlist.ProjectListRequest
@@ -81,6 +83,12 @@ class DataRepository @Inject constructor(
     override suspend fun getTravelDetails(getTravelRequest: GetTravelRequest): Flow<Resource<GetTravelResponse>> {
         return flow {
             emit(remoteRepository.getTravelDetails(getTravelRequest))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun getWorkDetails(getWorkDetailRequest: GetWorkDetailRequest): Flow<Resource<GetWorkDetailListsResponse>> {
+        return flow {
+            emit(remoteRepository.getWorkDetails(getWorkDetailRequest))
         }.flowOn(ioDispatcher)
     }
 
