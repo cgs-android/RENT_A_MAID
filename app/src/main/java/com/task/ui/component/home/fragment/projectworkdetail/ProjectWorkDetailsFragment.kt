@@ -10,24 +10,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.GsonBuilder
-import com.task.BUNDLE_PROJECT_DETAILS
-import com.task.BUNDLE_PROJECT_STATUS
 import com.task.R
 import com.task.data.Resource
 import com.task.data.dto.project.getworkdetails.GetWorkDetailListData
 import com.task.data.dto.project.getworkdetails.GetWorkDetailListsResponse
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
-import com.task.data.dto.project.travelend.TravelEndResponse
-import com.task.data.dto.project.travelstart.TravelStartResponse
-import com.task.data.dto.worktime.WorkLogResponse
 import com.task.data.dto.worktime.workend.WorkEndResponse
 import com.task.data.dto.worktime.workstart.WorkStartResponse
 import com.task.databinding.FragmentProjectWorkDetailsBinding
 import com.task.ui.base.BaseFragment
 import com.task.ui.component.home.HomeActivity
-import com.task.ui.component.home.fragment.projectlist.adapter.ProjectListAdapter
-import com.task.ui.component.home.fragment.projecttraveldetail.ProjectTravelDetailsViewModel
 import com.task.ui.component.home.fragment.projectworkdetail.adapter.ProjectWorkLogAdapter
 import com.task.utils.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -153,6 +145,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
 
     }
 
+
     private fun setTimerText(timeText: Int) {
         binding.dfTimerTextView.text =
             requireActivity().getString(timeText)
@@ -191,10 +184,12 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
     private fun driveTimeCloseLogDialog() {
         dialogHelper.showAlertDialog(
             object : DialogHelper.DialogPickListener {
-
-
                 override fun onPositiveClicked(message: String) {
-                    apiEndWorkTime(EnumIntUtils.ONE.code, message)
+                    apiEndWorkTime(
+                        EnumIntUtils.ONE.code,
+                        message,
+                        EnumStringUtils.Completed.toString()
+                    )
                 }
 
                 override fun onNegativeClicked() {
@@ -328,9 +323,13 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                         val endedAt: String = it1.get(size - 1).ended_at
                         val workStartId: Int = it1.get(size - 1).id
 
-                        if (startedAt.isNotEmpty() and endedAt.isNotEmpty()) {
-                            startTimerButtonHint()
-                        } else if (endedAt.isEmpty()) {
+                        if ((it1.get(size - 1).project_activity.isNotEmpty())) {
+                            if (it1.get(size - 1).project_activity[0].status == EnumStringUtils.Completed.toString()) {
+                                onSuccessUpdateWorkTimer()
+                            } else {
+                                startTimerButtonHint()
+                            }
+                        } else {
                             projectWorkDetailsViewModel.storeLocalTravelStartId(workStartId)
                             stopTimerButtonHint()
                         }
@@ -350,6 +349,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
 
     private fun stopTimerButtonHint() {
         mtimerStatus = 1
+        mPauseAndResume = false
         binding.fpwdPauseTextView.visibility = View.VISIBLE
         setTimerText(R.string.action_stop)
     }
@@ -396,6 +396,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
 
                 is Resource.SuccessHandling -> it.data.let {
                     binding.ddfProgressBar.toGone()
+                    apiCallBacks(EnumIntUtils.TWO.code)
                     onSuccessUpdateWorkTimer()
                 }
                 is Resource.DataError -> {

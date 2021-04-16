@@ -12,5 +12,12 @@ data class GetWorkDetailListData(
     val project_id: Int = 0,
     val user_id: Int = 0,
     val started_at: String = "",
-    val ended_at: String = ""
+    val ended_at: String = "",
+    val project_activity: List<ProjectActivityListData>
+)
+
+data class ProjectActivityListData(
+    val id: Int = 0,
+    val comment: String = "",
+    val status: String = ""
 )

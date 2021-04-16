@@ -72,18 +72,38 @@ object DateUtils {
         return dateFormat.format(date)
     }
 
+
     fun returnCurrentTime(date: String): String {
-        val dateFormat =
-            SimpleDateFormat(DATE_TIME_FORMAT_DEFAULT_FROM_SERVER, Locale.getDefault())
-        var convertedDate: Date? = Date()
-        try {
-            convertedDate = dateFormat.parse(date)
-            return SimpleDateFormat(FORMATTED_TIME, Locale.getDefault()).format(convertedDate)
-        } catch (e: ParseException) {
-            e.printStackTrace()
+        when (date.contains("T")) {
+            true -> {
+                val dateFormat =
+                    SimpleDateFormat(DATE_TIME_FORMAT_DEFAULT_FROM_SERVER, Locale.getDefault())
+                var convertedDate: Date? = Date()
+                try {
+                    convertedDate = dateFormat.parse(date)
+                    return SimpleDateFormat(FORMATTED_TIME, Locale.getDefault()).format(
+                        convertedDate
+                    )
+                } catch (e: ParseException) {
+                    e.printStackTrace()
+                }
+            }
+            false -> {
+                val dateFormat =
+                    SimpleDateFormat(DATE_TIME_FORMAT_DEFAULT, Locale.getDefault())
+                var convertedDate: Date? = Date()
+                try {
+                    convertedDate = dateFormat.parse(date)
+                    return SimpleDateFormat(FORMATTED_TIME, Locale.getDefault()).format(
+                        convertedDate
+                    )
+                } catch (e: ParseException) {
+                    e.printStackTrace()
+                }
+            }
         }
+
         return ""
     }
-
 
 }
