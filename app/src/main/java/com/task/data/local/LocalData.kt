@@ -46,6 +46,17 @@ class LocalData @Inject constructor(val context: Context) {
         return value!!
     }
 
+    fun putTravelDistanceInKilometer(travelDistance: String) {
+        val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
+        sharedPref.edit().putString(PREF_TRAVEL_DISTANCE_KEY, travelDistance).apply()
+    }
+
+    fun getTravelDistanceInKilometer(): String {
+        val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
+        val value: String? = sharedPref.getString(PREF_TRAVEL_DISTANCE_KEY, "")
+        return value!!
+    }
+
 
 }
 

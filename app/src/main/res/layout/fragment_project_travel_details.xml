@@ -230,6 +230,18 @@
             app:layout_constraintTop_toBottomOf="@+id/ddfWholeConstraintLayout">
 
             <com.task.utils.font.CustomFontTextViewBold
+                android:id="@+id/textviewFptdTravelDistance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/colorRed"
+                android:textSize="@dimen/_13sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.task.utils.font.CustomFontTextViewBold
                 android:id="@+id/textddfTravelTimeHint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -242,7 +254,7 @@
                 android:textSize="@dimen/_13sdp"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/textviewFptdTravelDistance" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -403,8 +415,8 @@
             android:background="@drawable/button_radius"
             android:text="@string/title_next"
             android:textColor="@color/colorWhite"
-            android:visibility="gone"
             android:textSize="@dimen/_13sdp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dfTimerConstraintLayout" />
 

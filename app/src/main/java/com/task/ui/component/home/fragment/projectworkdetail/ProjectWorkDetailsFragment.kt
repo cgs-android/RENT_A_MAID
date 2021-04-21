@@ -61,6 +61,10 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         return binding.root
     }
 
+    override fun gpsStatus(isGPSEnable: Boolean) {
+
+    }
+
     override fun observeViewModel() {
         observeToast(projectWorkDetailsViewModel.showToast)
         observe(projectWorkDetailsViewModel.projectWorkDetails, ::handleProjectDetailResult)

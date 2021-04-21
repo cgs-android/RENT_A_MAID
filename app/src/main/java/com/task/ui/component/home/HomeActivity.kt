@@ -1,5 +1,8 @@
 package com.task.ui.component.home
 
+import android.app.Activity
+import android.app.ActivityManager
+import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -19,11 +22,9 @@ import com.task.ui.component.home.adapter.DrawerAdapter
 import com.task.ui.component.home.fragment.projectlist.ProjectListFragment
 import com.task.ui.component.home.fragment.projecttraveldetail.ProjectTravelDetailsFragment
 import com.task.ui.component.home.fragment.projectworkdetail.ProjectWorkDetailsFragment
-import com.task.utils.EnumIntUtils
-import com.task.utils.SingleEvent
-import com.task.utils.setupSnackbar
-import com.task.utils.showToast
+import com.task.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity() {
@@ -59,8 +60,28 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         initRecyclerView()
         bindDrawerData(homeViewModel.loadDrawerData(this))
-        changeFragment(EnumIntUtils.ONE.code, args)
+        getIntentDatas()
     }
+
+    private fun getIntentDatas() {
+        val getNotifyRedirection = intent.extras
+        if (getNotifyRedirection != null) {
+            when (getNotifyRedirection.getString(EnumStringUtils.NotificationTravelRedirection.toString())) {
+                EnumStringUtils.NotificationTravelRedirection.toString() -> {
+                    changeFragment(EnumIntUtils.ZERO.code, args)
+                }
+            }
+        } else {
+            if (isMyServiceRunning(RSSPullService::class.java)) {
+                changeFragment(EnumIntUtils.ZERO.code, args)
+            } else {
+                homeViewModel.resetTravelDistanceTime()
+                changeFragment(EnumIntUtils.ONE.code, args)
+            }
+
+        }
+    }
+
 
     override fun onBackPressed() {
         val fragment =

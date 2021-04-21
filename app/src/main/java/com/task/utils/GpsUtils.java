@@ -52,7 +52,6 @@ public class GpsUtils {
 
     // method for turn on GPS
     public void turnGPSOn(onGpsListener onGpsListener) {
-
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             if (onGpsListener != null) {
                 onGpsListener.gpsStatus(true);

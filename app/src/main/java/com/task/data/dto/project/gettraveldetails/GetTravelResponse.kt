@@ -13,5 +13,6 @@ data class GetTravelDataResponse(
     val project_id: Int = 0,
     val user_id: Int = 0,
     val started_at: String = "",
+    val travel_distance: Float = 0f,
     val ended_at: String = "",
 )

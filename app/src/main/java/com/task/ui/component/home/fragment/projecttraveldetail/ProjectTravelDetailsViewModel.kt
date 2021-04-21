@@ -97,7 +97,8 @@ class ProjectTravelDetailsViewModel @Inject constructor(
                         getToken(),
                         getTravelStartId(),
                         endAt,
-                        endGeoLocation
+                        endGeoLocation,
+                        getTotalTravelDistance()
                     )
                 ).collect {
                     travelEndPrivate.value = it

@@ -1,11 +1,13 @@
 package com.task.ui.base
 
+
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.task.utils.GpsUtils
 
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment(), GpsUtils.onGpsListener {
 
 
     abstract fun observeViewModel()
@@ -22,5 +24,13 @@ abstract class BaseFragment : Fragment() {
         initAppHeader()
     }
 
+    override fun onResume() {
+        super.onResume()
+        turnGPSOn()
+    }
+
+    private fun turnGPSOn() {
+        GpsUtils(requireActivity()).turnGPSOn(this)
+    }
 
 }

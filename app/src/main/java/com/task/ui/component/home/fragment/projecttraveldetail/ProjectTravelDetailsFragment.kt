@@ -1,7 +1,9 @@
 package com.task.ui.component.home.fragment.projecttraveldetail
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +12,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.GsonBuilder
-import com.task.BUNDLE_PROJECT_DETAILS
-import com.task.BUNDLE_PROJECT_STATUS
 import com.task.R
 import com.task.data.Resource
 import com.task.data.dto.project.gettraveldetails.GetTravelResponse
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
-import com.task.data.dto.project.projectlist.ProjectListDataResponse
 import com.task.data.dto.project.travelend.TravelEndResponse
 import com.task.data.dto.project.travelstart.TravelStartResponse
+import com.task.data.local.LocalData
 import com.task.databinding.FragmentProjectTravelDetailsBinding
 import com.task.ui.base.BaseFragment
 import com.task.ui.component.home.HomeActivity
@@ -36,6 +35,11 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     @Inject
     lateinit var dialogHelper: DialogHelper
 
+
+    @Inject
+    lateinit var localRepository: LocalData
+
+
     private var mPauseAndResume: Boolean = false
     private lateinit var homeActivity: HomeActivity
 
@@ -50,6 +54,10 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
 
     private lateinit var binding: FragmentProjectTravelDetailsBinding
 
+    var handler: Handler = Handler()
+    var runnable: Runnable? = null
+    var delay = 1000
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +66,10 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     ): View {
         binding = FragmentProjectTravelDetailsBinding.inflate(layoutInflater, container, false)
         return binding.root
+    }
+
+    override fun gpsStatus(isGPSEnable: Boolean) {
+
     }
 
     override fun observeViewModel() {
@@ -225,6 +237,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
         timerStatus.let {
             when (it) {
                 0 -> {
+                    startTravelDistanceService()
                     binding.textddfTravelTimeStart.apply {
                         mtimerStatus = 1
                         text = DateUtils.returnCurrentTime()
@@ -345,6 +358,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                     binding.ddfProgressBar.toGone()
                     onSuccessUpdateTravelTimer()
                     visibleNextButton()
+                    stopTravelDistanceService()
                 }
                 is Resource.DataError -> {
                     binding.ddfProgressBar.toGone()
@@ -519,12 +533,22 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
 
             if (it.data.ended_at.isNotEmpty()) {
                 visibleTravelTimeEnd()
+                it.data.travel_distance.let { it1 ->
+                    binding.textviewFptdTravelDistance.text = String.format(
+                        "$it1 " + resources.getString(
+                            R.string.msg_km
+                        )
+                    )
+                }
                 binding.textddfTravelTimeEnd.text =
                     DateUtils.returnCurrentTime(it.data.ended_at)
                 binding.dfTimerConstraintLayout.visibility = View.GONE
                 visibleTimerHint()
                 visibleNextButton()
             } else {
+                if (!homeActivity.isMyServiceRunning(RSSPullService::class.java)) {
+                    startTravelDistanceService()
+                }
                 goneTravelTimeEnd()
                 visibleStartButton()
                 changeTimerStopHint()
@@ -572,6 +596,45 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
 
     private fun goneNextButton() {
         binding.fptdNextButton.visibility = View.GONE
+    }
+
+    private fun startTravelDistanceService() {
+        val serviceIntent = Intent(requireContext(), RSSPullService::class.java)
+        serviceIntent.putExtra(
+            EnumStringUtils.ServiceIntent.toString(),
+            this.getString(R.string.app_name) + " " + this.getString(R.string.title_is_working)
+        )
+        ContextCompat.startForegroundService(requireContext(), serviceIntent)
+        updateDistanceInPerSecond()
+    }
+
+    private fun stopTravelDistanceService() {
+        val stopService = Intent(requireContext(), RSSPullService::class.java)
+        stopService.putExtra(
+            EnumStringUtils.ServiceIntent.toString(),
+            EnumStringUtils.StopService.toString(),
+        )
+        ContextCompat.startForegroundService(requireContext(), stopService)
+        runnable?.let { handler.removeCallbacks(it) }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (homeActivity.isMyServiceRunning(RSSPullService::class.java)) {
+            updateDistanceInPerSecond()
+        }
+    }
+
+    private fun updateDistanceInPerSecond() {
+        handler.postDelayed(Runnable {
+            handler.postDelayed(runnable!!, delay.toLong())
+            binding.textviewFptdTravelDistance.text =
+                String.format(
+                    localRepository.getTravelDistanceInKilometer() + " " + resources.getString(
+                        R.string.msg_km
+                    )
+                )
+        }.also { runnable = it }, delay.toLong())
     }
 
 

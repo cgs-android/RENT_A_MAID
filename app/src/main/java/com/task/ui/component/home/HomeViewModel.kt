@@ -45,6 +45,10 @@ class HomeViewModel @Inject constructor(private val mDataRepository: DataReposit
         openDrawerDetailsPrivate.value = position
     }
 
+    fun resetTravelDistanceTime() {
+        localRepository.putTravelDistanceInKilometer("")
+    }
+
 
     fun showToastMessage(errorCode: Int) {
         val error = errorManager.getError(errorCode)

@@ -29,4 +29,11 @@ const val PREF_FAVOURITES_KEY = "favourites"
 const val PREF_LOGIN_DATA_KEY = "LOGIN_DATAS"
 const val PREF_PROJECT_ID_KEY = "PREF_PROJECT_ID"
 const val PREF_TRAVEL_START_ID_KEY = "PREF_TRAVEL_START_ID"
+const val PREF_TRAVEL_DISTANCE_KEY = "PREF_TRAVEL_DISTANCE_KEY"
 
+///permissionConstant
+const val PERMISSION_ALL_PERMISSION = 0
+
+
+///serviceConstant
+const val CHANNEL_ID = "ForegroundServiceChannel"

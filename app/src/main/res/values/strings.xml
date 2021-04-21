@@ -84,4 +84,11 @@
     <string name="msg_leave_comments">Leave your comments</string>
     <string name="title_next">Next</string>
     <string name="title_msg_travel_time">Should the drive time now be discontinued?</string>
+    <string name="title_is_working">is Running</string>
+
+    <string name="permission_required_title">Permissions Required</string>
+    <string name="setting">Settings</string>
+    <string name="msg_km">k.m</string>
+    <string name="permission_required_message">You have forcefully denied some of the required permissions for this action. Please open settings, go to permissions and allow them.</string>
+    <string name="please_grant_permission_write">please grant write file permission and try again</string>
 </resources>

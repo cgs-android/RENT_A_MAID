@@ -19,6 +19,10 @@ abstract class BaseViewModel : ViewModel() {
         return localRepository.getLoginResponseData().data.token
     }
 
+    fun getTotalTravelDistance(): String {
+        return localRepository.getTravelDistanceInKilometer()
+    }
+
     fun getUserId(): Int {
         return localRepository.getLoginResponseData().data.id
     }

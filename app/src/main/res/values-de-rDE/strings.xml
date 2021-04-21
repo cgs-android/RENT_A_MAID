@@ -85,4 +85,12 @@
     <string name="msg_leave_comments">Kommentare hinterlassen</string>
     <string name="title_msg_travel_time">Soll die Fahrzeit jetzt eingestellt werden?</string>
     <string name="title_next">Nächster</string>
+    <string name="title_is_working">is Running</string>
+
+    <string name="permission_required_title">Permissions Required</string>
+    <string name="setting">Settings</string>
+    <string name="msg_km">k.m</string>
+    <string name="permission_required_message">You have forcefully denied some of the required permissions for this action. Please open settings, go to permissions and allow them.</string>
+    <string name="please_grant_permission_write">please grant write file permission and try again</string>
+    ¬
 </resources>

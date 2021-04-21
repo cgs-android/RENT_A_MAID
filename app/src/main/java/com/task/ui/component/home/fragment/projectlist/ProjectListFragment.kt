@@ -53,6 +53,10 @@ class ProjectListFragment : BaseFragment(), View.OnClickListener,
         return binding.root
     }
 
+    override fun gpsStatus(isGPSEnable: Boolean) {
+
+    }
+
     override fun observeViewModel() {
         observeToast(projectListViewModel.showToast)
         observe(projectListViewModel.projectDetails, ::handleProjectDetailResult)
@@ -163,8 +167,6 @@ class ProjectListFragment : BaseFragment(), View.OnClickListener,
             when (userRoleBool) {
                 true -> {
                     val args = Bundle()
-                    val jsonString = GsonBuilder().create().toJson(it)
-                    args.putString(BUNDLE_PROJECT_DETAILS, jsonString)
                     homeActivity.changeFragment(EnumIntUtils.ZERO.code, args)
                 }
                 else -> {
@@ -180,5 +182,7 @@ class ProjectListFragment : BaseFragment(), View.OnClickListener,
             }
         }
     }
+
+
 }
 

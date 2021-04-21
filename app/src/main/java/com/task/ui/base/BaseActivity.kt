@@ -1,20 +1,36 @@
 package com.task.ui.base
 
+import android.Manifest
+import android.app.ActivityManager
+import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import android.view.ContextThemeWrapper
 import android.view.MenuItem
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.task.BuildConfig
+import com.task.PERMISSION_ALL_PERMISSION
 import java.util.*
 
 
 abstract class BaseActivity : AppCompatActivity() {
 
+
     abstract fun observeViewModel()
     protected abstract fun initViewBinding()
+
+    private val necessaryPermissions = arrayOf<String>(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_NETWORK_STATE,
+        Manifest.permission.INTERNET
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,5 +91,44 @@ abstract class BaseActivity : AppCompatActivity() {
                     .build()
             )
         }
+    }
+
+    fun hasPermissions(): Boolean {
+        var res = 0
+        for (perms in necessaryPermissions) {
+            res = checkCallingOrSelfPermission(perms)
+            if (res != PackageManager.PERMISSION_GRANTED) {
+                return false
+            }
+        }
+        return true
+    }
+
+    fun requestNecessaryPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(necessaryPermissions, PERMISSION_ALL_PERMISSION)
+        }
+    }
+
+    public fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager =
+            getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }
