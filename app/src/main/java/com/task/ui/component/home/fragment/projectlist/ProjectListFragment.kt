@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder
 import com.task.BUNDLE_PROJECT_DETAILS
 import com.task.BUNDLE_PROJECT_STATUS
 import com.task.R
+import com.task.TOKEN_IS_INVALID
 import com.task.data.Resource
 import com.task.data.dto.project.projectlist.ProjectListDataResponse
 import com.task.data.dto.project.projectlist.ProjectListsResponse
@@ -133,6 +134,13 @@ class ProjectListFragment : BaseFragment(), View.OnClickListener,
             is Resource.Failure -> status.data?.let {
                 binding.fplProgressBar.toGone()
                 projectListViewModel.showFailureToastMessage(it.message)
+                it.message.let { it1 ->
+                    when (it1) {
+                        TOKEN_IS_INVALID -> {
+                            sessionExpiredLoginRedirection()
+                        }
+                    }
+                }
             }
         }
     }

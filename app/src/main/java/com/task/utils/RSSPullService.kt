@@ -43,7 +43,7 @@ class RSSPullService : Service() {
         locationRequest.priority = (LocationRequest.PRIORITY_HIGH_ACCURACY)
         locationRequest.interval = (1 * 1000.toLong()) // 10 seconds
         locationRequest.fastestInterval = (1 * 1000.toLong()) // 5 // seconds
-        //locationRequest.smallestDisplacement = (30f)
+        locationRequest.smallestDisplacement = (10f)
 
 
         locationCallback = object : LocationCallback() {

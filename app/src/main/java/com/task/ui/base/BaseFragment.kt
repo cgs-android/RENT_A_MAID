@@ -1,9 +1,11 @@
 package com.task.ui.base
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.task.ui.component.login.LoginActivity
 import com.task.utils.GpsUtils
 
 
@@ -31,6 +33,12 @@ abstract class BaseFragment : Fragment(), GpsUtils.onGpsListener {
 
     private fun turnGPSOn() {
         GpsUtils(requireActivity()).turnGPSOn(this)
+    }
+
+    fun sessionExpiredLoginRedirection() {
+        requireActivity().finishAffinity()
+        val loginIntent = Intent(requireActivity(), LoginActivity::class.java)
+        startActivity(loginIntent)
     }
 
 }

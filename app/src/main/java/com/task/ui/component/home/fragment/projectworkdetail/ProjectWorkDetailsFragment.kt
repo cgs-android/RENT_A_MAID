@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.task.R
+import com.task.TOKEN_IS_INVALID
 import com.task.data.Resource
 import com.task.data.dto.project.getworkdetails.GetWorkDetailListData
 import com.task.data.dto.project.getworkdetails.GetWorkDetailListsResponse
@@ -292,6 +293,13 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
             is Resource.Failure -> status.data?.let {
                 binding.ddfProgressBar.toGone()
                 projectWorkDetailsViewModel.showFailureToastMessage(it.message)
+                it.message.let { it1 ->
+                    when (it1) {
+                        TOKEN_IS_INVALID -> {
+                            sessionExpiredLoginRedirection()
+                        }
+                    }
+                }
             }
         }
     }
@@ -311,6 +319,14 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
             }
             is Resource.Failure -> status.data?.let {
                 binding.ddfProgressBar.toGone()
+                projectWorkDetailsViewModel.showFailureToastMessage(it.message)
+                it.message.let { it1 ->
+                    when (it1) {
+                        TOKEN_IS_INVALID -> {
+                            sessionExpiredLoginRedirection()
+                        }
+                    }
+                }
             }
         }
     }
@@ -379,6 +395,13 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                 is Resource.Failure -> it.data?.let {
                     binding.ddfProgressBar.toGone()
                     projectWorkDetailsViewModel.showFailureToastMessage(it.message)
+                    it.message.let { it1 ->
+                        when (it1) {
+                            TOKEN_IS_INVALID -> {
+                                sessionExpiredLoginRedirection()
+                            }
+                        }
+                    }
                 }
                 else -> {
                 }
@@ -412,6 +435,13 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                 is Resource.Failure -> it.data?.let {
                     binding.ddfProgressBar.toGone()
                     projectWorkDetailsViewModel.showFailureToastMessage(it.message)
+                    it.message.let { it1 ->
+                        when (it1) {
+                            TOKEN_IS_INVALID -> {
+                                sessionExpiredLoginRedirection()
+                            }
+                        }
+                    }
                 }
             }
         }

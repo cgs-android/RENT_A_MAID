@@ -37,3 +37,6 @@ const val PERMISSION_ALL_PERMISSION = 0
 
 ///serviceConstant
 const val CHANNEL_ID = "ForegroundServiceChannel"
+
+//sessionToken
+const val TOKEN_IS_INVALID = "Token is invalid"

@@ -13,6 +13,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.task.R
+import com.task.TOKEN_IS_INVALID
 import com.task.data.Resource
 import com.task.data.dto.project.gettraveldetails.GetTravelResponse
 import com.task.data.dto.project.projecttraveldetails.ProjectTravelDetailsResponse
@@ -273,6 +274,13 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 is Resource.Failure -> status.data?.let {
                     binding.ddfProgressBar.toGone()
                     projectTravelDetailsViewModel.showFailureToastMessage(it.message)
+                    it.message.let { it1 ->
+                        when (it1) {
+                            TOKEN_IS_INVALID -> {
+                                sessionExpiredLoginRedirection()
+                            }
+                        }
+                    }
                 }
                 else -> {
                 }
@@ -298,6 +306,14 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 }
                 is Resource.Failure -> status.data?.let {
                     binding.ddfProgressBar.toGone()
+                    projectTravelDetailsViewModel.showFailureToastMessage(it.message)
+                    it.message.let { it1 ->
+                        when (it1) {
+                            TOKEN_IS_INVALID -> {
+                                sessionExpiredLoginRedirection()
+                            }
+                        }
+                    }
                     visibleStartButton()
                     //goneTravelTimeStart()
                     goneTravelTimeEnd()
@@ -340,6 +356,13 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 is Resource.Failure -> it.data?.let {
                     binding.ddfProgressBar.toGone()
                     projectTravelDetailsViewModel.showFailureToastMessage(it.message)
+                    it.message.let { it1 ->
+                        when (it1) {
+                            TOKEN_IS_INVALID -> {
+                                sessionExpiredLoginRedirection()
+                            }
+                        }
+                    }
                 }
                 else -> {
                 }
@@ -369,6 +392,13 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 is Resource.Failure -> it.data?.let {
                     binding.ddfProgressBar.toGone()
                     projectTravelDetailsViewModel.showFailureToastMessage(it.message)
+                    it.message.let { it1 ->
+                        when (it1) {
+                            TOKEN_IS_INVALID -> {
+                                sessionExpiredLoginRedirection()
+                            }
+                        }
+                    }
                 }
                 else -> {
                 }

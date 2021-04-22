@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:text="Project 456"
+                android:text=""
                 android:textColor="@color/colorAliceBlue"
                 android:textSize="@dimen/_14sdp"
                 app:layout_constraintStart_toEndOf="@+id/ddfProjectStatusImageView"
@@ -164,7 +164,7 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_1sdp"
-                    android:text="Albert Ritschard [TL], Susanne Iten, Franco Riccio, Martianne Aeby, Marta Amman"
+                    android:text=""
                     android:textColor="@color/colorAliceBlue"
                     android:textSize="@dimen/_12sdp"
                     app:layout_constraintTop_toBottomOf="@+id/pliProjectHintTextView" />
@@ -188,7 +188,7 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_1sdp"
-                    android:text="Schlossstrasse 1A, 3800 Interlaken BE"
+                    android:text=""
                     android:textColor="@color/colorAliceBlue"
                     android:textSize="@dimen/_12sdp"
                     app:layout_constraintTop_toBottomOf="@+id/pliProjectLocationHintTextView" />
