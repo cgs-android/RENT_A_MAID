@@ -91,4 +91,7 @@
     <string name="msg_km">k.m</string>
     <string name="permission_required_message">You have forcefully denied some of the required permissions for this action. Please open settings, go to permissions and allow them.</string>
     <string name="please_grant_permission_write">please grant write file permission and try again</string>
+
+    <string name="msg_offline">You are offline.</string>
+    <string name="msg_on_gps">Turn On GPS</string>
 </resources>

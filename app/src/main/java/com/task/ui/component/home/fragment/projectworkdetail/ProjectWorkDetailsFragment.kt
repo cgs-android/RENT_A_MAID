@@ -24,6 +24,8 @@ import com.task.ui.component.home.HomeActivity
 import com.task.ui.component.home.fragment.projectworkdetail.adapter.ProjectWorkLogAdapter
 import com.task.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_project_travel_details.*
+import kotlinx.android.synthetic.main.fragment_project_work_details.*
 import kotlinx.android.synthetic.main.item_header.*
 import javax.inject.Inject
 
@@ -292,10 +294,10 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
             }
             is Resource.Failure -> status.data?.let {
                 binding.ddfProgressBar.toGone()
-                projectWorkDetailsViewModel.showFailureToastMessage(it.message)
                 it.message.let { it1 ->
                     when (it1) {
                         TOKEN_IS_INVALID -> {
+                            projectWorkDetailsViewModel.showFailureToastMessage(it.message)
                             sessionExpiredLoginRedirection()
                         }
                     }
@@ -319,10 +321,10 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
             }
             is Resource.Failure -> status.data?.let {
                 binding.ddfProgressBar.toGone()
-                projectWorkDetailsViewModel.showFailureToastMessage(it.message)
                 it.message.let { it1 ->
                     when (it1) {
                         TOKEN_IS_INVALID -> {
+                            projectWorkDetailsViewModel.showFailureToastMessage(it.message)
                             sessionExpiredLoginRedirection()
                         }
                     }
@@ -394,10 +396,10 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                 }
                 is Resource.Failure -> it.data?.let {
                     binding.ddfProgressBar.toGone()
-                    projectWorkDetailsViewModel.showFailureToastMessage(it.message)
                     it.message.let { it1 ->
                         when (it1) {
                             TOKEN_IS_INVALID -> {
+                                projectWorkDetailsViewModel.showFailureToastMessage(it.message)
                                 sessionExpiredLoginRedirection()
                             }
                         }
@@ -434,10 +436,10 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                 }
                 is Resource.Failure -> it.data?.let {
                     binding.ddfProgressBar.toGone()
-                    projectWorkDetailsViewModel.showFailureToastMessage(it.message)
                     it.message.let { it1 ->
                         when (it1) {
                             TOKEN_IS_INVALID -> {
+                                projectWorkDetailsViewModel.showFailureToastMessage(it.message)
                                 sessionExpiredLoginRedirection()
                             }
                         }
@@ -592,6 +594,16 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
 
     private fun observeToast(event: LiveData<SingleEvent<Any>>) {
         binding.root.showToast(this, event, Snackbar.LENGTH_LONG)
+    }
+
+    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        super.onNetworkConnectionChanged(isConnected)
+        enableDisableLayout(isConnected, fpwdRootScrollView)
+        showShackBarMessage(
+            isConnected,
+            fpwdRootScrollView,
+            requireActivity().getString(R.string.msg_offline)
+        )
     }
 
 

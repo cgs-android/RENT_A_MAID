@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import com.task.BUNDLE_PROJECT_DETAILS
@@ -22,6 +24,7 @@ import com.task.ui.component.home.HomeActivity
 import com.task.ui.component.home.fragment.projectlist.adapter.ProjectListAdapter
 import com.task.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_projectlist.*
 
 @AndroidEntryPoint
 class ProjectListFragment : BaseFragment(), View.OnClickListener,
@@ -189,6 +192,16 @@ class ProjectListFragment : BaseFragment(), View.OnClickListener,
                 }
             }
         }
+    }
+
+    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        super.onNetworkConnectionChanged(isConnected)
+        enableDisableLayout(isConnected, fplRootConstraintLayout)
+        showShackBarMessage(
+            isConnected,
+            fplRootConstraintLayout,
+            requireActivity().getString(R.string.msg_offline)
+        )
     }
 
 

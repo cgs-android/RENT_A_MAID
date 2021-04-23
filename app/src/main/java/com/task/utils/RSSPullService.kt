@@ -28,7 +28,7 @@ class RSSPullService : Service() {
     private var mFusedLocationClient: FusedLocationProviderClient? = null
     lateinit var locationRequest: LocationRequest
     private var locationCallback: LocationCallback? = null
-    private var floatTotalDistance = 0.0
+    private var floatTotalDistance = -1.00
 
     override fun onCreate() {
         super.onCreate()
@@ -54,7 +54,11 @@ class RSSPullService : Service() {
                 for (location in locationResult.locations) {
                     if (location != null) {
                         runOnUiThread {
-                            floatTotalDistance += 30
+                            if (floatTotalDistance < 0) {
+                                floatTotalDistance = 0.00
+                            } else if (floatTotalDistance >= 0) {
+                                floatTotalDistance += 10.00
+                            }
                             val km = floatTotalDistance / 1000
                             localRepository.putTravelDistanceInKilometer(km.toString())
                         }

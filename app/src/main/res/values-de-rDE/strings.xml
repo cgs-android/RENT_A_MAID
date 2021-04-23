@@ -89,8 +89,10 @@
 
     <string name="permission_required_title">Permissions Required</string>
     <string name="setting">Settings</string>
-    <string name="msg_km">k.m</string>
+    <string name="msg_km">k.m.</string>
     <string name="permission_required_message">You have forcefully denied some of the required permissions for this action. Please open settings, go to permissions and allow them.</string>
     <string name="please_grant_permission_write">please grant write file permission and try again</string>
-    ¬
+
+    <string name="msg_offline">Du bist offline</string>
+    <string name="msg_on_gps">Schalten Sie GPS ein</string>
 </resources>

@@ -155,7 +155,6 @@ class ProjectWorkDetailsViewModel @Inject constructor(
     }
 
 
-
     fun storeLocalTravelStartId(travelStartId: Int) {
         localRepository.putTravelStartId(travelStartId)
     }

@@ -7,6 +7,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
@@ -25,6 +26,8 @@ import com.task.ui.base.BaseFragment
 import com.task.ui.component.home.HomeActivity
 import com.task.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_project_travel_details.*
+import kotlinx.android.synthetic.main.fragment_projectlist.*
 import kotlinx.android.synthetic.main.item_header.*
 import javax.inject.Inject
 
@@ -140,7 +143,23 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 homeActivity.drawerOpenAndClose()
             }
             binding.dfTimerTextView -> {
-                onStartStopTimer(mtimerStatus)
+                when (isCheckGpsStatus()) {
+                    true -> {
+                        showShackBarMessage(
+                            true,
+                            fptdRootScrollView,
+                            requireActivity().getString(R.string.msg_on_gps)
+                        )
+                        onStartStopTimer(mtimerStatus)
+                    }
+                    false -> {
+                        showShackBarMessage(
+                            false,
+                            fptdRootScrollView,
+                            requireActivity().getString(R.string.msg_on_gps)
+                        )
+                    }
+                }
             }
             binding.fptdNextButton -> {
                 navigateToWorkDetails()
@@ -273,10 +292,10 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 }
                 is Resource.Failure -> status.data?.let {
                     binding.ddfProgressBar.toGone()
-                    projectTravelDetailsViewModel.showFailureToastMessage(it.message)
                     it.message.let { it1 ->
                         when (it1) {
                             TOKEN_IS_INVALID -> {
+                                projectTravelDetailsViewModel.showFailureToastMessage(it.message)
                                 sessionExpiredLoginRedirection()
                             }
                         }
@@ -306,10 +325,10 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 }
                 is Resource.Failure -> status.data?.let {
                     binding.ddfProgressBar.toGone()
-                    projectTravelDetailsViewModel.showFailureToastMessage(it.message)
                     it.message.let { it1 ->
                         when (it1) {
                             TOKEN_IS_INVALID -> {
+                                projectTravelDetailsViewModel.showFailureToastMessage(it.message)
                                 sessionExpiredLoginRedirection()
                             }
                         }
@@ -355,10 +374,10 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 }
                 is Resource.Failure -> it.data?.let {
                     binding.ddfProgressBar.toGone()
-                    projectTravelDetailsViewModel.showFailureToastMessage(it.message)
                     it.message.let { it1 ->
                         when (it1) {
                             TOKEN_IS_INVALID -> {
+                                projectTravelDetailsViewModel.showFailureToastMessage(it.message)
                                 sessionExpiredLoginRedirection()
                             }
                         }
@@ -391,10 +410,10 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 }
                 is Resource.Failure -> it.data?.let {
                     binding.ddfProgressBar.toGone()
-                    projectTravelDetailsViewModel.showFailureToastMessage(it.message)
                     it.message.let { it1 ->
                         when (it1) {
                             TOKEN_IS_INVALID -> {
+                                projectTravelDetailsViewModel.showFailureToastMessage(it.message)
                                 sessionExpiredLoginRedirection()
                             }
                         }
@@ -665,6 +684,16 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                     )
                 )
         }.also { runnable = it }, delay.toLong())
+    }
+
+    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        super.onNetworkConnectionChanged(isConnected)
+        enableDisableLayout(isConnected, fptdRootScrollView)
+        showShackBarMessage(
+            isConnected,
+            fptdRootScrollView,
+            requireActivity().getString(R.string.msg_offline)
+        )
     }
 
 
