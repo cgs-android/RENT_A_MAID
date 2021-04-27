@@ -677,12 +677,17 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     private fun updateDistanceInPerSecond() {
         handler.postDelayed(Runnable {
             handler.postDelayed(runnable!!, delay.toLong())
-            binding.textviewFptdTravelDistance.text =
-                String.format(
-                    localRepository.getTravelDistanceInKilometer() + " " + resources.getString(
-                        R.string.msg_km
-                    )
-                )
+            localRepository.getTravelDistanceInKilometer().let {
+                if (it.isNotEmpty()) {
+                    binding.textviewFptdTravelDistance.text =
+                        String.format(
+                            "$it " + resources.getString(
+                                R.string.msg_km
+                            )
+                        )
+                }
+            }
+
         }.also { runnable = it }, delay.toLong())
     }
 
