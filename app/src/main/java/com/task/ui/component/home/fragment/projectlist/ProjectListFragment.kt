@@ -177,10 +177,12 @@ class ProjectListFragment : BaseFragment(), View.OnClickListener,
             }
             when (userRoleBool) {
                 true -> {
+                    projectListViewModel.putLocalUserRole(true)
                     val args = Bundle()
                     homeActivity.changeFragment(EnumIntUtils.ZERO.code, args)
                 }
                 else -> {
+                    projectListViewModel.putLocalUserRole(false)
                     val args = Bundle()
                     it.project_details.projectStatusColor?.let { it1 ->
                         args.putInt(

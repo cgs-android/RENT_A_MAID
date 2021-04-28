@@ -257,7 +257,15 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
         mtimerStatus = 0
         projectWorkDetailsViewModel.clearList()
         val arg = Bundle()
-        homeActivity.changeFragment(EnumIntUtils.ZERO.code, arg)
+        when (projectWorkDetailsViewModel.getLocalUserRole()) {
+            true -> {
+                homeActivity.changeFragment(EnumIntUtils.ZERO.code, arg)
+            }
+            else -> {
+                homeActivity.changeFragment(EnumIntUtils.ONE.code, arg)
+            }
+        }
+
         return true
     }
 

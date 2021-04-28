@@ -158,4 +158,8 @@ class ProjectWorkDetailsViewModel @Inject constructor(
     fun storeLocalTravelStartId(travelStartId: Int) {
         localRepository.putTravelStartId(travelStartId)
     }
+
+    fun getLocalUserRole(): Boolean {
+        return localRepository.getUserRoleStatus()
+    }
 }

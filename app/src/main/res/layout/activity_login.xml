@@ -41,11 +41,14 @@
             android:inputType="text|textNoSuggestions|textEmailAddress"
             android:paddingBottom="@dimen/_10sdp"
             android:singleLine="true"
-            android:text="silivia@rentamaid.com"
+            android:text="@string/test_email"
             android:textColor="@color/colorAliceBlue"
             android:textColorHint="@color/colorAliceBlue"
             android:textSize="@dimen/_13sdp"
             app:layout_constraintTop_toBottomOf="@+id/laAppLogoImageView" />
+
+        <!--silivia@rentamaid.com-->
+        <!--123123-->
 
         <com.task.utils.font.CustomerEdittextViewMedium
             android:id="@+id/laPasswordEditText"
@@ -58,7 +61,7 @@
             android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:paddingBottom="@dimen/_10sdp"
-            android:text="123123"
+            android:text="@string/test_password"
             android:textColor="@color/colorAliceBlue"
             android:textColorHint="@color/colorAliceBlue"
             android:textSize="@dimen/_13sdp"

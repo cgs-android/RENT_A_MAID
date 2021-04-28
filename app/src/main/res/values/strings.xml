@@ -30,8 +30,8 @@
     <string name="invalid_password">Das Passwort muss> 4 Zeichen lang sein</string>
     <string name="invalid_username_and_password">Bitte überprüfen Sie Ihre E-Mail-Adresse und Ihr Passwort</string>
     <string name="add_to_favorite">Add to favorite</string>
-    <string name="test_password">ahmed</string>
-    <string name="test_email">ahmed@ahmed.ahmed</string>
+    <string name="test_password">password</string>
+    <string name="test_email">santhose@gmail.com</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="login_to_continue">Login to continue.</string>
     <string name="mobile_number">Mobile Number*</string>

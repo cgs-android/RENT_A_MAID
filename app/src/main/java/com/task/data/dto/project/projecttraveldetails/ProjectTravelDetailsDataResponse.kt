@@ -10,19 +10,19 @@ open class ProjectDetailsDataResponse(
 
 
 data class ProjectDetails(
-    val id: String,
-    val proj_comp_same_aadress: Boolean,
-    val company_id: Int,
-    val work_start_time: String,
-    val start_date: String,
+    val id: String = "",
+    val proj_comp_same_aadress: Boolean = false,
+    val company_id: Int = 0,
+    val work_start_time: String = "",
+    val start_date: String = "",
 )
 
 data class ProjectLocation(
-    val contact_person: String,
-    val company_name: String,
-    val address_line1: String,
-    val address_line2: String,
-    val pincode: String,
-    val city: String,
-    val country: String
+    val contact_person: String = "",
+    val company_name: String = "",
+    val address_line1: String = "",
+    val address_line2: String = "",
+    val pincode: String = "",
+    val city: String = "",
+    val country: String = ""
 )

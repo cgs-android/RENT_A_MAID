@@ -67,6 +67,10 @@ class ProjectListViewModel @Inject constructor(
         localRepository.putProjectId(projectId)
     }
 
+    fun putLocalUserRole(userStatus: Boolean) {
+        localRepository.putUserRoleStatus(userStatus)
+    }
+
 
     fun showFailureToastMessage(error: String) {
         showToastPrivate.value = SingleEvent(error)
