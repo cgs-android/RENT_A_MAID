@@ -5,7 +5,8 @@ const val SPLASH_DELAY = 1000
 
 //const val BASE_URL = "https://webandappstudio.webgo.cc/rentamaid/"
 //const val BASE_URL = "https://webandappstudio.webgo.cc/demo-rentamaid/"
-const val BASE_URL = "https://webandappstudio.webgo.cc/rentamaid/"
+const val BASE_URL = "https://webandappstudio.webgo.cc/rentamaid/"  ///live server
+//const val BASE_URL = "https://webandappstudio.webport.cc/rentamaid/"  ///development server
 const val RECIPE_ITEM_KEY = "RECIPE_ITEM_KEY"
 
 

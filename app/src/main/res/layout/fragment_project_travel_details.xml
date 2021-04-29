@@ -108,14 +108,14 @@
 
 
                 <com.task.utils.font.CustomFontTextViewMedium
-                    android:id="@+id/ddfDriveTimeTextView"
+                    android:id="@+id/fptdWorkStartTimeTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_1sdp"
                     android:gravity="end"
-                    android:text="14:00 Uhr"
+                    android:text=""
                     android:textColor="@color/colorAliceBlue"
                     android:textSize="@dimen/_13sdp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -142,7 +142,7 @@
 
 
                 <com.task.utils.font.CustomFontTextViewMedium
-                    android:id="@+id/ddfWorkStartTimeTextView"
+                    android:id="@+id/fptdWorkEndTimeTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"

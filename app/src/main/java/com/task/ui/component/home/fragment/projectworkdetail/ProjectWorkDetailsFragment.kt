@@ -240,7 +240,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                 onPauseAndResume(mPauseAndResume)
             }
             hiMenuNavigationImageView -> {
-                homeActivity.drawerOpenAndClose()
+                homeActivity.navigateToLoginScreen()
             }
             binding.dfTimerTextView -> {
                 onStartStopTimer(mtimerStatus)
@@ -489,9 +489,17 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                 )
             }
 
-            binding.ddfWorkStartTimeTextView.apply {
+            binding.fpwdWorkStartTimeTextView.apply {
                 text = String.format(
                     it.data.project_details.work_start_time + " " + requireActivity().resources.getString(
+                        R.string.hrs
+                    )
+                )
+            }
+
+            binding.fpwdWorkEndTimeTextView.apply {
+                text = String.format(
+                    it.data.project_details.work_end_time + " " + requireActivity().resources.getString(
                         R.string.hrs
                     )
                 )

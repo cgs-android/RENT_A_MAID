@@ -3,6 +3,7 @@ package com.task.ui.component.home
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -22,6 +23,7 @@ import com.task.ui.component.home.adapter.DrawerAdapter
 import com.task.ui.component.home.fragment.projectlist.ProjectListFragment
 import com.task.ui.component.home.fragment.projecttraveldetail.ProjectTravelDetailsFragment
 import com.task.ui.component.home.fragment.projectworkdetail.ProjectWorkDetailsFragment
+import com.task.ui.component.login.LoginActivity
 import com.task.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,7 +48,7 @@ class HomeActivity : BaseActivity() {
     override fun observeViewModel() {
         observeSnackBarMessages(homeViewModel.showSnackBar)
         observeToast(homeViewModel.showToast)
-        observerDrawerClickEvent(homeViewModel.openDrawerDetails)
+        //observerDrawerClickEvent(homeViewModel.openDrawerDetails)
     }
 
 
@@ -128,23 +130,24 @@ class HomeActivity : BaseActivity() {
         if (!(drawerResponse.isNullOrEmpty())) {
             drawerAdapter = DrawerAdapter(homeViewModel, drawerResponse)
             binding.ahDrawerRecyclerView.adapter = drawerAdapter
+            binding.ahDashboardDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         }
-        binding.ahDashboardDrawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-            }
-
-            override fun onDrawerOpened(drawerView: View) {
-
-            }
-
-            override fun onDrawerClosed(drawerView: View) {
-
-            }
-
-            override fun onDrawerStateChanged(newState: Int) {
-
-            }
-        })
+//        binding.ahDashboardDrawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+//            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+//            }
+//
+//            override fun onDrawerOpened(drawerView: View) {
+//
+//            }
+//
+//            override fun onDrawerClosed(drawerView: View) {
+//
+//            }
+//
+//            override fun onDrawerStateChanged(newState: Int) {
+//
+//            }
+//        })
     }
 
 
@@ -192,6 +195,11 @@ class HomeActivity : BaseActivity() {
         binding.root.showToast(this, event, Snackbar.LENGTH_LONG)
     }
 
+    fun navigateToLoginScreen() {
+        val nextScreenIntent = Intent(this, LoginActivity::class.java)
+        startActivity(nextScreenIntent)
+        finish()
+    }
 
     interface OnBackPressedListner {
         fun onBackPressed(): Boolean

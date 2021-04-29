@@ -51,6 +51,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     private var mTeamLead: String? = ""
 
     private var mtimerStatus: Int = 0
+    private var projectStatusColor: Int? = 0
 
     private var projectTravelDetailsResponse: ProjectTravelDetailsResponse? = null
 
@@ -140,7 +141,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 onPauseAndResume(mPauseAndResume)
             }
             hiMenuNavigationImageView -> {
-                homeActivity.drawerOpenAndClose()
+                homeActivity.navigateToLoginScreen()
             }
             binding.dfTimerTextView -> {
                 when (isCheckGpsStatus()) {
@@ -333,7 +334,11 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                             }
                         }
                     }
-                    visibleStartButton()
+                    when (projectStatusColor) {
+                        1 -> {
+                            visibleStartButton()
+                        }
+                    }
                     //goneTravelTimeStart()
                     goneTravelTimeEnd()
                     changeTimerStartHint()
@@ -437,6 +442,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
 
     private fun changeStatusColor(colorStatus: Int?) {
         colorStatus?.let {
+            projectStatusColor = it
             when (it) {
                 1 -> {
                     projectStatusColor(R.color.colorGreen)
@@ -490,9 +496,17 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 )
             }
 
-            binding.ddfWorkStartTimeTextView.apply {
+            binding.fptdWorkStartTimeTextView.apply {
                 text = String.format(
                     it.data.project_details.work_start_time + " " + requireActivity().resources.getString(
+                        R.string.hrs
+                    )
+                )
+            }
+
+            binding.fptdWorkEndTimeTextView.apply {
+                text = String.format(
+                    it.data.project_details.work_end_time + " " + requireActivity().resources.getString(
                         R.string.hrs
                     )
                 )
@@ -595,13 +609,19 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 visibleTimerHint()
                 visibleNextButton()
             } else {
-                if (!homeActivity.isMyServiceRunning(RSSPullService::class.java)) {
-                    startTravelDistanceService()
+                when (projectStatusColor) {
+                    1 -> {
+                        if (!homeActivity.isMyServiceRunning(RSSPullService::class.java)) {
+                            startTravelDistanceService()
+                        }
+                        goneTravelTimeEnd()
+                        visibleStartButton()
+                        changeTimerStopHint()
+                        goneNextButton()
+                    }
                 }
-                goneTravelTimeEnd()
-                visibleStartButton()
-                changeTimerStopHint()
-                goneNextButton()
+
+
             }
         }
     }

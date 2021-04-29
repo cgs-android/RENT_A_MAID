@@ -26,10 +26,10 @@
                 android:id="@+id/hiMenuNavigationImageView"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:src="@drawable/ic_menu"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:src="@drawable/ic_logout"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.task.utils.font.CustomFontTextViewBold

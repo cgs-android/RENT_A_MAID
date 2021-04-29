@@ -25,6 +25,7 @@ import com.task.ui.component.home.fragment.projectlist.adapter.ProjectListAdapte
 import com.task.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_projectlist.*
+import kotlinx.android.synthetic.main.item_header.*
 
 @AndroidEntryPoint
 class ProjectListFragment : BaseFragment(), View.OnClickListener,
@@ -68,7 +69,7 @@ class ProjectListFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun initOnClickListeners() {
-
+        fplHeaderLogoutImageView.setOnClickListener(this)
     }
 
 
@@ -92,7 +93,10 @@ class ProjectListFragment : BaseFragment(), View.OnClickListener,
 
 
     override fun onClick(v: View?) {
-        when (v?.id) {
+        when (v) {
+            fplHeaderLogoutImageView -> {
+                homeActivity.navigateToLoginScreen()
+            }
         }
     }
 
