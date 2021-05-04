@@ -35,4 +35,8 @@ abstract class BaseViewModel : ViewModel() {
         return localRepository.getProjectId()
     }
 
+    fun getProjectIdForBackgroundService(): String {
+        return localRepository.getProjectIdForBackgroundService()
+    }
+
 }

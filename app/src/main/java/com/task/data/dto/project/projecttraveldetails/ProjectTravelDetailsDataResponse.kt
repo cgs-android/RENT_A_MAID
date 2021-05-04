@@ -16,6 +16,7 @@ data class ProjectDetails(
     val work_start_time: String = "",
     val work_end_time: String = "",
     val start_date: String = "",
+    val end_date: String = "",
 )
 
 data class ProjectLocation(

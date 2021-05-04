@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
@@ -32,6 +33,10 @@ class RSSPullService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        startFetchLocation();
+    }
+
+    private fun startFetchLocation() {
         initLocationFushedApi()
         getLocation()
     }
@@ -43,7 +48,7 @@ class RSSPullService : Service() {
         locationRequest.priority = (LocationRequest.PRIORITY_HIGH_ACCURACY)
         locationRequest.interval = (1 * 1000.toLong()) // 10 seconds
         locationRequest.fastestInterval = (1 * 1000.toLong()) // 5 // seconds
-        locationRequest.smallestDisplacement = (10f)
+        //locationRequest.smallestDisplacement = (10f)
 
 
         locationCallback = object : LocationCallback() {
@@ -75,6 +80,10 @@ class RSSPullService : Service() {
             mFusedLocationClient?.removeLocationUpdates(locationCallback)
             stopForeground(true)
             stopSelf()
+        } else if (input.equals(EnumStringUtils.PauseService.toString())) {
+            mFusedLocationClient?.removeLocationUpdates(locationCallback)
+        } else if (input.equals(EnumStringUtils.ResumeService.toString())) {
+            startFetchLocation()
         }
         initNotification(intent)
         return START_NOT_STICKY

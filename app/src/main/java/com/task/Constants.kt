@@ -5,8 +5,9 @@ const val SPLASH_DELAY = 1000
 
 //const val BASE_URL = "https://webandappstudio.webgo.cc/rentamaid/"
 //const val BASE_URL = "https://webandappstudio.webgo.cc/demo-rentamaid/"
-const val BASE_URL = "https://webandappstudio.webgo.cc/rentamaid/"  ///live server
-//const val BASE_URL = "https://webandappstudio.webport.cc/rentamaid/"  ///development server
+//const val BASE_URL = "https://webandappstudio.webgo.cc/rentamaid/"  ///live server
+
+const val BASE_URL = "https://webandappstudio.webport.cc/rentamaid/"  ///development server
 const val RECIPE_ITEM_KEY = "RECIPE_ITEM_KEY"
 
 
@@ -29,6 +30,7 @@ const val PREF_PREFERENCES_FILE_NAME = "rent_a_maid_pref"
 const val PREF_FAVOURITES_KEY = "favourites"
 const val PREF_LOGIN_DATA_KEY = "LOGIN_DATAS"
 const val PREF_PROJECT_ID_KEY = "PREF_PROJECT_ID"
+const val PREF_PROJECT_ID_BACKGROUND_SERVICE_KEY = "PREF_PROJECT_ID_BACKGROUND_SERVICE_KEY"
 const val PREF_TRAVEL_START_ID_KEY = "PREF_TRAVEL_START_ID"
 const val PREF_TRAVEL_DISTANCE_KEY = "PREF_TRAVEL_DISTANCE_KEY"
 const val PREF_USER_ROLE = "PREF_USER_ROLE_KEY"

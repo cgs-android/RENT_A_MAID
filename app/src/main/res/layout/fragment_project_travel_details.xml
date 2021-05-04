@@ -95,7 +95,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:gravity="start"
                     android:text="@string/drive_time_start_ideal"
@@ -112,7 +111,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_1sdp"
                     android:gravity="end"
                     android:text=""
@@ -129,7 +127,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:gravity="start"
                     android:text="@string/work_starts_at_location"
@@ -146,7 +143,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_1sdp"
                     android:gravity="end"
                     android:text=""
@@ -175,7 +171,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_1sdp"
                     android:text=""
                     android:textColor="@color/colorAliceBlue"
@@ -199,7 +194,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_1sdp"
                     android:text=""
                     android:textColor="@color/colorAliceBlue"
@@ -224,7 +218,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintddfTravelTimeHint"
+            android:id="@+id/constraintddfTravelDistance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -238,9 +232,32 @@
                 android:text=""
                 android:textColor="@color/colorOrange"
                 android:textSize="@dimen/_14sdp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <com.task.utils.font.CustomFontTextViewBold
+                android:id="@+id/textviewFptdTravelDistanceAfter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/colorOrange"
+                android:textSize="@dimen/_14sdp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintddfTravelTimeHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@+id/constraintddfTravelDistance">
 
             <com.task.utils.font.CustomFontTextViewBold
                 android:id="@+id/textddfTravelTimeHint"
@@ -255,7 +272,7 @@
                 android:textSize="@dimen/_13sdp"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textviewFptdTravelDistance" />
+                app:layout_constraintTop_toBottomOf="@+id/textviewFptdTravelDistanceAfter" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

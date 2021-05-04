@@ -4,5 +4,7 @@ enum class EnumStringUtils {
     Completed,
     NotificationTravelRedirection,
     ServiceIntent,
-    StopService
+    StopService,
+    PauseService,
+    ResumeService
 }

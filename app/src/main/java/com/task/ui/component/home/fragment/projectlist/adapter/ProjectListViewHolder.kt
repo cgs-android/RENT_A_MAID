@@ -11,7 +11,6 @@ import com.task.databinding.ItemProjectlistBinding
 import com.task.ui.component.home.fragment.projectlist.listener.IProjectListListener
 import com.task.utils.DateUtils.formatDate
 import com.task.utils.DateUtils.isTodayOrTomorrowProject
-import com.task.utils.DateUtils.returnCurrentDate
 import com.task.utils.RegexUtils.removeLastChar
 
 
@@ -33,12 +32,14 @@ class ProjectListViewHolder(private val itemBinding: ItemProjectlistBinding) :
                 position
             )
         }
-        val serverStartDate = formatDate(projectDetailsResponse.start_date)
+        val startDate = formatDate(projectDetailsResponse.start_date)
+        val endDate = formatDate(projectDetailsResponse.end_date)
         bindProjectId(projectDetailsResponse.id)
         bindProjectTeamMembers(context, teamMembers)
         bindProjectStatusColor(
             context,
-            serverStartDate,
+            startDate,
+            endDate,
             projectDetailsResponse
         )
     }
@@ -99,34 +100,34 @@ class ProjectListViewHolder(private val itemBinding: ItemProjectlistBinding) :
 
     private fun bindProjectStatusColor(
         context: Context,
-        serverDate: String,
+        startDate: String,
+        endDate: String,
         projectDetailsResponse: ProjectDetailsResponse
     ) {
-        serverDate.let {
-            when (isTodayOrTomorrowProject(returnCurrentDate(), it)) {
-                1 -> {
-                    itemBinding.pliProjectDetailsConstraintLayout.visibility = View.VISIBLE
-                    projectStatusColor(context, R.color.colorGreen)
-                    itemBinding.pliProjectDateTextView.text = context.resources.getString(
-                        R.string.today
-                    )
-                    projectDetailsResponse.projectStatusColor = 1
-                }
-                -1 -> {
-                    itemBinding.pliProjectDetailsConstraintLayout.visibility = View.GONE
-                    projectStatusColor(context, R.color.colorBlue)
-                    itemBinding.pliProjectDateTextView.text = it
-                    projectDetailsResponse.projectStatusColor = -1
-                }
-                0 -> {
-                    projectStatusColor(context, R.color.colorOrange)
-                    itemBinding.pliProjectDateTextView.text = context.resources.getString(
-                        R.string.tomorrow
-                    )
-                    projectDetailsResponse.projectStatusColor = 0
-                }
+        when (isTodayOrTomorrowProject(startDate, endDate)) {
+            1 -> {
+                itemBinding.pliProjectDetailsConstraintLayout.visibility = View.VISIBLE
+                projectStatusColor(context, R.color.colorGreen)
+                itemBinding.pliProjectDateTextView.text = context.resources.getString(
+                    R.string.today
+                )
+                projectDetailsResponse.projectStatusColor = 1
+            }
+            -1 -> {
+                itemBinding.pliProjectDetailsConstraintLayout.visibility = View.GONE
+                projectStatusColor(context, R.color.colorBlue)
+                itemBinding.pliProjectDateTextView.text = startDate
+                projectDetailsResponse.projectStatusColor = -1
+            }
+            0 -> {
+                projectStatusColor(context, R.color.colorOrange)
+                itemBinding.pliProjectDateTextView.text = context.resources.getString(
+                    R.string.tomorrow
+                )
+                projectDetailsResponse.projectStatusColor = 0
             }
         }
+
     }
 
     private fun projectStatusColor(context: Context, color: Int) {

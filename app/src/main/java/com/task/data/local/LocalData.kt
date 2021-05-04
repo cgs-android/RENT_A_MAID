@@ -35,6 +35,19 @@ class LocalData @Inject constructor(val context: Context) {
         return value!!
     }
 
+
+    fun putProjectIdForBackgroundService(projectId: String) {
+        val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
+        sharedPref.edit().putString(PREF_PROJECT_ID_BACKGROUND_SERVICE_KEY, projectId).apply()
+    }
+
+    fun getProjectIdForBackgroundService(): String {
+        val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
+        val value: String? = sharedPref.getString(PREF_PROJECT_ID_BACKGROUND_SERVICE_KEY, "")
+        return value!!
+    }
+
+
     fun putTravelStartId(travelStartId: Int) {
         val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
         sharedPref.edit().putInt(PREF_TRAVEL_START_ID_KEY, travelStartId).apply()

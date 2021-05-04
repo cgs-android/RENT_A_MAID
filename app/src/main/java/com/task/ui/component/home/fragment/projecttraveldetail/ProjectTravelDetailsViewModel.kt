@@ -140,4 +140,13 @@ class ProjectTravelDetailsViewModel @Inject constructor(
     fun storeLocalTravelStartId(travelStartId: Int) {
         localRepository.putTravelStartId(travelStartId)
     }
+
+    fun localPrefStoreProjectId(projectId: String) {
+        localRepository.putProjectId(projectId)
+    }
+
+    fun localPrefStoreProjectIdForBackgroundService(projectId: String) {
+        localRepository.putProjectIdForBackgroundService(projectId)
+    }
+
 }

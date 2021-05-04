@@ -237,6 +237,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
             when (it) {
                 true -> {
                     binding.dfPauseTextView.apply {
+                        resumeTravelDistanceService()
                         mPauseAndResume = false
                         text = this.resources.getString(R.string.tap_to_pause)
                         setTextColor(this.resources.getColor(R.color.colorAliceBlue))
@@ -244,6 +245,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                 }
                 false -> {
                     binding.dfPauseTextView.apply {
+                        pauseTravelDistanceService()
                         mPauseAndResume = true
                         text = this.resources.getString(R.string.tap_to_resume)
                         setTextColor(this.resources.getColor(R.color.colorRed))
@@ -462,14 +464,17 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     private fun goneStartButton() {
         binding.dfTimerConstraintLayout.visibility = View.GONE
         binding.constraintddfTravelTimeHint.visibility = View.GONE
+        binding.constraintddfTravelDistance.visibility = View.GONE
     }
 
     private fun visibleStartButton() {
         binding.dfTimerConstraintLayout.visibility = View.VISIBLE
         binding.constraintddfTravelTimeHint.visibility = View.VISIBLE
+        binding.constraintddfTravelDistance.visibility = View.VISIBLE
     }
 
     private fun bindProjectId(projectId: String) {
+        projectTravelDetailsViewModel.localPrefStoreProjectId(projectId)
         projectId.let {
             binding.pdfProjectIdTextView.apply {
                 text = String.format(
@@ -569,15 +574,14 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     private fun bindProjectStatusColor(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
         val serverStartDate =
             DateUtils.formatDate(projectTravelDetailsResponse.data.project_details.start_date)
-        serverStartDate.let {
-            changeStatusColor(
-                DateUtils.isTodayOrTomorrowProject(
-                    DateUtils.returnCurrentDate(),
-                    it
-                )
+        val serverEndDate =
+            DateUtils.formatDate(projectTravelDetailsResponse.data.project_details.end_date)
+        changeStatusColor(
+            DateUtils.isTodayOrTomorrowProject(
+                serverStartDate,
+                serverEndDate
             )
-        }
-
+        )
     }
 
     private fun bindGetTravelTimeData(getTravelResponse: GetTravelResponse) {
@@ -595,9 +599,12 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
             }
 
             if (it.data.ended_at.isNotEmpty()) {
+                goneVisibleTravelDistanceBackgroundLogics()
+                visibleTravelDistanceAfterTextView()
+                goneTravelDistanceTextView()
                 visibleTravelTimeEnd()
                 it.data.travel_distance.let { it1 ->
-                    binding.textviewFptdTravelDistance.text = String.format(
+                    binding.textviewFptdTravelDistanceAfter.text = String.format(
                         "$it1 " + resources.getString(
                             R.string.msg_km
                         )
@@ -628,6 +635,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
 
     private fun visibleTimerHint() {
         binding.constraintddfTravelTimeHint.visibility = View.VISIBLE
+        binding.constraintddfTravelDistance.visibility = View.VISIBLE
     }
 
 
@@ -668,6 +676,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun startTravelDistanceService() {
+        updateProjectIdForBackgroundService(projectTravelDetailsViewModel.getProjectId())
         val serviceIntent = Intent(requireContext(), RSSPullService::class.java)
         serviceIntent.putExtra(
             EnumStringUtils.ServiceIntent.toString(),
@@ -675,9 +684,17 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
         )
         ContextCompat.startForegroundService(requireContext(), serviceIntent)
         updateDistanceInPerSecond()
+        visibleTravelDistanceTextView()
+    }
+
+    private fun updateProjectIdForBackgroundService(projectId: String = "") {
+        projectTravelDetailsViewModel.localPrefStoreProjectIdForBackgroundService(
+            projectId
+        )
     }
 
     private fun stopTravelDistanceService() {
+        updateProjectIdForBackgroundService()
         val stopService = Intent(requireContext(), RSSPullService::class.java)
         stopService.putExtra(
             EnumStringUtils.ServiceIntent.toString(),
@@ -687,10 +704,28 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
         runnable?.let { handler.removeCallbacks(it) }
     }
 
+    private fun pauseTravelDistanceService() {
+        val pauseService = Intent(requireContext(), RSSPullService::class.java)
+        pauseService.putExtra(
+            EnumStringUtils.ServiceIntent.toString(),
+            EnumStringUtils.PauseService.toString(),
+        )
+        ContextCompat.startForegroundService(requireContext(), pauseService)
+    }
+
+    private fun resumeTravelDistanceService() {
+        val resumeService = Intent(requireContext(), RSSPullService::class.java)
+        resumeService.putExtra(
+            EnumStringUtils.ServiceIntent.toString(),
+            EnumStringUtils.ResumeService.toString(),
+        )
+        ContextCompat.startForegroundService(requireContext(), resumeService)
+    }
+
     override fun onResume() {
         super.onResume()
         if (homeActivity.isMyServiceRunning(RSSPullService::class.java)) {
-            updateDistanceInPerSecond()
+            goneVisibleTravelDistanceBackgroundLogics()
         }
     }
 
@@ -709,6 +744,34 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
             }
 
         }.also { runnable = it }, delay.toLong())
+    }
+
+    private fun goneVisibleTravelDistanceBackgroundLogics() {
+        if (homeActivity.isMyServiceRunning(RSSPullService::class.java)) {
+            if (projectTravelDetailsViewModel.getProjectIdForBackgroundService() == projectTravelDetailsViewModel.getProjectId()
+            ) {
+                updateDistanceInPerSecond()
+                visibleTravelDistanceTextView()
+            } else {
+                goneTravelDistanceTextView()
+            }
+        }
+    }
+
+    private fun visibleTravelDistanceTextView() {
+        binding.textviewFptdTravelDistance.visibility = View.VISIBLE
+    }
+
+    private fun goneTravelDistanceTextView() {
+        binding.textviewFptdTravelDistance.visibility = View.GONE
+    }
+
+    private fun visibleTravelDistanceAfterTextView() {
+        binding.textviewFptdTravelDistanceAfter.visibility = View.VISIBLE
+    }
+
+    private fun goneTravelDistanceAfterTextView() {
+        binding.textviewFptdTravelDistanceAfter.visibility = View.GONE
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean) {

@@ -435,6 +435,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                     binding.ddfProgressBar.toGone()
                     apiCallBacks(EnumIntUtils.TWO.code)
                     onSuccessUpdateWorkTimer()
+                    navigateToProjectList()
                 }
                 is Resource.DataError -> {
                     binding.ddfProgressBar.toGone()
@@ -455,6 +456,11 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
                 }
             }
         }
+    }
+
+    private fun navigateToProjectList() {
+        val arg = Bundle()
+        homeActivity.changeFragment(EnumIntUtils.ONE.code, arg)
     }
 
     private fun onSuccessUpdateWorkTimer() {
@@ -561,11 +567,13 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
     private fun bindProjectStatusColor(projectTravelDetailsResponse: ProjectTravelDetailsResponse) {
         val serverStartDate =
             DateUtils.formatDate(projectTravelDetailsResponse.data.project_details.start_date)
+        val serverEndDate =
+            DateUtils.formatDate(projectTravelDetailsResponse.data.project_details.end_date)
         serverStartDate.let {
             changeStatusColor(
                 DateUtils.isTodayOrTomorrowProject(
-                    DateUtils.returnCurrentDate(),
-                    it
+                    serverStartDate,
+                    serverEndDate
                 )
             )
         }
@@ -599,6 +607,7 @@ class ProjectWorkDetailsFragment : BaseFragment(), View.OnClickListener,
 
 
     private fun projectStatusColor(color: Int) {
+        binding.ddfProjectStatusImageView.visibility = View.VISIBLE
         binding.ddfProjectStatusImageView.setColorFilter(
             ContextCompat.getColor(
                 requireContext(),

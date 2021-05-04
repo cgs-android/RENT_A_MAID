@@ -11,13 +11,32 @@ import java.util.*
 
 object DateUtils {
 
-    fun isTodayOrTomorrowProject(currentDate: String, serverDate: String): Int {
+    fun isTodayOrTomorrowProject(startDate: String, endDate: String): Int {
         val df =
             SimpleDateFormat(FORMATTED_DATE, Locale.getDefault())
-        val dateCurrent: Date = df.parse(currentDate)
-        val serverCurrent: Date = df.parse(serverDate)
-        val dayBetween = ((dateCurrent.time - serverCurrent.time) / (24 * 60 * 60 * 1000)).toInt()
-        if (dateCurrent.equals(serverCurrent)) {
+        val dateCurrent: Date = df.parse(returnCurrentDate())
+        val startDateCurrent: Date = df.parse(startDate)
+        val endDateCurrent: Date = df.parse(endDate)
+        val dayBetween =
+            ((dateCurrent.time - startDateCurrent.time) / (24 * 60 * 60 * 1000)).toInt()
+        val datesInRange: MutableList<Date> = ArrayList()
+        val startCalendar: Calendar = GregorianCalendar()
+        startCalendar.time = startDateCurrent
+        val endCalendar: Calendar = GregorianCalendar()
+        endCalendar.time = endDateCurrent
+        val currentCalendar: Calendar = GregorianCalendar()
+        currentCalendar.time = dateCurrent
+        while (startCalendar.before(endCalendar)) {
+            val result = startCalendar.time
+            datesInRange.add(result)
+            val localTZ = startCalendar.timeZone
+            val sdf = SimpleDateFormat(FORMATTED_DATE, Locale.getDefault())
+            sdf.timeZone = localTZ
+            val results = sdf.format(result)
+            startCalendar.add(Calendar.DATE, 1)
+        }
+        datesInRange.add(endCalendar.time)
+        if (datesInRange.contains(currentCalendar.time)) {
             return 1
         } else if (dayBetween == 1 || dayBetween == -1) {
             return 0
@@ -26,7 +45,7 @@ object DateUtils {
         }
     }
 
-    fun returnCurrentDate(): String {
+    private fun returnCurrentDate(): String {
         val c = Calendar.getInstance().time
         val df =
             SimpleDateFormat(FORMATTED_DATE, Locale.getDefault())
