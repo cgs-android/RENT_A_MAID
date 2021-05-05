@@ -72,15 +72,26 @@ class LocalData @Inject constructor(val context: Context) {
 
     fun putUserRoleStatus(userRole: Boolean) {
         val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
-        sharedPref.edit().putBoolean(PREF_USER_ROLE, userRole).apply()
+        sharedPref.edit().putBoolean(PREF_USER_ROLE_KEY, userRole).apply()
     }
 
     fun getUserRoleStatus(): Boolean {
         val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
-        val value: Boolean? = sharedPref.getBoolean(PREF_USER_ROLE, false)
+        val value: Boolean? = sharedPref.getBoolean(PREF_USER_ROLE_KEY, false)
         return value!!
     }
 
+
+    fun putIsTravelPause(userRole: Boolean) {
+        val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
+        sharedPref.edit().putBoolean(PREF_IS_PAUSE_KEY, userRole).apply()
+    }
+
+    fun getIsTravelPause(): Boolean {
+        val sharedPref = context.getSharedPreferences(PREF_PREFERENCES_FILE_NAME, 0)
+        val value: Boolean? = sharedPref.getBoolean(PREF_IS_PAUSE_KEY, false)
+        return value!!
+    }
 
 }
 

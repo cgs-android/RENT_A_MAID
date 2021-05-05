@@ -43,6 +43,7 @@ class RSSPullService : Service() {
 
 
     private fun initLocationFushedApi() {
+        mFusedLocationClient?.removeLocationUpdates(locationCallback)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.create()
         locationRequest.priority = (LocationRequest.PRIORITY_HIGH_ACCURACY)

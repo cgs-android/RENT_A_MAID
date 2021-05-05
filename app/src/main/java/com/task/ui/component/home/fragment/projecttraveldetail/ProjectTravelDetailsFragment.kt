@@ -241,6 +241,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                         mPauseAndResume = false
                         text = this.resources.getString(R.string.tap_to_pause)
                         setTextColor(this.resources.getColor(R.color.colorAliceBlue))
+                        projectTravelDetailsViewModel.locaPrefUpdatePauseTravelStatus(true)
                     }
                 }
                 false -> {
@@ -249,11 +250,30 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                         mPauseAndResume = true
                         text = this.resources.getString(R.string.tap_to_resume)
                         setTextColor(this.resources.getColor(R.color.colorRed))
+                        projectTravelDetailsViewModel.locaPrefUpdatePauseTravelStatus(false)
                     }
                 }
             }
         }
 
+    }
+
+    private fun updatePauseTextView() {
+        binding.dfPauseTextView.visibility = View.VISIBLE
+        binding.dfPauseTextView.apply {
+            mPauseAndResume = false
+            text = this.resources.getString(R.string.tap_to_pause)
+            setTextColor(this.resources.getColor(R.color.colorAliceBlue))
+        }
+    }
+
+    private fun updateResumeTextView() {
+        binding.dfPauseTextView.visibility = View.VISIBLE
+        binding.dfPauseTextView.apply {
+            mPauseAndResume = true
+            text = this.resources.getString(R.string.tap_to_resume)
+            setTextColor(this.resources.getColor(R.color.colorRed))
+        }
     }
 
     private fun onStartStopTimer(timerStatus: Int) {
@@ -623,6 +643,7 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
                         }
                         goneTravelTimeEnd()
                         visibleStartButton()
+                        updatePauseAndResumeTextView()
                         changeTimerStopHint()
                         goneNextButton()
                     }
@@ -755,6 +776,25 @@ class ProjectTravelDetailsFragment : BaseFragment(), View.OnClickListener,
             } else {
                 goneTravelDistanceTextView()
             }
+        }
+    }
+
+    private fun updatePauseAndResumeTextView() {
+        if (homeActivity.isMyServiceRunning(RSSPullService::class.java)) {
+            if (projectTravelDetailsViewModel.getProjectIdForBackgroundService() == projectTravelDetailsViewModel.getProjectId()
+            ) {
+                when (localRepository.getIsTravelPause()) {
+                    true -> {
+                        updatePauseTextView()
+                    }
+                    else -> {
+                        updateResumeTextView()
+                    }
+                }
+
+            }
+        } else {
+            updatePauseTextView()
         }
     }
 

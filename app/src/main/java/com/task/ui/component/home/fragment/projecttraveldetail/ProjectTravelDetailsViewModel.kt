@@ -149,4 +149,8 @@ class ProjectTravelDetailsViewModel @Inject constructor(
         localRepository.putProjectIdForBackgroundService(projectId)
     }
 
+    fun locaPrefUpdatePauseTravelStatus(pauseStatus: Boolean) {
+        localRepository.putIsTravelPause(pauseStatus)
+    }
+
 }

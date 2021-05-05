@@ -47,6 +47,7 @@ class HomeViewModel @Inject constructor(private val mDataRepository: DataReposit
 
     fun resetTravelDistanceTime() {
         localRepository.putTravelDistanceInKilometer("")
+        localRepository.putProjectIdForBackgroundService("")
     }
 
 
